@@ -43,6 +43,10 @@ const Consultant=mongoose.model('Consultant',{
     linkedIn:{
         type: String,
     },
+    date_creation: {
+        type: Date,
+        default: Date.now
+      },
     projet:[{
         type: mongoose.Schema.Types.ObjectId,ref:'Projet'
     }]

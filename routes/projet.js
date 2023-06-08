@@ -26,8 +26,6 @@ router.post('/create', async(req , res )=>{
         updated=await Projet.findByIdAndUpdate({_id:id}, newData);
         res.send(updated);
  
- 
- 
     }catch(error){
         res.send(err)}
   
@@ -46,11 +44,11 @@ router.post('/create', async(req , res )=>{
  
     })
 
-/*router.get('/getbyid/:id',async(req,res)=>{
+router.get('/getbyid/:id',async(req,res)=>{
        try{
            id=req.params.id;
-           consultant=await Consultant.findById({_id: id})
-           res.send(consultant);
+           projet=await Projet.findById({_id: id})
+           res.send(projets);
 
        
 
@@ -58,6 +56,6 @@ router.post('/create', async(req , res )=>{
            res.send(error);
        }
    });
-   */
+   
  module.exports=router;
  

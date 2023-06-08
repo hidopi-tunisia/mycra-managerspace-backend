@@ -42,6 +42,10 @@ var ClientSchema=mongoose.Schema({
     competences:{
         type:String
     },
+    date_creation: {
+        type: Date,
+        default: Date.now
+      },
     consultant:[{
         type: mongoose.Schema.Types.ObjectId,ref:'Consultant'
     }],
