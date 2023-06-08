@@ -1,6 +1,6 @@
-const mongoose=require('mongoose');// yconnecti bin mongodb w node js
+const mongoose=require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/app').then(
+mongoose.connect('mongodb+srv://hidopi:SsTxf6X4b0pCcYSB@mycraclusterdev.hu0dhsd.mongodb.net/mycra_dev?retryWrites=true&w=majority').then(
     ()=>{
         console.log('connected');
     }

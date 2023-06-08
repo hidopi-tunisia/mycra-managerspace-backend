@@ -5,8 +5,12 @@ const Client=require('../models/client');
 const bcrypt=require('bcrypt');
 const jwt =require('jsonwebtoken');
 
-router.post('/create', async(req , res )=>{
+router.get('/', function(req, res, next) {
+    res.send('La liste des clients dun manager');
+  });
 
+router.post('/create', async(req , res )=>{
+console.log("create begin");
     try{
         data = req.body;
         client=new Client(data);
@@ -26,14 +30,12 @@ router.post('/create', async(req , res )=>{
         updated=await Client.findByIdAndUpdate({_id:id}, newData);
         res.send(updated);
  
- 
- 
     }catch(error){
         res.send(err)}
   
  })
  router.get('/getall',async(req,res)=>{
-
+console.log("get all clients");
     try{
  
         clients=await Client.find();

@@ -1,19 +1,18 @@
 const mongoose=require('mongoose');
+// var mongoose = require('../config/connect.js');
 
-
-const Client=mongoose.model('Client',{
+var ClientSchema=mongoose.Schema({
     nomSocial:{
         type:String,
-        
     } ,
     responsable:{
-        type:String,
+        type:String
     },
     NSiret:{
-        type:String,
+        type:String
     },
     adressePostale:{
-        type:String,
+        type:String
     } ,
     email:{
         type:String,
@@ -21,11 +20,11 @@ const Client=mongoose.model('Client',{
         unique:true
     } ,
     tel1:{
-        type:Number,
+        type:Number
         
     } ,
     tel2:{
-        type:Number,
+        type:Number
         
     },
     ville:{
@@ -35,16 +34,13 @@ const Client=mongoose.model('Client',{
         type: Number
     },
     dateSignature:{
-        type:Date,
+        type:Date
     },
     note:{
-        type:String,
+        type:String
     },
     competences:{
-        type:String,
-    },
-    document:{
-        type: File,
+        type:String
     },
     consultant:[{
         type: mongoose.Schema.Types.ObjectId,ref:'Consultant'
@@ -54,4 +50,4 @@ const Client=mongoose.model('Client',{
     }]
 
 });
-module.exports = Client;
+module.exports = mongoose.model('Client', ClientSchema) ;

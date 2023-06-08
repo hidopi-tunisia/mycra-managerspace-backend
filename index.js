@@ -17,10 +17,6 @@ app.use('/client', clientRoute);
 app.use('/consultant', consultantRoute);
 app.use('/projet', projetRoute);
 
-
-
-
-
 app.listen(3000,()=>{//arrow function
-    console.log('server work');
+    console.log('My Cra Manager Back-End work');
 });
