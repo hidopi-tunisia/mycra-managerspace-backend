@@ -14,7 +14,7 @@ const Consultant=mongoose.model('Consultant',{
     },
     nom:{
         type:String,
-    }/* ,
+    },
     prenom:{
         type:String,
     } ,
@@ -40,15 +40,12 @@ const Consultant=mongoose.model('Consultant',{
     note:{
         type:String,
     },
-    dossierCompetence:{
-        type:File,
-    },
     linkedIn:{
         type: String,
     },
     projet:[{
         type: mongoose.Schema.Types.ObjectId,ref:'Projet'
     }]
-*/
+
 });
 module.exports = Consultant;
