@@ -49,13 +49,12 @@ router.get('/getbyid/:id',async(req,res)=>{
            id=req.params.id;
            projet=await Projet.findById({_id: id})
            res.send(projets);
-
-       
-
        }catch(error){
            res.send(error);
        }
    });
    
+   // les projets d'un client précis
+   // les projets dont le status est archivé 
  module.exports=router;
  
