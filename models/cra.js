@@ -5,10 +5,13 @@ const CraSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Consultant",
   },
-  joursOuvresTravailles: [
+  joursTravailles: [
     {
       jour: {
         type: String, // la journée de la semaine
+      },
+      date:{
+        type: Date,
       },
       travaille: { // journée travaillée ou pas
         type: Boolean,
@@ -16,16 +19,19 @@ const CraSchema = mongoose.Schema({
       },
     },
   ],
+  nbSemaines: {
+    type: Number,
+  },
   nbJoursTravailles: { // valeur calculable
     type: Number,
   },
   mois: {
     type: String,
   },
-  date_debut: {
+  date_debut_du_mois: {
     type: Date,
   },
-  date_fin: {
+  date_fin_du_mois: {
     type: Date,
   },
   annee: {

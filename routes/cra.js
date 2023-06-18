@@ -1,27 +1,53 @@
 const express = require("express");
 
 const router = express.Router();
+const moment = require("moment");
 const CRA = require("../models/cra");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 
+router.get("/", function (req, res, next) {
+  const currentDate = new Date();
+  res.json(moment().format("MMMM"));
+});
 
-router.get('/', function(req, res, next) {
-    res.send('La liste des clients dun manager');
-  });
-
-router.post("/postCra", async (req, res) => {
+router.post("/postCra", async (req, res, next) => {
+  const joursOuvres = [
+    { jour: "Lundi", travaille: true },
+    { jour: "Mardi", travaille: true },
+    { jour: "Mercredi", travaille: true },
+    { jour: "Jeudi", travaille: true },
+    { jour: "Vendredi", travaille: true },
+  ];
+  const currentDate = new Date();
   try {
     data = req.body;
-    data.craType = "month";
-    cra = new CRA(data);
+    data.craType = "mois";
+    data.mois = moment().format("MMMM");
+    data.annee = currentDate.getFullYear();
+    data.joursTravailles = joursOuvres;
 
+    // Calcul du nombre de semaines dans le mois
+    const firstDayOfMonth = moment().startOf("month");
+    const lastDayOfMonth = moment().endOf("month");
+    const nbSemaines = lastDayOfMonth.diff(firstDayOfMonth, "weeks") + 1;
+    data.nbSemaines = nbSemaines;
+    data.date_debut_du_mois = firstDayOfMonth;
+    data.date_fin_du_mois = lastDayOfMonth;
+
+    // Calcul du nombre de jours travaillés
+    const nbJoursTravailles = joursOuvres.filter(
+      (jour) => jour.travaille
+    ).length;
+    data.nbJoursTravailles = nbJoursTravailles;
+
+    var cra = new CRA(data);
     savedCRA = await cra.save();
     console.log(data.nbJoursTravailles, "jours travaille", data.craType);
     res.send(savedCRA);
   } catch (error) {
-    res.send(error);
+    res.status(400).json({ message: "Erreur" }, error);
   }
 });
 router.post("/post-my-cra-by-week", async (req, res) => {
