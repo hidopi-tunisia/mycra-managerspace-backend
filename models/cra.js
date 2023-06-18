@@ -7,7 +7,7 @@ const CraSchema = mongoose.Schema({
   },
   joursTravailles: [
     {
-      jour: {
+      jourSemaine: {
         type: String, // la journée de la semaine
       },
       date:{
