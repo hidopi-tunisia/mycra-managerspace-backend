@@ -19,6 +19,7 @@ router.get("/", function (req, res, next) {
 
 router.post("/postCra", async (req, res, next) => {
   //const currentDate = new Date();
+
   try {
     let nbJoursTravailles = 0;
     let nbJoursNonTravailles = 0;
@@ -48,18 +49,25 @@ router.post("/postCra", async (req, res, next) => {
       return dateJourFerie.month() === parseInt(month) - 1; // Le mois est basé sur zéro index
     });
 
+    // Afficher le nombre de jours fériés
+    const nbJoursFeries = joursFeriesDuMois.length;
+    console.log(`Nombre de jours fériés ce mois-ci : ${nbJoursFeries}`);
+    data.nbJoursFeries = nbJoursFeries;
+
     // Ajouter les jours fériés à la liste des jours travaillés du mois en cours.
 
     joursFeriesDuMois.forEach((jourFerie) => {
       const dateJourFerie = moment(jourFerie.date).toDate();
+      const nomJourFerie = jourFerie.nom_jour_ferie;
       joursTravailles.push({
         jourSemaine: moment(dateJourFerie).format("dddd"),
         date: dateJourFerie,
         travaille: false,
-        reason: "Jour férié",
+        reason: "Jour férié"
       });
+      data.nomJourFerieDuMois = jourFerie.nom_jour_ferie
+      console.log('Jours fériés ce mois-ci :',data.nomJourFerieDuMois);
     });
-    
 
     data.date_debut_du_mois = firstDayOfMonth;
     data.date_fin_du_mois = lastDayOfMonth;
