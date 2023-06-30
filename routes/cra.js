@@ -48,8 +48,9 @@ router.post("/postCra", async (req, res, next) => {
       return dateJourFerie.month() === parseInt(month) - 1; // Le mois est basé sur zéro index
     });
 
-    // Ajouter les jours fériés à la liste des jours travaillés
-    joursFeries.forEach((jourFerie) => {
+    // Ajouter les jours fériés à la liste des jours travaillés du mois en cours.
+
+    joursFeriesDuMois.forEach((jourFerie) => {
       const dateJourFerie = moment(jourFerie.date).toDate();
       joursTravailles.push({
         jourSemaine: moment(dateJourFerie).format("dddd"),
@@ -58,6 +59,7 @@ router.post("/postCra", async (req, res, next) => {
         reason: "Jour férié",
       });
     });
+    
 
     data.date_debut_du_mois = firstDayOfMonth;
     data.date_fin_du_mois = lastDayOfMonth;
@@ -70,7 +72,7 @@ router.post("/postCra", async (req, res, next) => {
         date: currentDate.toDate(),
         travaille: currentDate.isoWeekday() <= 5,
       };
-    
+
       const jourFerie = joursFeriesDuMois.find((jour) =>
         moment(jour.date).isSame(currentDate, "day")
       );
@@ -78,7 +80,7 @@ router.post("/postCra", async (req, res, next) => {
         jourOuvre.travaille = false;
         jourOuvre.reason = "Jour férié";
       }
-    
+
       joursTravailles.push(jourOuvre);
       if (jourOuvre.travaille) {
         nbJoursTravailles++;
@@ -92,7 +94,6 @@ router.post("/postCra", async (req, res, next) => {
         nbJoursNonTravailles++;
       }
     }
-    
 
     data.joursTravailles = joursTravailles;
     data.nbJoursTravailles = nbJoursTravailles;
