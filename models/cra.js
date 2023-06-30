@@ -1,7 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 
 const CraSchema = mongoose.Schema({
-  consultant: { // Consultant en question qui a saisi le CRA
+  consultant: {
+    // Consultant en question qui a saisi le CRA
     type: mongoose.Schema.Types.ObjectId,
     ref: "Consultant",
   },
@@ -10,22 +11,36 @@ const CraSchema = mongoose.Schema({
       jourSemaine: {
         type: String, // la journée de la semaine
       },
-      date:{
-        type: Date,
+      date: {
+        // La date correspondante
+        type: Date, //format ISO 8601
       },
-      travaille: { // journée travaillée ou pas
+      travaille: {
+        // journée travaillée ou pas
         type: Boolean,
         default: true, // Puisque le calendrier est déjà prérempli comme étant travaillé
+      },
+      reason: {
+        type: String,
+        enum: ["Absence", "Arrêt maladie", "CP", "Jour férié", "Autre"],
+        required: false,
       },
     },
   ],
   nbSemaines: {
+    // Nombre de semaines travaillées
     type: Number,
   },
-  nbJoursTravailles: { // valeur calculable
+  nbJoursTravailles: {
+    // valeur calculable des jours travaillés
+    type: Number,
+  },
+  nbJoursNonTravailles: {
+    // valeur calculable des jours non travaillés
     type: Number,
   },
   mois: {
+    // Mois du saisi
     type: String,
   },
   date_debut_du_mois: {
@@ -35,30 +50,41 @@ const CraSchema = mongoose.Schema({
     type: Date,
   },
   annee: {
+    // L'année de la saisi
     type: String,
   },
   craType: {
+    // Type de Cra
     type: String,
   },
   projet: {
+    // Projet à laquelle le consultant a travaillé
     type: mongoose.Schema.Types.ObjectId,
-    ref: "Projet"
+    ref: "Projet",
   },
-  confirmation: { // les détails de confirmation de son CRA
+  confirmation: {
+    // les détails de confirmation de son CRA
     date_confirmation: {
       type: Date,
     },
     confirmedBy: {
+      // Le nom du manager
       type: String,
     },
-    confirmed_by_manager: { // Le manager qui a confirmé le CRA de son Consultant
+    confirmed_by_manager: {
+      // Le manager qui a confirmé le CRA de son Consultant
       type: Boolean,
       default: false,
     },
   },
-  date_saisiCra: { // la date de saisi du CRA
+  date_saisiCra: {
+    // la date de saisi du CRA
     type: Date,
     default: Date.now,
   },
+  nb_tt_du_mois: {
+    // Nombre de jours en Télétravail
+    type: Number,
+  },
 });
-module.exports = mongoose.model('Cra', CraSchema) ;;
+module.exports = mongoose.model("Cra", CraSchema);
