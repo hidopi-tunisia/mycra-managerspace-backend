@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const axios = require("axios");
 const router = express.Router();
 const moment = require("moment");
 require("moment/locale/fr"); // le jour de la semaine et le mois en FR
@@ -19,9 +20,6 @@ router.get("/", function (req, res, next) {
 router.post("/postCra", async (req, res, next) => {
   //const currentDate = new Date();
   try {
-    const holidays = [
-      /* Liste des dates de jours fériés */
-    ];
     let nbJoursTravailles = 0;
     let nbJoursNonTravailles = 0;
     const joursTravailles = [];
@@ -37,6 +35,30 @@ router.post("/postCra", async (req, res, next) => {
     data.nbSemaines = nbSemaines;
     // Fin calcul nb semaines
 
+    // Récupérer les jours fériés de l'année en cours depuis l'API des jours fériés français
+    const year = moment().format("YYYY");
+    const month = moment().format("MM");
+    const url = "https://jours-feries-france.antoine-augusti.fr/api/2023"; // Remplacez l'URL par l'année souhaitée
+    const response = await axios.get(url);
+    const joursFeries = response.data;
+
+    // Filtrer les jours fériés pour ne garder que ceux du mois en cours
+    const joursFeriesDuMois = joursFeries.filter((jourFerie) => {
+      const dateJourFerie = moment(jourFerie.date);
+      return dateJourFerie.month() === parseInt(month) - 1; // Le mois est basé sur zéro index
+    });
+
+    // Ajouter les jours fériés à la liste des jours travaillés
+    joursFeries.forEach((jourFerie) => {
+      const dateJourFerie = moment(jourFerie.date).toDate();
+      joursTravailles.push({
+        jourSemaine: moment(dateJourFerie).format("dddd"),
+        date: dateJourFerie,
+        travaille: false,
+        reason: "Jour férié",
+      });
+    });
+
     data.date_debut_du_mois = firstDayOfMonth;
     data.date_fin_du_mois = lastDayOfMonth;
 
@@ -44,18 +66,19 @@ router.post("/postCra", async (req, res, next) => {
 
     while (currentDate.isSameOrBefore(lastDayOfMonth)) {
       const jourOuvre = {
-        jourSemaine: currentDate.format("dddd"), // Sauvegarder le jour de la semaine
-        date: currentDate.toDate(), // Date correspondante
-        travaille: currentDate.isoWeekday() <= 5
+        jourSemaine: currentDate.format("dddd"),
+        date: currentDate.toDate(),
+        travaille: currentDate.isoWeekday() <= 5,
       };
-
-      // Vérifier si la date est un jour non travaillé spécifié dans la requête
-      const jourNonTravaille = data.joursTravailles.find(jour => moment(jour.date).isSame(currentDate, "day"));
-      if (jourNonTravaille && !jourNonTravaille.travaille) {
-        jourOuvre.travaille = false; // Marquer la date comme non travaillée
-        jourOuvre.reason = jourNonTravaille.reason; // Récupérer la raison spécifiée
+    
+      const jourFerie = joursFeriesDuMois.find((jour) =>
+        moment(jour.date).isSame(currentDate, "day")
+      );
+      if (jourFerie) {
+        jourOuvre.travaille = false;
+        jourOuvre.reason = "Jour férié";
       }
-
+    
       joursTravailles.push(jourOuvre);
       if (jourOuvre.travaille) {
         nbJoursTravailles++;
@@ -69,6 +92,7 @@ router.post("/postCra", async (req, res, next) => {
         nbJoursNonTravailles++;
       }
     }
+    
 
     data.joursTravailles = joursTravailles;
     data.nbJoursTravailles = nbJoursTravailles;
@@ -154,9 +178,10 @@ router.post("/calculerNbJoursTravailles", async (req, res, next) => {
   }
 });
 
-router.post("/saisirIndisponibilite", async (req, res, next) => {
+router.put("/saisirIndisponibilite/:craId", async (req, res, next) => {
   try {
     const { dateDebut, dateFin, reason } = req.body;
+    const { craId } = req.params;
 
     // Vérification si la raison est fournie
     if (!reason) {
@@ -170,13 +195,13 @@ router.post("/saisirIndisponibilite", async (req, res, next) => {
     const endDate = new Date(dateFin).toISOString();
 
     // Recherche du CRA correspondant
-    const cra = await CRA.findOne({ consultant: req.user.id });
+    const cra = await CRA.findOne({ _id: craId });
 
     // Vérification si le CRA existe
     if (!cra) {
       return res
         .status(404)
-        .json({ message: "Aucun CRA trouvé pour ce consultant" });
+        .json({ message: "Aucun CRA trouvé pour cet identifiant" });
     }
 
     // Mise à jour des absences
@@ -201,6 +226,12 @@ router.post("/saisirIndisponibilite", async (req, res, next) => {
     });
   }
 });
+
+// Fonction pour vérifier si une date est un jour férié
+function isHoliday(date, holidays) {
+  const formattedDate = moment(date).format("YYYY-MM-DD");
+  return holidays.some((holiday) => holiday.date === formattedDate);
+}
 
 // Fonction pour obtenir le nom du jour de la semaine en français
 function getNomJourSemaine(jourSemaine) {
