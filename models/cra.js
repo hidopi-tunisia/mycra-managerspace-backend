@@ -22,15 +22,36 @@ const CraSchema = mongoose.Schema({
       },
       reason: {
         type: String,
-        enum: ["Absence", "Arrêt maladie", "CP", "Jour férié", "Autre"],
-        required: false,
-        nomJourFerieDuMois: String
+        enum: [
+          "Absence",
+          "Arrêt maladie",
+          "CP",
+          "Jour férié",
+          "Absences",
+          "Absence autorisée non rémunérée",
+          "Absence non autorisée non rémunérée",
+          "Déménagement",
+          "Examen médical prénatal",
+          "Mariage enfant",
+          "Mariage-Pacs",
+          "Maternité",
+          "Naissance",
+          "Paternité",
+          "Soins enfants",
+          "Accident de travail-trajet",
+          "Autre",
+        ],
+        required: false
+      },
+      nomJourFerieDuMois: {
+        // le nom du jour férié
+        type: String, 
       },
     },
   ],
-  nbJoursFeries : {
+  nbJoursFeries: {
     // Nombre de semaines travaillées
-    type: Number
+    type: Number,
   },
   nbSemaines: {
     // Nombre de semaines travaillées

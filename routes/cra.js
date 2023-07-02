@@ -3,7 +3,6 @@ const mongoose = require("mongoose");
 const axios = require("axios");
 const router = express.Router();
 const moment = require("moment");
-require("moment/locale/fr"); // le jour de la semaine et le mois en FR
 const CRA = require("../models/cra");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
@@ -11,8 +10,8 @@ const bodyParser = require("body-parser");
 
 router.get("/", function (req, res, next) {
   const currentDate = new Date();
-  const firstDayOfMonth = moment().startOf("month");
-  const lastDayOfMonth = moment().endOf("month");
+  const firstDayOfMonth = moment().startOf("month").locale("fr");
+  const lastDayOfMonth = moment().endOf("month").locale("fr");
   console.log(firstDayOfMonth, lastDayOfMonth);
   //res.json(moment().year());
 });
@@ -26,15 +25,8 @@ router.post("/postCra", async (req, res, next) => {
     const joursTravailles = [];
     data = req.body;
     data.craType = "mois";
-    data.mois = moment().format("MMMM");
+    data.mois = moment().locale("fr").format("MMMM");
     data.annee = moment().format("YYYY");
-
-    // Début Calcul du nombre de semaines du mois
-    const firstDayOfMonth = moment().startOf("month");
-    const lastDayOfMonth = moment().endOf("month");
-    const nbSemaines = lastDayOfMonth.diff(firstDayOfMonth, "weeks") + 1;
-    data.nbSemaines = nbSemaines;
-    // Fin calcul nb semaines
 
     // Récupérer les jours fériés de l'année en cours depuis l'API des jours fériés français
     const year = moment().format("YYYY");
@@ -57,27 +49,38 @@ router.post("/postCra", async (req, res, next) => {
     // Ajouter les jours fériés à la liste des jours travaillés du mois en cours.
 
     joursFeriesDuMois.forEach((jourFerie) => {
-      const dateJourFerie = moment(jourFerie.date).toDate();
+      const dateJourFerie = moment(jourFerie.date).startOf("day").format("YYYY-MM-DD");
       const nomJourFerie = jourFerie.nom_jour_ferie;
+      // Obtenir le jour de la semaine
+      const jourSemaine = moment(dateJourFerie, "DD-MM-YYYY").format("dddd");
+
+      // Obtenir le nom du jour de la semaine en français
+      const nomJourSemaine = moment.weekdays(jourSemaine - 1);
       joursTravailles.push({
-        jourSemaine: moment(dateJourFerie).format("dddd"),
+        jourSemaine: moment(dateJourFerie).locale("fr").format("dddd"),
         date: dateJourFerie,
         travaille: false,
-        reason: "Jour férié"
+        reason: "Jour férié",
+        nomJourFerieDuMois: nomJourFerie,
       });
-      data.nomJourFerieDuMois = jourFerie.nom_jour_ferie
-      console.log('Jours fériés ce mois-ci :',data.nomJourFerieDuMois);
+      data.nomJourFerieDuMois = nomJourFerie;
+      console.log("Jours fériés ce mois-ci :", data.nomJourFerieDuMois);
     });
-
-    data.date_debut_du_mois = firstDayOfMonth;
-    data.date_fin_du_mois = lastDayOfMonth;
+    // Début Calcul du nombre de semaines du mois
+    const firstDayOfMonth = moment().startOf("month").locale("fr");
+    const lastDayOfMonth = moment().endOf("month").locale("fr");
+    const nbSemaines = lastDayOfMonth.diff(firstDayOfMonth, "weeks") + 1;
+    data.nbSemaines = nbSemaines;
+    // Fin calcul nb semaines
+    data.date_debut_du_mois = firstDayOfMonth.format("YYYY-MM-DD");
+    data.date_fin_du_mois = lastDayOfMonth.format("YYYY-MM-DD");
 
     let currentDate = firstDayOfMonth;
 
     while (currentDate.isSameOrBefore(lastDayOfMonth)) {
       const jourOuvre = {
-        jourSemaine: currentDate.format("dddd"),
-        date: currentDate.toDate(),
+        jourSemaine: currentDate.locale("fr").format("dddd"),
+        date: currentDate.startOf("day").format("YYYY-MM-DD"),
         travaille: currentDate.isoWeekday() <= 5,
       };
 
@@ -221,6 +224,8 @@ router.put("/saisirIndisponibilite/:craId", async (req, res, next) => {
       }
       return jour;
     });
+
+    console.log("jour modifié", startDate);
 
     // Mise à jour du CRA avec les nouvelles absences
     cra.joursTravailles = joursTravailles;
