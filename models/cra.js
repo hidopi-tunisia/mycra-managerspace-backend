@@ -49,6 +49,16 @@ const CraSchema = mongoose.Schema({
       },
     },
   ],
+  datesNonTravaillees: [
+    {
+      date: {
+        type: Date,
+      },
+      raison: {
+        type: String,
+      },
+    },
+  ],
   nbJoursFeries: {
     // Nombre de semaines travaillées
     type: Number,

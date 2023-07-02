@@ -49,7 +49,9 @@ router.post("/postCra", async (req, res, next) => {
     // Ajouter les jours fériés à la liste des jours travaillés du mois en cours.
 
     joursFeriesDuMois.forEach((jourFerie) => {
-      const dateJourFerie = moment(jourFerie.date).startOf("day").format("YYYY-MM-DD");
+      const dateJourFerie = moment(jourFerie.date)
+        .startOf("day")
+        .format("YYYY-MM-DD");
       const nomJourFerie = jourFerie.nom_jour_ferie;
       // Obtenir le jour de la semaine
       const jourSemaine = moment(dateJourFerie, "DD-MM-YYYY").format("dddd");
@@ -90,6 +92,20 @@ router.post("/postCra", async (req, res, next) => {
       if (jourFerie) {
         jourOuvre.travaille = false;
         jourOuvre.reason = "Jour férié";
+      }
+
+      // Déclaration et initialisation de la variable datesNonTravaillees
+      const datesNonTravaillees = req.body.datesNonTravaillees || [];
+      // Vérifier si la date actuelle est une date non travaillée
+      const dateNonTravaillee = datesNonTravaillees.find((date) =>
+        moment(date.date).isSame(currentDate, "day")
+      );
+      if (dateNonTravaillee) {
+        jourOuvre.travaille = false;
+        jourOuvre.reason = dateNonTravaillee.raison;
+
+        // Incrémenter le nombre de jours non travaillés
+        nbJoursNonTravailles++;
       }
 
       joursTravailles.push(jourOuvre);
