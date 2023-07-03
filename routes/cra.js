@@ -157,6 +157,7 @@ router.put("/saisirIndisponibilite/:id", async (req, res, next) => {
       return res.status(404).json({ message: "CRA introuvable" });
     }
 
+
     // Ajouter la période d'indisponibilité au tableau des indisponibilités
     cra.indisponibilites.push({ dateDebut, dateFin, raison });
 
@@ -175,7 +176,10 @@ router.put("/saisirIndisponibilite/:id", async (req, res, next) => {
 
     // Mettre à jour le nombre de jours non travaillés
     cra.nbJoursNonTravailles += joursIndisponibles;
-    console.log(cra.nbJoursNonTravailles);
+
+    // Mettre à jour le nombre de jours travaillés
+    cra.nbJoursTravailles -= joursIndisponibles;
+
     // Sauvegarder les modifications du CRA
     await cra.save();
 
