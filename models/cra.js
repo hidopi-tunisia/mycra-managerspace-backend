@@ -59,6 +59,22 @@ const CraSchema = mongoose.Schema({
       },
     },
   ],
+  indisponibilites: [
+    {
+      dateDebut: {
+        type: Date,
+        required: true,
+      },
+      dateFin: {
+        type: Date,
+        required: true,
+      },
+      raison: {
+        type: String,
+        required: true,
+      },
+    },
+  ],
   nbJoursFeries: {
     // Nombre de semaines travaillées
     type: Number,

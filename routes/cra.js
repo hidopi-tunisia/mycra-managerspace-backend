@@ -145,115 +145,44 @@ router.post("/postCra", async (req, res, next) => {
   }
 });
 
-router.post("/calculerNbJoursTravailles", async (req, res, next) => {
+router.put("/saisirIndisponibilite/:id", async (req, res, next) => {
+  const id = req.params.id;
+  const { dateDebut, dateFin, raison } = req.body;
+
   try {
-    const { date_debut_du_mois, date_fin_du_mois } = req.body;
-    let nbJoursTravailles = 0;
-    const joursTravailles = [];
+    const cra = await CRA.findById(id);
 
-    let currentDate = moment(date_debut_du_mois).startOf("day");
-
-    while (currentDate.isSameOrBefore(date_fin_du_mois)) {
-      const jourOuvre = {
-        jourSemaine: currentDate.format("dddd"),
-        date: currentDate.toDate(),
-        travaille: currentDate.isoWeekday() <= 5,
-      };
-
-      joursTravailles.push(jourOuvre);
-      if (jourOuvre.travaille) {
-        nbJoursTravailles++;
-      }
-
-      currentDate = currentDate.add(1, "day");
-    }
-
-    const data = {
-      joursTravailles,
-      nbJoursTravailles,
-      date_debut_du_mois,
-      date_fin_du_mois,
-    };
-    const dateDebut = moment(data.date_debut_du_mois);
-    const mois = dateDebut.format("MMMM");
-
-    data.craType = "entre 2 dates";
-    data.mois = mois;
-    data.annee = moment().format("YYYY");
-    var cra = new CRA(data);
-    const savedCRA = await cra.save();
-    console.log(
-      data.nbJoursTravailles,
-      "jours travailles pour le",
-      cra.craType,
-      "de",
-      cra.mois,
-      "en",
-      data.annee
-    );
-    console.log(
-      "période : ",
-      cra.date_debut_du_mois,
-      "au",
-      cra.date_fin_du_mois
-    );
-    res.send(savedCRA);
-  } catch (error) {
-    console.log(error);
-    res
-      .status(400)
-      .json({ message: "Erreur lors du calcul des jours travaillés." });
-  }
-});
-
-router.put("/saisirIndisponibilite/:craId", async (req, res, next) => {
-  try {
-    const { dateDebut, dateFin, reason } = req.body;
-    const { craId } = req.params;
-
-    // Vérification si la raison est fournie
-    if (!reason) {
-      return res
-        .status(400)
-        .json({ message: "Il faut saisir une raison d'absence" });
-    }
-
-    // Convertir les dates en format ISO 8601
-    const startDate = new Date(dateDebut).toISOString();
-    const endDate = new Date(dateFin).toISOString();
-
-    // Recherche du CRA correspondant
-    const cra = await CRA.findOne({ _id: craId });
-
-    // Vérification si le CRA existe
+    // Vérifier si le CRA existe
     if (!cra) {
-      return res
-        .status(404)
-        .json({ message: "Aucun CRA trouvé pour cet identifiant" });
+      return res.status(404).json({ message: "CRA introuvable" });
     }
 
-    // Mise à jour des absences
-    const joursTravailles = cra.joursTravailles.map((jour) => {
-      if (jour.date >= startDate && jour.date <= endDate) {
+    // Ajouter la période d'indisponibilité au tableau des indisponibilités
+    cra.indisponibilites.push({ dateDebut, dateFin, raison });
+
+    // Mettre à jour les jours travaillés correspondants dans le tableau
+    const joursTravailles = cra.joursTravailles;
+    const joursIndisponibles = moment(dateFin).diff(dateDebut, "days") + 1;
+
+    joursTravailles.forEach((jour) => {
+      const dateJour = moment(jour.date);
+
+      if (dateJour.isBetween(dateDebut, dateFin, null, "[]")) {
         jour.travaille = false;
-        jour.reason = reason;
+        jour.reason = raison;
       }
-      return jour;
     });
 
-    console.log("jour modifié", startDate);
-
-    // Mise à jour du CRA avec les nouvelles absences
-    cra.joursTravailles = joursTravailles;
+    // Mettre à jour le nombre de jours non travaillés
+    cra.nbJoursNonTravailles += joursIndisponibles;
+    console.log(cra.nbJoursNonTravailles);
+    // Sauvegarder les modifications du CRA
     await cra.save();
 
-    return res.json(cra);
+    res.json({ message: "Période d'indisponibilité ajoutée avec succès" });
   } catch (error) {
     console.log(error);
-    return res.status(500).json({
-      message:
-        "Une erreur s'est produite lors de la saisie de l'indisponibilité",
-    });
+    res.status(500).json({ message: "Erreur lors de la mise à jour du CRA" });
   }
 });
 
@@ -276,6 +205,8 @@ function getNomJourSemaine(jourSemaine) {
   ];
   return joursSemaine[jourSemaine];
 }
+// endpoint : Confirmer un CRA PATCH et/ou Refuser Un CRA avec une raison
+// endpoint : Supprimer un CRA (is_deleted: true / deleted_date : Date.now())
 
 router.put("/update/:id", async (req, res) => {
   try {
