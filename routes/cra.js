@@ -196,33 +196,24 @@ function isHoliday(date, holidays) {
   return holidays.some((holiday) => holiday.date === formattedDate);
 }
 
-// Fonction pour obtenir le nom du jour de la semaine en français
-function getNomJourSemaine(jourSemaine) {
-  const joursSemaine = [
-    "Dimanche",
-    "Lundi",
-    "Mardi",
-    "Mercredi",
-    "Jeudi",
-    "Vendredi",
-    "Samedi",
-  ];
-  return joursSemaine[jourSemaine];
-}
 // endpoint : Confirmer un CRA PATCH et/ou Refuser Un CRA avec une raison
 // endpoint : Supprimer un CRA (is_deleted: true / deleted_date : Date.now())
 
-router.put("/update/:id", async (req, res) => {
+router.put("/update-cra/:id", async (req, res) => {
   try {
-    id = req.params.id;
-    newData = req.body;
-    updated = await CRA.findByIdAndUpdate({ _id: id }, newData);
-    res.send(updated);
+    const id = req.params.id;
+    const newData = req.body;
+    const updated = await CRA.findByIdAndUpdate({ _id: id }, newData);
+    if (!updated) {
+      return res.status(404).json({ message: "CRA introuvable" });
+    }
+    res.json({ message: "CRA mis à jour avec succès" });
   } catch (error) {
-    res.send(err);
+    res.status(500).json({ message: "Erreur lors de la mise à jour du CRA" });
   }
 });
-router.get("/getall", async (req, res) => {
+
+router.get("/getall-cra", async (req, res) => {
   try {
     cras = await CRA.find();
     res.send(cras);
@@ -230,24 +221,27 @@ router.get("/getall", async (req, res) => {
     res.send(error);
   }
 });
-router.get("/getbyid/:id", async (req, res) => {
+router.get("/get_cra_by_id/:id", async (req, res) => {
   try {
     id = req.params.id;
     cra = await CRA.findById({ _id: id });
     res.send(cra);
+    console.log("Nb jours trvaillées : ", cra.nbJoursTravailles);
+    console.log("Nb jours NON trvaillées : ", cra.nbJoursNonTravailles);
+    console.log("Nb jours Jours Férié : ", cra.nbJoursFeries);
   } catch (error) {
     res.send(error);
   }
 });
-router.delete("/delete/:id", (req, res) => {
-  id = req.params.id;
-  CRA.findByIdAndDelete({ _id: id })
-    .then((deleteCRA) => {
-      res.send(deleteCRA);
-    })
-    .catch((err) => {
-      res.send(err);
-    });
-});
+// router.delete("/delete/:id", (req, res) => {
+//   id = req.params.id;
+//   CRA.findByIdAndDelete({ _id: id })
+//     .then((deleteCRA) => {
+//       res.send(deleteCRA);
+//     })
+//     .catch((err) => {
+//       res.send(err);
+//     });
+// });
 
 module.exports = router;
