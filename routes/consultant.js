@@ -104,5 +104,30 @@ router.get('/getbyid/:id',async(req,res)=>{
    })
 
    // Get CRA By ID Consultant
+
+   router.get("/statistiques/:consultantId", async (req, res) => {
+    try {
+      const consultantId = req.params.consultantId;
+  
+      // Calcul du nombre de mois travaillés
+      const moisTravailles = await CRA.distinct("mois", { consultantId });
+  
+      // Calcul du nombre total de jours non travaillés
+      const totalJoursNonTravailles = await CRA.aggregate([
+        { $match: { consultantId } },
+        { $group: { _id: null, total: { $sum: "$nbJoursNonTravailles" } } },
+      ]);
+  
+      const statistiques = {
+        nombreMoisTravailles: moisTravailles.length,
+        nombreTotalJoursNonTravailles: totalJoursNonTravailles.length > 0 ? totalJoursNonTravailles[0].total : 0,
+      };
+  
+      res.json(statistiques);
+    } catch (error) {
+      res.status(500).json({ message: "Erreur lors de la récupération des statistiques du consultant" });
+    }
+  });
+  
  module.exports=router;
  

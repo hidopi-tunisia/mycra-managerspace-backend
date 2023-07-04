@@ -114,9 +114,12 @@ const CraSchema = mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Projet",
   },
-  confirmation: {
-    // les détails de confirmation de son CRA
+  confirmation_refus: {
+    // les détails de confirmation et/ou refus de son CRA
     date_confirmation: {
+      type: Date,
+    },
+    date_refus: {
       type: Date,
     },
     confirmedBy: {
@@ -124,10 +127,29 @@ const CraSchema = mongoose.Schema({
       type: String,
     },
     confirmed_by_manager: {
-      // Le manager qui a confirmé le CRA de son Consultant
+      // La confirmation et la validation d'un CRA d'un Consultant
       type: Boolean,
       default: false,
     },
+    refused_by_manager: {
+      // Le  refus d'un CRA d'un Consultant avec une raison.
+      type: Boolean,
+      default: false,
+    },
+    raison_refus : { // raison du refus
+      type : String
+    }
+  },
+  status: {
+    type : String, // Validé / Refusé / En Attente
+    // RG : Si confirmed_by_manager = false & refused_by_manager = false
+    enum: [
+      "Refusee",
+      "Validee",
+      "En Attente"
+    ],
+    default : "En Attente",
+    required : true
   },
   date_saisiCra: {
     // la date de saisi du CRA
@@ -137,6 +159,6 @@ const CraSchema = mongoose.Schema({
   nb_tt_du_mois: {
     // Nombre de jours en Télétravail
     type: Number,
-  },
+  }
 });
 module.exports = mongoose.model("Cra", CraSchema);

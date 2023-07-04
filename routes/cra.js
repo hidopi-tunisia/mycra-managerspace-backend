@@ -190,14 +190,43 @@ router.put("/saisirIndisponibilite/:id", async (req, res, next) => {
   }
 });
 
-// Fonction pour vérifier si une date est un jour férié
-function isHoliday(date, holidays) {
-  const formattedDate = moment(date).format("YYYY-MM-DD");
-  return holidays.some((holiday) => holiday.date === formattedDate);
-}
+// endpoint : Confirmer un CRA PATCH et/ou Refuser Un CRA avec une raison + date
+router.put("/refuser-cra/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { raison } = req.body;
+    const currentDate = new Date();
 
-// endpoint : Confirmer un CRA PATCH et/ou Refuser Un CRA avec une raison
+    const cra = await CRA.findById(id);
+
+    // Vérifier si le CRA existe
+    if (!cra) {
+      return res.status(404).json({ message: "CRA introuvable" });
+    }
+
+    // Mettre à jour les détails de refus
+    cra.confirmation_refus.date_refus = currentDate;
+    cra.confirmation_refus.refused_by_manager = true;
+    cra.confirmation_refus.raison_refus = raison;
+    cra.status = "Refusee";
+
+    // Réinitialiser confirmed_by_manager à false si déjà true
+    if (cra.confirmation_refus.confirmed_by_manager) {
+      cra.confirmation_refus.confirmed_by_manager = false;
+    }
+
+    // Sauvegarder les modifications du CRA
+    await cra.save();
+
+    res.json({ message: "CRA refusé avec succès" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors du refus du CRA" });
+  }
+});
+
 // endpoint : Supprimer un CRA (is_deleted: true / deleted_date : Date.now())
+// le pourcentage des CRA saisi du mois en cours par le nombre total des consultants
 
 router.put("/update-cra/:id", async (req, res) => {
   try {
@@ -218,21 +247,27 @@ router.get("/getall-cra", async (req, res) => {
     cras = await CRA.find();
     res.send(cras);
   } catch (error) {
-    res.send(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des CRA" });
   }
 });
+
 router.get("/get_cra_by_id/:id", async (req, res) => {
   try {
-    id = req.params.id;
-    cra = await CRA.findById({ _id: id });
-    res.send(cra);
-    console.log("Nb jours trvaillées : ", cra.nbJoursTravailles);
-    console.log("Nb jours NON trvaillées : ", cra.nbJoursNonTravailles);
-    console.log("Nb jours Jours Férié : ", cra.nbJoursFeries);
+    const id = req.params.id;
+    const cra = await CRA.findById(id);
+    if (!cra) {
+      return res.status(404).json({ message: "CRA introuvable" });
+    }
+    res.json(cra);
+    console.log("Nb jours travaillés : ", cra.nbJoursTravailles);
+    console.log("Nb jours non travaillés : ", cra.nbJoursNonTravailles);
+    console.log("Nb jours fériés : ", cra.nbJoursFeries);
   } catch (error) {
-    res.send(error);
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de la récupération du CRA" });
   }
 });
+
 // router.delete("/delete/:id", (req, res) => {
 //   id = req.params.id;
 //   CRA.findByIdAndDelete({ _id: id })
