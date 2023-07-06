@@ -191,6 +191,46 @@ router.put("/saisirIndisponibilite/:id", async (req, res, next) => {
 });
 
 // endpoint : Confirmer un CRA PATCH et/ou Refuser Un CRA avec une raison + date
+
+router.put("/valider-cra/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { raison } = req.body;
+
+    const cra = await CRA.findById(id);
+
+    if (!cra) {
+      return res.status(404).json({ message: "CRA introuvable" });
+    }
+
+    if (cra.confirmation_refus.confirmed_by_manager) {
+      return res.status(400).json({ message: "Le CRA a déjà été confirmé" });
+    }
+
+    if (cra.confirmation_refus.refused_by_manager) {
+      // Réinitialiser le CRA en cas de validation après refus
+      cra.confirmation_refus.refused_by_manager = false;
+      cra.confirmation_refus.date_refus = null;
+      cra.confirmation_refus.raison_refus = null;
+    }
+
+    cra.confirmation_refus.confirmed_by_manager = true;
+    cra.confirmation_refus.refused_by_manager = false;
+    cra.status = "Validee";
+    cra.confirmation_refus.date_confirmation = new Date();
+    cra.confirmation_refus.confirmedBy = "Lecorp";
+    cra.confirmation_refus.raison_refus = null;
+
+    await cra.save();
+
+    res.json({ message: "CRA validé avec succès" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de la validation du CRA" });
+  }
+});
+
+
 router.put("/refuser-cra/:id", async (req, res) => {
   try {
     const id = req.params.id;
