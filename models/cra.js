@@ -159,6 +159,10 @@ const CraSchema = mongoose.Schema({
   nb_tt_du_mois: {
     // Nombre de jours en Télétravail
     type: Number,
+  },
+  is_deleted:{
+    type : Boolean,
+    default : true
   }
 });
 module.exports = mongoose.model("Cra", CraSchema);
