@@ -357,6 +357,27 @@ router.get("/pourcentage-cra-mois", async (req, res) => {
   }
 });
 
+// Cet endpoint utilise les paramètres de requête dateDebut et dateFin pour spécifier la plage de dates à filtrer. 
+// Il renvoie les CRA correspondants qui ont une date de saisie (date_saisiCra) 
+// comprise entre la date de début et la date de fin.
+router.get("/filtrer-cra-par-date", async (req, res) => {
+  // GET /filtrer-cra-par-date?dateDebut=2023-05-01&dateFin=2023-05-31
+
+  try {
+    const { dateDebut, dateFin } = req.query;
+
+    const cras = await CRA.find({
+      date_saisiCra: { $gte: dateDebut, $lte: dateFin }
+    });
+
+    res.json({ cras });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des CRA filtrés par date" });
+  }
+});
+
+
 
 router.put("/update-cra/:id", async (req, res) => {
   try {
