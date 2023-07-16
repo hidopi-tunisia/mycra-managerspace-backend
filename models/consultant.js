@@ -13,6 +13,9 @@ const Consultant = mongoose.model("Consultant", {
     type: String,
     required: true
   },
+  photo_profil: {
+    type: String
+  },
   email: {
     type: String,
     required: true,
@@ -28,11 +31,11 @@ const Consultant = mongoose.model("Consultant", {
   },
   dossierCompetence: {
     type: String,
-    required: true
+    required: false
   },
   profilLinkedIn: {
     type: String,
-    required: true
+    required: false
   },
   competences: [{
     type: String
@@ -50,8 +53,8 @@ const Consultant = mongoose.model("Consultant", {
     required: true
   },
   note: {
-    type: Number,
-    required: true
+    type: String,
+    maxlength: 500
   },
   date_creation: {
     type: Date,
