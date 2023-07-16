@@ -4,6 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 const moment = require("moment");
 const CRA = require("../models/cra");
+const Consultant = require("../models/consultant")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
@@ -265,7 +266,7 @@ router.put("/refuser-cra/:id", async (req, res) => {
 });
 
 // endpoint : Supprimer un CRA (is_deleted: true / deleted_date : Date.now())
-// le pourcentage des CRA saisi du mois en cours par le nombre total des consultants
+
 // nombre des cra pas encore validés (En Attente) du mois en cours
 router.get("/nombre-cra-mois-attente", async (req, res) => {
   try {
@@ -328,6 +329,34 @@ router.get("/nombre-cra-mois-refusee", async (req, res) => {
     res.status(500).json({ message: "Erreur lors du calcul du nombre de CRA" });
   }
 });
+
+// le pourcentage des CRA saisi du mois en cours par le nombre total des consultants
+router.get("/pourcentage-cra-mois", async (req, res) => {
+  try {
+    const currentDate = moment();
+    const startOfMonth = currentDate.startOf("month");
+    const endOfMonth = currentDate.endOf("month");
+
+    const totalCRA = await CRA.countDocuments({
+      date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth }
+    });
+
+    const craNonSaisis = await Consultant.countDocuments({
+      $or: [
+        { cra: { $exists: false } },
+        { "cra.date_saisiCra": { $not: { $gte: startOfMonth, $lte: endOfMonth } } }
+      ]
+    });
+
+    const pourcentageCRA = (totalCRA / (totalCRA + craNonSaisis)) * 100;
+
+    res.json({ pourcentageCRA });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors du calcul du pourcentage de CRA pour le mois en cours" });
+  }
+});
+
 
 router.put("/update-cra/:id", async (req, res) => {
   try {
