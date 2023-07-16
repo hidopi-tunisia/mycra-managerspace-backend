@@ -266,7 +266,27 @@ router.put("/refuser-cra/:id", async (req, res) => {
 
 // endpoint : Supprimer un CRA (is_deleted: true / deleted_date : Date.now())
 // le pourcentage des CRA saisi du mois en cours par le nombre total des consultants
-// nombre des cra pas encore validés
+// nombre des cra pas encore validés (En Attente) du mois en cours
+router.get("/nombre-cra-mois-attente", async (req, res) => {
+  try {
+    const currentDate = moment();
+    const startOfMonth = currentDate.startOf("month");
+    const endOfMonth = currentDate.endOf("month");
+
+    const count = await CRA.countDocuments({
+      $or: [
+        { date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth } },
+        { status: "En Attente"  }
+      ],
+    });
+
+    res.json({ count });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors du calcul du nombre de CRA" });
+  }
+});
+
 // Nombre des Cra Validés
 router.get("/nombre-cra-mois-validee", async (req, res) => {
   try {
@@ -278,6 +298,27 @@ router.get("/nombre-cra-mois-validee", async (req, res) => {
       $or: [
         { date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth } },
         { status: "Validee"  }
+      ],
+    });
+
+    res.json({ count });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors du calcul du nombre de CRA" });
+  }
+});
+
+// nombre des cra refusées (REFUSEE) du mois en cours
+router.get("/nombre-cra-mois-refusee", async (req, res) => {
+  try {
+    const currentDate = moment();
+    const startOfMonth = currentDate.startOf("month");
+    const endOfMonth = currentDate.endOf("month");
+
+    const count = await CRA.countDocuments({
+      $or: [
+        { date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth } },
+        { status: "Refusee"  }
       ],
     });
 
