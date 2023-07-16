@@ -1,43 +1,57 @@
 const mongoose = require("mongoose");
 
 const Consultant = mongoose.model("Consultant", {
-  poste: {
+  civilite: {
     type: String,
-  },
-  experience: {
-    type: String,
-  },
-  competences: {
-    type: String,
+    required: true
   },
   nom: {
     type: String,
+    required: true
   },
   prenom: {
     type: String,
+    required: true
   },
   email: {
     type: String,
-    required: "Email is required",
-    unique: true,
+    required: true,
+    unique: true
   },
-  tel: {
-    type: Number,
-  },
-  dateDispo: {
+  dateDisponibilite: {
     type: Date,
+    required: true
   },
   dateEmbauche: {
     type: Date,
+    required: true
   },
-  codePostal: {
+  dossierCompetence: {
+    type: String,
+    required: true
+  },
+  profilLinkedIn: {
+    type: String,
+    required: true
+  },
+  competences: [{
+    type: String
+  }],
+  poste: {
+    type: String,
+    required: true
+  },
+  anneesExperience: {
     type: Number,
+    required: true
+  },
+  numeroTelephone: {
+    type: String,
+    required: true
   },
   note: {
-    type: String,
-  },
-  linkedIn: {
-    type: String,
+    type: Number,
+    required: true
   },
   date_creation: {
     type: Date,
