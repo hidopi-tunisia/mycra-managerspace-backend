@@ -185,6 +185,7 @@ router.get("/consultant/:id", async (req, res) => {
   }
 });
 
+// Historique des CRA d'un consultant
 router.get("/historique-cra/:idConsultant", async (req, res) => {
     try {
       const idConsultant = req.params.idConsultant;
@@ -206,6 +207,30 @@ router.get("/historique-cra/:idConsultant", async (req, res) => {
     }
   });
   
+router.put("/archiver-consultant/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    // Rechercher le consultant par son ID
+    const consultant = await Consultant.findById(id);
+
+    if (!consultant) {
+      return res.status(404).json({ message: "Consultant introuvable" });
+    }
+
+    // Archiver le consultant en définissant un champ "archived" à true
+    consultant.archived = true;
+
+    // Sauvegarder les modifications du consultant
+    await consultant.save();
+
+    res.json({ message: "Consultant archivé avec succès" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de l'archivage du consultant" });
+  }
+});
+
 
 router.get("/statistiques/:consultantId", async (req, res) => {
   try {

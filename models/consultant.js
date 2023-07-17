@@ -60,6 +60,11 @@ const Consultant = mongoose.model("Consultant", {
     type: Date,
     default: Date.now,
   },
+  archived: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
   projet: [
     {
       type: mongoose.Schema.Types.ObjectId,
