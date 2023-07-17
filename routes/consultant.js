@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const Consultant = require("../models/consultant");
 const Projet = require ('../models/projet')
+const CRA = require("../models/cra");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -128,16 +129,6 @@ router.get("/getall-consultants", async (req, res) => {
   }
 });
 
-router.get("/get-consultant-byid/:id", async (req, res) => {
-  try {
-    id = req.params.id;
-    consultant = await Consultant.findById({ _id: id });
-    res.send(consultant);
-  } catch (error) {
-    res.send(error);
-  }
-});
-
 // Cet endpoint prend en compte l'ID du consultant et l'ID du projet comme paramètres de requête.
 //  Il recherche le consultant et le projet correspondants à ces IDs en utilisant les méthodes findById de Mongoose. 
 // Si l'un ou l'autre n'est pas trouvé, il renvoie une réponse avec un statut 404.
@@ -194,6 +185,27 @@ router.get("/consultant/:id", async (req, res) => {
   }
 });
 
+router.get("/historique-cra/:idConsultant", async (req, res) => {
+    try {
+      const idConsultant = req.params.idConsultant;
+  
+      // Rechercher le consultant par son ID
+      const consultant = await Consultant.findById(idConsultant);
+  
+      if (!consultant) {
+        return res.status(404).json({ message: "Consultant introuvable" });
+      }
+  
+      // Rechercher les CRA associés au consultant
+      const cras = await CRA.find({ consultant: idConsultant });
+  
+      res.json({ consultant, cras });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Erreur lors de la récupération de l'historique des CRA" });
+    }
+  });
+  
 
 router.get("/statistiques/:consultantId", async (req, res) => {
   try {
