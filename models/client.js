@@ -46,11 +46,12 @@ var ClientSchema=mongoose.Schema({
         type: Date,
         default: Date.now
       },
+      projets: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Projet",
+      }],
     consultant:[{
         type: mongoose.Schema.Types.ObjectId,ref:'Consultant'
-    }],
-    projet:[{
-        type: mongoose.Schema.Types.ObjectId,ref:'Projet'
     }]
 
 });
