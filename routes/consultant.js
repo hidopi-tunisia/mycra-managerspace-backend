@@ -119,14 +119,31 @@ router.put("/modifier-consultant/:id", async (req, res) => {
 });
 
 // Affichage de Tous les Consultants
+//EXEMPLE : /consultant/getall-consultants?page=2&limit=5
+
 router.get("/getall-consultants", async (req, res) => {
   try {
-    consultants = await Consultant.find();
-    res.send(consultants);
+    const page = parseInt(req.query.page) || 1; // Par défaut, la première page
+    const limit = parseInt(req.query.limit) || 10; // Par défaut, 10 consultants par page
+
+    const startIndex = (page - 1) * limit;
+    const endIndex = page * limit;
+
+    // Récupérer les consultants avec pagination
+    const consultants = await Consultant.find().skip(startIndex).limit(limit);
+
+    // Obtenir le nombre total de consultants
+    const totalConsultants = await Consultant.countDocuments();
+
+    // Calculer le nombre total de pages
+    const totalPages = Math.ceil(totalConsultants / limit);
+
+    res.json({ consultants, totalConsultants, totalPages });
   } catch (error) {
-    res.send(error);
+    res.status(500).json({ message: "Erreur lors de la récupération des consultants" });
   }
 });
+
 
 // Cet endpoint prend en compte l'ID du consultant et l'ID du projet comme paramètres de requête.
 //  Il recherche le consultant et le projet correspondants à ces IDs en utilisant les méthodes findById de Mongoose.
