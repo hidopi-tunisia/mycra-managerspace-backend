@@ -49,18 +49,31 @@ router.put("/update-client/:id", async (req, res) => {
 });
 
 // Endpoint pour afficher la liste de tous les clients
-router.get("/clients", async (req, res) => {
-  try {
-    const clients = await Client.find();
-    res.json(clients);
-  } catch (error) {
-    console.log(error);
-    res
-      .status(500)
-      .json({ message: "Erreur lors de la récupération des clients" });
-  }
-});
+// clients/clients?page=2&limit=5
 
+router.get("/clients", async (req, res) => {
+    try {
+      const page = parseInt(req.query.page) || 1; // Par défaut, la première page
+      const limit = parseInt(req.query.limit) || 10; // Par défaut, 10 clients par page
+  
+      const startIndex = (page - 1) * limit;
+      const endIndex = page * limit;
+  
+      // Récupérer les clients avec pagination
+      const clients = await Client.find().skip(startIndex).limit(limit);
+  
+      // Obtenir le nombre total de clients
+      const totalClients = await Client.countDocuments();
+  
+      // Calculer le nombre total de pages
+      const totalPages = Math.ceil(totalClients / limit);
+  
+      res.json({ clients, totalClients, totalPages });
+    } catch (error) {
+      res.status(500).json({ message: "Erreur lors de la récupération des clients" });
+    }
+  });
+  
 // Endpoint pour afficher les détails d'un client spécifique
 router.get("/client-byid/:id", async (req, res) => {
   try {

@@ -144,7 +144,6 @@ router.get("/getall-consultants", async (req, res) => {
   }
 });
 
-
 // Cet endpoint prend en compte l'ID du consultant et l'ID du projet comme paramètres de requête.
 //  Il recherche le consultant et le projet correspondants à ces IDs en utilisant les méthodes findById de Mongoose.
 // Si l'un ou l'autre n'est pas trouvé, il renvoie une réponse avec un statut 404.
