@@ -1,58 +1,78 @@
-const mongoose=require('mongoose');
-// var mongoose = require('../config/connect.js');
+const mongoose = require("mongoose");
 
-var ClientSchema=mongoose.Schema({
-    nomSocial:{
-        type:String,
-    } ,
-    responsable:{
-        type:String
+const clientSchema = new mongoose.Schema({
+  civilite: {
+    type: String,
+    required: true,
+  },
+  nom: {
+    type: String,
+    required: false,
+  },
+  prenom: {
+    type: String,
+    required: false,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  numeroTelephone: {
+    type: String,
+    required: true,
+  },
+  deuxiemeNumeroTelephone: {
+    type: String,
+  },
+  adresse: {
+    rue: {
+      type: String,
+      required: true,
     },
-    NSiret:{
-        type:String
+    codePostal: {
+      type: String,
+      required: true,
     },
-    adressePostale:{
-        type:String
-    } ,
-    email:{
-        type:String,
-        required:"Email is required",
-        unique:true
-    } ,
-    tel1:{
-        type:Number
-        
-    } ,
-    tel2:{
-        type:Number
-        
+    ville: {
+      type: String,
+      required: true,
     },
-    ville:{
-        type:String
+  },
+  nomCompletResponsable: {
+    type: String,
+    required: true,
+  },
+  nomSocialEntreprise: {
+    type: String,
+    required: true,
+  },
+  siretEntreprise: {
+    type: String,
+    required: true,
+  },
+  dateSignature: {
+    type: Date,
+  },
+  observation: {
+    type: String,
+  },
+  projets: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Projet",
     },
-    codePostal:{
-        type: Number
-    },
-    dateSignature:{
-        type:Date
-    },
-    note:{
-        type:String
-    },
-    competences:{
-        type:String
-    },
-    date_creation: {
-        type: Date,
-        default: Date.now
-      },
-      projets: [{
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Projet",
-      }],
-    consultant:[{
-        type: mongoose.Schema.Types.ObjectId,ref:'Consultant'
-    }]
-
+  ],
+  consultants: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Consultant",
+  }],
+  dateCreation: {
+    type: Date,
+    default: Date.now,
+  },
 });
-module.exports = mongoose.model('Client', ClientSchema) ;
+
+const Client = mongoose.model("Client", clientSchema);
+
+module.exports = Client;

@@ -30,10 +30,10 @@ const ProjetSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  consultants: [{
+  consultants: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Consultant",
-  }],
+  },
   date_creation: {
     type: Date,
     default: Date.now,

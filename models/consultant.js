@@ -65,11 +65,14 @@ const Consultant = mongoose.model("Consultant", {
     default: false,
     required: true,
   },
-  projet: [
+  projet: 
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Projet",
     },
-  ],
+    client: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Client",
+    },
 });
 module.exports = Consultant;

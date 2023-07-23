@@ -9,6 +9,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
 
+//TODO: Envoie e-mail avec sendgrid une fois le cra d'un consultant est confirmé ou refusé.
+//TODO: un emai sera envoyé une fois le consultant saisi son CRA
+
 router.get("/", function (req, res, next) {
   const currentDate = new Date();
   const firstDayOfMonth = moment().startOf("month").locale("fr");

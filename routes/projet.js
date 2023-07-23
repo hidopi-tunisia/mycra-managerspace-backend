@@ -3,6 +3,7 @@ const express = require("express");
 const router = express.Router();
 const Projet = require("../models/projet");
 const Client = require("../models/client");
+const Consultant = require("../models/consultant");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
@@ -60,21 +61,24 @@ router.put("/modifier-projet/:id", async (req, res) => {
 });
 
 router.get("/projet/:id", async (req, res) => {
-  try {
-    const id = req.params.id;
-    const projet = await Projet.findById(id).populate("client consultants");
-    res.json(projet);
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({
-      message: "Erreur lors de la récupération des détails du projet",
-    });
-  }
+    try {
+        const projetId = req.params.id;
+        const projet = await Projet.findById(projetId).populate("consultants");
+    
+        if (!projet) {
+          return res.status(404).json({ message: "Projet introuvable" });
+        }
+    
+        res.json(projet);
+      } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Erreur lors de la récupération du projet" });
+      }
 });
 
 router.get("/projets", async (req, res) => {
   try {
-    const projets = await Projet.find().populate("client");
+    const projets = await Projet.find().populate("consultants");
     res.json(projets);
   } catch (error) {
     console.log(error);
@@ -136,6 +140,7 @@ router.get("/nombre-projets", async (req, res) => {
   }
 });
 
+// Afficher les projets d'un client
 router.get("/projets-client/:idClient", async (req, res) => {
     try {
       const idClient = req.params.idClient;
