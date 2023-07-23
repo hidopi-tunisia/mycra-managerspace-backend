@@ -167,38 +167,34 @@ router.put(
 );
 
 // Affecter un consultant à un client
-router.put(
-  "/affecter-consultant-client/:consultantId/:clientId",
-  async (req, res) => {
-    try {
-      const consultantId = req.params.consultantId;
-      const clientId = req.params.clientId;
+// Endpoint pour affecter un consultant à un client
+router.put("/affecter-consultant-client/:consultantId/:clientId", async (req, res) => {
+  const consultantId = req.params.consultantId;
+  const clientId = req.params.clientId;
 
-      const consultant = await Consultant.findById(consultantId);
-      const client = await Client.findById(clientId);
+  try {
+    const consultant = await Consultant.findById(consultantId);
+    const client = await Client.findById(clientId);
 
-      if (!consultant || !client) {
-        return res
-          .status(404)
-          .json({ message: "Consultant ou client introuvable" });
-      }
-
-      consultant.client = clientId;
-      client.consultants.push(consultantId);
-
-      await Promise.all([consultant.save(), client.save()]);
-
-      res.json({ message: "Consultant affecté au client avec succès" });
-    } catch (error) {
-      console.log(error);
-      res
-        .status(500)
-        .json({
-          message: "Erreur lors de l'affectation du consultant au client",
-        });
+    if (!consultant || !client) {
+      return res.status(404).json({ message: "Consultant ou client introuvable" });
     }
+
+    // Vérifier si le consultant est déjà affecté au client
+    if (client.consultants.includes(consultantId)) {
+      return res.status(400).json({ message: "Le consultant est déjà affecté à ce client" });
+    }
+
+    client.consultants.push(consultantId);
+    await client.save();
+
+    res.json({ message: "Consultant affecté au client avec succès", consultant });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Erreur lors de l'affectation du consultant au client" });
   }
-);
+});
+
 
 router.get("/consultant/:id", async (req, res) => {
   try {
@@ -312,7 +308,5 @@ router.get("/statistiques/:consultantId", async (req, res) => {
     });
   }
 });
-
-// affichze les consultants affectés à un projet
 
 module.exports = router;
