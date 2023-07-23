@@ -433,4 +433,6 @@ router.get("/get_cra_by_id/:id", async (req, res) => {
 //     });
 // });
 
+// Affichage la liste des présences et absences de tous les consultants et l'exporter en csv
+
 module.exports = router;

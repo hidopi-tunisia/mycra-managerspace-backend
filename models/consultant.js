@@ -60,19 +60,15 @@ const Consultant = mongoose.model("Consultant", {
     type: Date,
     default: Date.now,
   },
-  archived: {
-    type: Boolean,
-    default: false,
-    required: true,
-  },
-  projet: 
+  projet: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Projet",
     },
-    client: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Client",
-    },
+  ],
+  client: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Client",
+  },
 });
 module.exports = Consultant;

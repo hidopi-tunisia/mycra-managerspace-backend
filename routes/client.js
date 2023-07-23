@@ -184,5 +184,28 @@ router.get("/clients/:clientId/nombre-consultants", async (req, res) => {
   });
   
   // Liste des consultants travaillant chez ce client
+// Endpoint pour obtenir la liste des consultants d'un client spécifique
+router.get("/liste-consultants/:clientId/consultants", async (req, res) => {
+    try {
+      const clientId = req.params.clientId;
+  
+      // Rechercher le client dans la base de données
+      const client = await Client.findById(clientId).populate("consultants");
+  
+      if (!client) {
+        return res.status(404).json({ message: "Client introuvable" });
+      }
+  
+      // Récupérer la liste des consultants affectés au client
+      const consultants = client.consultants;
+  
+      res.json({ consultants });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Erreur lors de la récupération des consultants du client" });
+    }
+  });
+
+  // Supprimer un consultant d'un client
 
 module.exports = router;
