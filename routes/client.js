@@ -137,11 +137,9 @@ router.get("/projets-client/:id/projets", async (req, res) => {
     res.json(client.projets);
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({
-        message: "Erreur lors de la récupération des projets du client",
-      });
+    res.status(500).json({
+      message: "Erreur lors de la récupération des projets du client",
+    });
   }
 });
 
@@ -163,49 +161,95 @@ router.get("/nombre-clients", async (req, res) => {
 //Nombre des consultants qui sont affectés à ce client
 // Endpoint pour obtenir le nombre de consultants travaillant chez un client précis
 router.get("/clients/:clientId/nombre-consultants", async (req, res) => {
-    try {
-      const clientId = req.params.clientId;
-  
-      // Recherche du client par son ID
-      const client = await Client.findById(clientId);
-  
-      if (!client) {
-        return res.status(404).json({ message: "Client introuvable" });
-      }
-  
-      // Obtention du nombre de consultants dans le tableau 'consultants' du client
-      const nombreConsultants = client.consultants.length;
-  
-      res.json({ nombreConsultants });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Erreur lors du calcul du nombre de consultants" });
-    }
-  });
-  
-  // Liste des consultants travaillant chez ce client
-// Endpoint pour obtenir la liste des consultants d'un client spécifique
-router.get("/liste-consultants/:clientId/consultants", async (req, res) => {
-    try {
-      const clientId = req.params.clientId;
-  
-      // Rechercher le client dans la base de données
-      const client = await Client.findById(clientId).populate("consultants");
-  
-      if (!client) {
-        return res.status(404).json({ message: "Client introuvable" });
-      }
-  
-      // Récupérer la liste des consultants affectés au client
-      const consultants = client.consultants;
-  
-      res.json({ consultants });
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: "Erreur lors de la récupération des consultants du client" });
-    }
-  });
+  try {
+    const clientId = req.params.clientId;
 
-  // Supprimer un consultant d'un client
+    // Recherche du client par son ID
+    const client = await Client.findById(clientId);
+
+    if (!client) {
+      return res.status(404).json({ message: "Client introuvable" });
+    }
+
+    // Obtention du nombre de consultants dans le tableau 'consultants' du client
+    const nombreConsultants = client.consultants.length;
+
+    res.json({ nombreConsultants });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ message: "Erreur lors du calcul du nombre de consultants" });
+  }
+});
+
+// Liste des consultants travaillant chez ce client
+router.get("/liste-consultants/:clientId/consultants", async (req, res) => {
+  try {
+    const clientId = req.params.clientId;
+
+    // Rechercher le client dans la base de données
+    const client = await Client.findById(clientId).populate("consultants");
+
+    if (!client) {
+      return res.status(404).json({ message: "Client introuvable" });
+    }
+
+    // Récupérer la liste des consultants affectés au client
+    const consultants = client.consultants;
+
+    res.json({ consultants });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({
+        message: "Erreur lors de la récupération des consultants du client",
+      });
+  }
+});
+
+// Supprimer un consultant d'un client
+router.delete(
+  "/supp-consultant/:clientId/supprimer-consultant/:consultantId",
+  async (req, res) => {
+    try {
+      const { clientId, consultantId } = req.params;
+
+      const [client, consultant] = await Promise.all([
+        Client.findById(clientId),
+        Consultant.findById(consultantId),
+      ]);
+
+      if (!client || !consultant) {
+        return res
+          .status(404)
+          .json({ message: "Client ou consultant introuvable" });
+      }
+
+      // Vérifier si le consultant est bien affecté au client
+      if (!client.consultants.includes(consultantId)) {
+        return res
+          .status(400)
+          .json({ message: "Le consultant n'est pas affecté à ce client" });
+      }
+
+      // Supprimer le consultant de la liste des consultants du client
+      client.consultants = client.consultants.filter(
+        (id) => id.toString() !== consultantId
+      );
+      await client.save();
+
+      res.json({ message: "Consultant supprimé du client avec succès" });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({
+          message: "Erreur lors de la suppression du consultant du client",
+        });
+    }
+  }
+);
 
 module.exports = router;
