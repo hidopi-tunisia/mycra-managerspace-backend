@@ -380,8 +380,6 @@ router.get("/filtrer-cra-par-date", async (req, res) => {
   }
 });
 
-
-
 router.put("/update-cra/:id", async (req, res) => {
   try {
     const id = req.params.id;

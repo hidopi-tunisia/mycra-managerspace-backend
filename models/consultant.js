@@ -70,5 +70,20 @@ const Consultant = mongoose.model("Consultant", {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
   },
+  aAccepteCGU: {
+    type: Boolean,
+    default: false,
+    required: true,
+  },
+  cguVersionAcceptee: {
+    type: String,
+    default: "",
+  },
+  statutCompte: {
+    type: String,
+    enum: ["active", "inactive"],
+    default: "active",
+    required: true,
+  },
 });
 module.exports = Consultant;
