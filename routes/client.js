@@ -161,26 +161,20 @@ router.get("/nombre-clients", async (req, res) => {
 //Nombre des projets d'un client
 
 //Nombre des consultants qui sont affectés à ce client
+// Endpoint pour obtenir le nombre de consultants travaillant chez un client précis
 router.get("/clients/:clientId/nombre-consultants", async (req, res) => {
     try {
       const clientId = req.params.clientId;
   
-      // Recherche du client en fonction de son ID
+      // Recherche du client par son ID
       const client = await Client.findById(clientId);
   
       if (!client) {
         return res.status(404).json({ message: "Client introuvable" });
       }
   
-      // Recherche des projets associés à ce client
-      const projets = await Projet.find({ client: clientId });
-  
-      let nombreConsultants = 0;
-  
-      // Pour chaque projet, compter le nombre de consultants qui y travaillent
-      for (const projet of projets) {
-        nombreConsultants += projet.consultants.length;
-      }
+      // Obtention du nombre de consultants dans le tableau 'consultants' du client
+      const nombreConsultants = client.consultants.length;
   
       res.json({ nombreConsultants });
     } catch (error) {
@@ -188,7 +182,7 @@ router.get("/clients/:clientId/nombre-consultants", async (req, res) => {
       res.status(500).json({ message: "Erreur lors du calcul du nombre de consultants" });
     }
   });
-
+  
   // Liste des consultants travaillant chez ce client
 
 module.exports = router;
