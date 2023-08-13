@@ -12,7 +12,7 @@ const User = mongoose.model("User", {
   },
   role: {
     type: String,
-    enum: ["manager", "consultant"],
+    enum: ["admin","manager", "consultant"],
     required: true,
   },
   email: {
