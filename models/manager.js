@@ -91,6 +91,21 @@ const ManagerSchema = new mongoose.Schema({
     default: "active",
     required: true,
   },
+  role: {
+    type: String,
+    enum: ["manager", "consultant","admin"],
+    required: true,
+    default: "manager", // Définissez le rôle par défaut
+  },
+  // Données Firebase
+  uid: {
+    type: String, // Identifiant utilisateur Firebase
+    required: true,
+  },
+  firebaseToken: {
+    type: String, // Token d'authentification Firebase
+    required: false,
+  },
 });
 
 const Manager = mongoose.model("Manager", ManagerSchema);

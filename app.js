@@ -4,8 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var config = require("./config/connect");
-const admin = require('firebase-admin');
-const credentials = require("./mycra-dev-firebase-adminsdk-yd5qy-156c051fb2.json");
+var firebaseConfig = require('./config/firebaseConfig');
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -15,10 +14,6 @@ const projetRoute = require("./routes/projet");
 const craRoute = require("./routes/cra");
 const managerRoute = require("./routes/manager");
 const offreRoute = require("./routes/offre");
-
-admin.initializeApp({
-  credential: admin.credential.cert(credentials)
-});
 
 var app = express();
 
