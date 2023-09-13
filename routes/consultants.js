@@ -1,6 +1,8 @@
 import express from "express";
+import { auth } from "../middlewares/auth";
 
 const router = express.Router();
+router.use("/", auth);
 
 router.get("/", (req, res) => {
   res.send("Hello Consultants!");
@@ -14,5 +16,6 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   res.send("Got a DELETE request at /user");
 });
+
 
 export default router;

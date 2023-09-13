@@ -1,5 +1,6 @@
 import express from "express";
 import "dotenv/config";
+import "./config/firebase";
 
 import { crasRoutes } from "./routes";
 import { consultantsRoutes } from "./routes";
