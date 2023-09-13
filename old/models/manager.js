@@ -1,6 +1,10 @@
 const mongoose = require("mongoose");
 
 const ManagerSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    required: true,
+  },
   nom: {
     type: String,
     required: true,
@@ -40,19 +44,19 @@ const ManagerSchema = new mongoose.Schema({
       required: true,
     },
     adresse: {
-        rue: {
-          type: String,
-          required: true,
-        },
-        codePostal: {
-          type: String,
-          required: true,
-        },
-        ville: {
-          type: String,
-          required: true,
-        },
+      rue: {
+        type: String,
+        required: true,
       },
+      codePostal: {
+        type: String,
+        required: true,
+      },
+      ville: {
+        type: String,
+        required: true,
+      },
+    },
     numeroTelephone: {
       type: String,
       required: true,
@@ -68,9 +72,9 @@ const ManagerSchema = new mongoose.Schema({
       required: true,
     },
     expiree: {
-        type: Boolean,
-        default: false,
-      }
+      type: Boolean,
+      default: false,
+    },
   },
   offre: {
     type: mongoose.Schema.Types.ObjectId,
@@ -93,14 +97,9 @@ const ManagerSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["manager", "consultant","admin"],
+    enum: ["manager", "consultant", "admin"],
     required: true,
     default: "manager", // Définissez le rôle par défaut
-  },
-  // Données Firebase
-  uid: {
-    type: String, // Identifiant utilisateur Firebase
-    required: true,
   },
   firebaseToken: {
     type: String, // Token d'authentification Firebase

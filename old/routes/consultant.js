@@ -216,11 +216,9 @@ router.put(
       });
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({
-          message: "Erreur lors de l'affectation du consultant au client",
-        });
+      res.status(500).json({
+        message: "Erreur lors de l'affectation du consultant au client",
+      });
     }
   }
 );
