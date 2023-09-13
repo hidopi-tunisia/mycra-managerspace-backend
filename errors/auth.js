@@ -30,8 +30,19 @@ class ForbiddenError extends BaseError {
   }
 }
 
+class UnidentifiedRoleError extends BaseError {
+  #code = 400;
+  constructor() {
+    super();
+    this.message = "Unidentified role";
+    this.name = "UnidentifiedRole";
+    this.code = this.#code;
+  }
+}
+
 export {
   NoAuthorizationHeaderError,
   NoAuthorizationTokenError,
   ForbiddenError,
+  UnidentifiedRoleError,
 };

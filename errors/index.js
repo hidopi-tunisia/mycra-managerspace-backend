@@ -4,6 +4,7 @@ export {
   NoAuthorizationHeaderError,
   NoAuthorizationTokenError,
   ForbiddenError,
+  UnidentifiedRoleError,
 } from "./auth";
 
 const ErrorCodes = {
