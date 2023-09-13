@@ -2,6 +2,8 @@ import express from "express";
 import "dotenv/config";
 import "./config/firebase";
 
+import { auth } from "./middlewares/auth";
+
 import { crasRoutes } from "./routes";
 import { consultantsRoutes } from "./routes";
 import { managersRoutes } from "./routes";
@@ -10,9 +12,9 @@ const app = express();
 const router = express.Router();
 const port = process.env.PORT;
 
-router.get("/", (req, res) => {
-  res.send("Server is working...");
-});
+app.use(express.static("./views"));
+
+router.use("/", auth);
 
 router.use("/cras", crasRoutes);
 router.use("/managers", managersRoutes);

@@ -13,7 +13,7 @@ const auth = (req, res, next) => {
         const token = await admin.auth().verifyIdToken(authorization);
         if (token) {
           req.user = token;
-          next();
+          return next();
         }
         throw new NoAuthorizationHeaderError();
       }

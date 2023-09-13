@@ -1,11 +1,12 @@
 import express from "express";
-import { auth } from "../middlewares/auth";
 
 const router = express.Router();
-router.use("/", auth);
 
 router.get("/", (req, res) => {
   res.send("Hello Consultants!");
+});
+router.get("/:id", (req, res) => {
+  res.send("Hello Consultant!");
 });
 router.post("/", (req, res) => {
   res.send("Got a POST request");
