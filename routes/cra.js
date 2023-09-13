@@ -4,7 +4,7 @@ const axios = require("axios");
 const router = express.Router();
 const moment = require("moment");
 const CRA = require("../models/cra");
-const Consultant = require("../models/consultant")
+const Consultant = require("../models/consultant");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
@@ -161,7 +161,6 @@ router.put("/saisirIndisponibilite/:id", async (req, res, next) => {
       return res.status(404).json({ message: "CRA introuvable" });
     }
 
-
     // Ajouter la période d'indisponibilité au tableau des indisponibilités
     cra.indisponibilites.push({ dateDebut, dateFin, raison });
 
@@ -280,7 +279,7 @@ router.get("/nombre-cra-mois-attente", async (req, res) => {
     const count = await CRA.countDocuments({
       $or: [
         { date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth } },
-        { status: "En Attente"  }
+        { status: "En Attente" },
       ],
     });
 
@@ -301,7 +300,7 @@ router.get("/nombre-cra-mois-validee", async (req, res) => {
     const count = await CRA.countDocuments({
       $or: [
         { date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth } },
-        { status: "Validee"  }
+        { status: "Validee" },
       ],
     });
 
@@ -322,7 +321,7 @@ router.get("/nombre-cra-mois-refusee", async (req, res) => {
     const count = await CRA.countDocuments({
       $or: [
         { date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth } },
-        { status: "Refusee"  }
+        { status: "Refusee" },
       ],
     });
 
@@ -341,14 +340,18 @@ router.get("/pourcentage-cra-mois", async (req, res) => {
     const endOfMonth = currentDate.endOf("month");
 
     const totalCRA = await CRA.countDocuments({
-      date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth }
+      date_saisiCra: { $gte: startOfMonth, $lte: endOfMonth },
     });
 
     const craNonSaisis = await Consultant.countDocuments({
       $or: [
         { cra: { $exists: false } },
-        { "cra.date_saisiCra": { $not: { $gte: startOfMonth, $lte: endOfMonth } } }
-      ]
+        {
+          "cra.date_saisiCra": {
+            $not: { $gte: startOfMonth, $lte: endOfMonth },
+          },
+        },
+      ],
     });
 
     const pourcentageCRA = (totalCRA / (totalCRA + craNonSaisis)) * 100;
@@ -356,12 +359,15 @@ router.get("/pourcentage-cra-mois", async (req, res) => {
     res.json({ pourcentageCRA });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Erreur lors du calcul du pourcentage de CRA pour le mois en cours" });
+    res.status(500).json({
+      message:
+        "Erreur lors du calcul du pourcentage de CRA pour le mois en cours",
+    });
   }
 });
 
-// Cet endpoint utilise les paramètres de requête dateDebut et dateFin pour spécifier la plage de dates à filtrer. 
-// Il renvoie les CRA correspondants qui ont une date de saisie (date_saisiCra) 
+// Cet endpoint utilise les paramètres de requête dateDebut et dateFin pour spécifier la plage de dates à filtrer.
+// Il renvoie les CRA correspondants qui ont une date de saisie (date_saisiCra)
 // comprise entre la date de début et la date de fin.
 router.get("/filtrer-cra-par-date", async (req, res) => {
   // GET /filtrer-cra-par-date?dateDebut=2023-05-01&dateFin=2023-05-31
@@ -370,13 +376,15 @@ router.get("/filtrer-cra-par-date", async (req, res) => {
     const { dateDebut, dateFin } = req.query;
 
     const cras = await CRA.find({
-      date_saisiCra: { $gte: dateDebut, $lte: dateFin }
+      date_saisiCra: { $gte: dateDebut, $lte: dateFin },
     });
 
     res.json({ cras });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Erreur lors de la récupération des CRA filtrés par date" });
+    res.status(500).json({
+      message: "Erreur lors de la récupération des CRA filtrés par date",
+    });
   }
 });
 
@@ -396,7 +404,12 @@ router.put("/update-cra/:id", async (req, res) => {
 
 router.get("/getall-cra", async (req, res) => {
   try {
-    cras = await CRA.find();
+    const { sort, page, limit } = req.query;
+
+    cras = await CRA.find()
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ date_saisiCra: sort === "ASC" ? 1 : -1 });
     res.send(cras);
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la récupération des CRA" });

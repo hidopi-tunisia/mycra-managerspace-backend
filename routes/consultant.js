@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 const Consultant = require("../models/consultant");
-const Client = require('../models/client');
+const Client = require("../models/client");
 const Projet = require("../models/projet");
 const CRA = require("../models/cra");
 const bcrypt = require("bcrypt");
@@ -140,7 +140,9 @@ router.get("/getall-consultants", async (req, res) => {
 
     res.json({ consultants, totalConsultants, totalPages });
   } catch (error) {
-    res.status(500).json({ message: "Erreur lors de la récupération des consultants" });
+    res
+      .status(500)
+      .json({ message: "Erreur lors de la récupération des consultants" });
   }
 });
 
@@ -173,44 +175,55 @@ router.put(
       });
     } catch (error) {
       console.log(error);
-      res
-        .status(500)
-        .json({
-          message: "Erreur lors de l'affectation du consultant au projet",
-        });
+      res.status(500).json({
+        message: "Erreur lors de l'affectation du consultant au projet",
+      });
     }
   }
 );
 
 // Affecter un consultant à un client
 // Endpoint pour affecter un consultant à un client
-router.put("/affecter-consultant-client/:consultantId/:clientId", async (req, res) => {
-  const consultantId = req.params.consultantId;
-  const clientId = req.params.clientId;
+router.put(
+  "/affecter-consultant-client/:consultantId/:clientId",
+  async (req, res) => {
+    const consultantId = req.params.consultantId;
+    const clientId = req.params.clientId;
 
-  try {
-    const consultant = await Consultant.findById(consultantId);
-    const client = await Client.findById(clientId);
+    try {
+      const consultant = await Consultant.findById(consultantId);
+      const client = await Client.findById(clientId);
 
-    if (!consultant || !client) {
-      return res.status(404).json({ message: "Consultant ou client introuvable" });
+      if (!consultant || !client) {
+        return res
+          .status(404)
+          .json({ message: "Consultant ou client introuvable" });
+      }
+
+      // Vérifier si le consultant est déjà affecté au client
+      if (client.consultants.includes(consultantId)) {
+        return res
+          .status(400)
+          .json({ message: "Le consultant est déjà affecté à ce client" });
+      }
+
+      client.consultants.push(consultantId);
+      await client.save();
+
+      res.json({
+        message: "Consultant affecté au client avec succès",
+        consultant,
+      });
+    } catch (error) {
+      console.log(error);
+      res
+        .status(500)
+        .json({
+          message: "Erreur lors de l'affectation du consultant au client",
+        });
     }
-
-    // Vérifier si le consultant est déjà affecté au client
-    if (client.consultants.includes(consultantId)) {
-      return res.status(400).json({ message: "Le consultant est déjà affecté à ce client" });
-    }
-
-    client.consultants.push(consultantId);
-    await client.save();
-
-    res.json({ message: "Consultant affecté au client avec succès", consultant });
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({ message: "Erreur lors de l'affectation du consultant au client" });
   }
-});
-
+);
 
 router.get("/consultant/:id", async (req, res) => {
   try {
@@ -247,6 +260,7 @@ router.get("/consultant/:id", async (req, res) => {
 // Historique des CRA d'un consultant
 router.get("/historique-cra/:idConsultant", async (req, res) => {
   try {
+    const { sort, page, limit } = req.query;
     const idConsultant = req.params.idConsultant;
 
     // Rechercher le consultant par son ID
@@ -257,16 +271,21 @@ router.get("/historique-cra/:idConsultant", async (req, res) => {
     }
 
     // Rechercher les CRA associés au consultant
-    const cras = await CRA.find({ consultant: idConsultant });
+    const cras = await CRA.find({ consultant: idConsultant })
+      .skip(page * limit)
+      .limit(limit);
 
+    if (sort === "DESC") {
+      //cras = cras.sort({ date_saisiCra: -1 });
+    } else if (sort === "ASC") {
+      // cras = cras.sort({ date_saisiCra: 1 });
+    }
     res.json({ consultant, cras });
   } catch (error) {
     console.log(error);
-    res
-      .status(500)
-      .json({
-        message: "Erreur lors de la récupération de l'historique des CRA",
-      });
+    res.status(500).json({
+      message: "Erreur lors de la récupération de l'historique des CRA",
+    });
   }
 });
 
