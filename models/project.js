@@ -21,18 +21,24 @@ const schema = new Schema({
     type: Date,
     required: false,
   },
+  category: { // categorie
+    type: String,
+    required: true,
+  },
   client: { // client
     type: Schema.Types.ObjectId,
     ref: "Client",
     required: true,
   },
-  category: { // categorie
-    type: String,
-    required: true,
-  },
   consultants: { // consultants
     type: Schema.Types.ObjectId,
     ref: "Consultant",
+  },
+  manager: {
+    // manager
+    type: Schema.Types.ObjectId,
+    ref: "Manager",
+    required: true,
   },
   createdAt: { // date_creation
     type: Date,

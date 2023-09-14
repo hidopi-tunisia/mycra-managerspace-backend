@@ -103,7 +103,7 @@ const schema = new Schema({
     required: true,
   },
   manager: {
-    // client
+    // manager
     type: Schema.Types.ObjectId,
     ref: "Manager",
     required: true,
