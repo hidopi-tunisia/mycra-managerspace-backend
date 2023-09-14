@@ -1,6 +1,6 @@
 import admin from "firebase-admin";
 
-const createAdmin = async (payload) => {
+const createUser = async (payload) => {
   return admin.auth().createUser(payload);
 };
 
@@ -12,4 +12,4 @@ const setRole = async (id, role) => {
   return admin.auth().setCustomUserClaims(id, { role });
 };
 
-export { createAdmin, generatePasswordResetLink, setRole };
+export { createUser, generatePasswordResetLink, setRole };

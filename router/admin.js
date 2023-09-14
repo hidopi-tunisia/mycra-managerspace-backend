@@ -1,10 +1,10 @@
 import express from "express";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import {
-  createAdmin,
+  createUser,
   generatePasswordResetLink,
   setRole,
-} from "../helpers/admins";
+} from "../helpers/auth";
 import { handleError, isValidEmail } from "../utils";
 import { InvalidEmailError, InvalidRoleError } from "../utils/errors/auth";
 import { generateTemplate } from "../utils/mailing/generate-template";
@@ -19,7 +19,7 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     if (!body.email || !isValidEmail(body.email)) {
       throw new InvalidEmailError();
     }
-    const user = await createAdmin(body);
+    const user = await createUser(body);
     await setRole(user.uid, Roles.ADMIN);
     if (query.send_email !== "false") {
       const link = await generatePasswordResetLink(body.email);
