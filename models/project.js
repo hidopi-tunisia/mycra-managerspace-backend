@@ -1,40 +1,40 @@
 import { model, Schema } from "mongoose";
 
 const schema = new Schema({
-  nom: {
+  name: { // nom
     type: String,
     required: true,
   },
-  codeProjet: {
+  projectCode: { // codeProjet
     type: String,
     required: true,
   },
-  description: {
+  description: { // description
     type: String,
     required: true,
   },
-  dateDebut: {
+  startDate: { // dateDebut
     type: Date,
     required: false,
   },
-  dateFin: {
+  endDate: { // dateFin
     type: Date,
     required: false,
   },
-  client: {
+  client: { // client
     type: Schema.Types.ObjectId,
     ref: "Client",
     required: true,
   },
-  categorie: {
+  category: { // categorie
     type: String,
     required: true,
   },
-  consultants: {
+  consultants: { // consultants
     type: Schema.Types.ObjectId,
     ref: "Consultant",
   },
-  date_creation: {
+  createdAt: { // date_creation
     type: Date,
     default: Date.now,
   },
