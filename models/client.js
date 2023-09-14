@@ -83,7 +83,7 @@ const schema = new Schema({
     // consultants
     {
       type: Schema.Types.ObjectId,
-      ref: "Consultants",
+      ref: "Consultant",
     },
   ],
   createdAt: {

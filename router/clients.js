@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
   res.send("Hello Consultants!");
 });
-router.get("/:id", async (req, res) => {
+router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
   try {
     const { id } = req.params;
     const { join } = req.query;
