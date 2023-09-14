@@ -1,75 +1,93 @@
 import { Schema, model } from "mongoose";
 
 const schema = new Schema({
-  civilite: {
+  civility: {
+    // civilite
     type: String,
     required: true,
   },
-  nom: {
+  lastName: {
+    // nom
     type: String,
     required: false,
   },
-  prenom: {
+  firstName: {
+    // prenom
     type: String,
     required: false,
   },
   email: {
+    // email
     type: String,
     required: true,
     unique: true,
   },
-  numeroTelephone: {
+  phone: {
+    // numeroTelephone
     type: String,
     required: true,
   },
-  deuxiemeNumeroTelephone: {
+  secondPhone: {
+    // deuxiemeNumeroTelephone
     type: String,
   },
-  adresse: {
-    rue: {
+  address: {
+    // adresse
+    street: {
+      // rue
       type: String,
       required: true,
     },
-    codePostal: {
+    zipCode: {
+      // codePostal
       type: String,
       required: true,
     },
-    ville: {
+    city: {
+      // ville
       type: String,
       required: true,
     },
   },
-  nomCompletResponsable: {
+  supervisorFullName: {
+    // nomCompletResponsable
     type: String,
     required: true,
   },
-  nomSocialEntreprise: {
+  companyName: {
+    // nomSocialEntreprise
     type: String,
     required: true,
   },
-  siretEntreprise: {
+  siret: {
+    // siretEntreprise
     type: String,
     required: true,
   },
-  dateSignature: {
+  signatureDate: {
+    // dateSignature
     type: Date,
   },
   observation: {
+    // observation
     type: String,
   },
-  projets: [
+  projects: [
+    // projets
     {
       type: Schema.Types.ObjectId,
-      ref: "Projet",
+      ref: "Project",
     },
   ],
   consultants: [
+    // consultants
     {
       type: Schema.Types.ObjectId,
-      ref: "Consultant",
+      ref: "Consultants",
     },
   ],
-  dateCreation: {
+  createdAt: {
+    // dateCreation
     type: Date,
     default: Date.now,
   },

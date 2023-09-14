@@ -7,12 +7,12 @@ const schema = new Schema({
     required: true,
   },
   firstName: {
-    // nom
+    // prenom
     type: String,
     required: true,
   },
   lastName: {
-    // prenom
+    // nom
     type: String,
     required: true,
   },
