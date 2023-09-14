@@ -1,10 +1,10 @@
-import nodemailer from "nodemailer";
+import { createTransport, getTestMessageUrl } from "nodemailer";
 
 const { EMAIL_USER, EMAIL_PASSWORD, EMAIL_HOST, EMAIL_PORT } = process.env;
 
 const user = EMAIL_USER;
 
-const transporter = nodemailer.createTransport({
+const transporter = createTransport({
   host: EMAIL_HOST,
   port: EMAIL_PORT,
   auth: {
@@ -21,7 +21,7 @@ const sendEmail = (payload) => {
 };
 
 const getTestMessageUrl = (info) => {
-  return nodemailer.getTestMessageUrl(info);
+  return getTestMessageUrl(info);
 };
 
 export { sendEmail, getTestMessageUrl };
