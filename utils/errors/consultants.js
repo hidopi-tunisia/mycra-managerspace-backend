@@ -10,4 +10,4 @@ class ConsultantNotFoundError extends BaseError {
   }
 }
 
-export {ConsultantNotFoundError}
+export { ConsultantNotFoundError };

@@ -1,13 +1,24 @@
 import express from "express";
 import { Groups, checkGroup } from "../middlewares/check-group";
+import { getClient } from "../helpers/clients";
+import { handleError } from "../utils";
 
 const router = express.Router();
 
 router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
   res.send("Hello Consultants!");
 });
-router.get("/:id", (req, res) => {
-  res.send("Hello Consultant!");
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { join } = req.query;
+    const result = await getClient(id, {
+      join,
+    });
+    res.send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 router.post("/", (req, res) => {
   res.send("Got a POST request");
