@@ -12,10 +12,10 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
   try {
     const { id } = req.params;
     const { join } = req.query;
-    const response = await getConsultant(id, {
+    const result = await getConsultant(id, {
       join,
     });
-    res.send(response);
+    res.send(result);
   } catch (error) {
     handleError({ res, error });
   }

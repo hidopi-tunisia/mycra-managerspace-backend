@@ -9,7 +9,7 @@ const getConsultant = async (id, options = {}) => {
   if (options.join && typeof options.join === "string") {
     if (options.join.split(",").includes("projects")) {
       doc = await doc.populate({
-        path: "projet",
+        path: "projects",
       });
     }
     if (options.join.split(",").includes("clients")) {
