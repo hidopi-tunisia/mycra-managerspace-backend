@@ -5,10 +5,12 @@ import "./config/database";
 
 import { auth } from "./middlewares/auth";
 
-import { crasRoutes } from "./routes";
-import { consultantsRoutes } from "./routes";
-import { clientsRoutes } from "./routes";
-import { managersRoutes } from "./routes";
+import {
+  crasRouter,
+  consultantsRouter,
+  managersRouter,
+  clientsRouter,
+} from "./router";
 
 const app = express();
 const router = express.Router();
@@ -18,10 +20,10 @@ app.use(express.static("./views"));
 
 router.use("/", auth);
 
-router.use("/cras", crasRoutes);
-router.use("/managers", managersRoutes);
-router.use("/clients", clientsRoutes);
-router.use("/consultants", consultantsRoutes);
+router.use("/cras", crasRouter);
+router.use("/managers", managersRouter);
+router.use("/clients", clientsRouter);
+router.use("/consultants", consultantsRouter);
 
 app.use("/", router);
 
