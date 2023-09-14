@@ -40,6 +40,6 @@ const schema = new Schema({
   },
 });
 
-const Projet = model("Projet", schema);
+const Project = model("Project", schema);
 
-export default Projet;
+export default Project;

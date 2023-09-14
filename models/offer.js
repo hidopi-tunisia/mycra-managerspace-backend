@@ -24,6 +24,6 @@ const schema = new Schema({
   // Autres champs spécifiques à l'offre
 });
 
-const Offre = mongoose.model("Offre", schema);
+const Offer = model("Offer", schema);
 
-export default Offre;
+export default Offer;
