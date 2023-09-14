@@ -1,23 +1,23 @@
 import { model, Schema } from "mongoose";
 
 const schema = new Schema({
-  nom: {
+  name: { // nom
     type: String,
     required: true,
   },
-  description: {
+  description: { // description
     type: String,
     required: true,
   },
-  dureeEssai: {
+  trialPeriod: { // dureeEssai
     type: Number,
     required: true,
   },
-  prix: {
+  price: { // prix
     type: Number,
     required: true,
   },
-  fonctionnalitesIncluses: {
+  includedFeatures: { // fonctionnalitesIncluses
     type: [String],
     required: true,
   },
