@@ -22,11 +22,6 @@ const schema = new Schema({
     required: true,
     unique: true,
   },
-  password: {
-    // motDePasse
-    type: String,
-    required: true,
-  },
   consultants: [
     // consultants
     {
@@ -43,7 +38,7 @@ const schema = new Schema({
   ],
   company: {
     // entreprise
-    companyNamenomSocial: {
+    companyName: {
       // nomSocial
       type: String,
       required: true,
@@ -117,18 +112,6 @@ const schema = new Schema({
     enum: ["active", "inactive"],
     default: "active",
     required: true,
-  },
-  role: {
-    // role
-    type: String,
-    enum: ["manager", "consultant", "admin"],
-    required: true,
-    default: "manager", // Définissez le rôle par défaut
-  },
-  firebaseToken: {
-    // firebaseToken
-    type: String, // Token d'authentification Firebase
-    required: false,
   },
 });
 

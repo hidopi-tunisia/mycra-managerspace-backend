@@ -26,4 +26,8 @@ const getManager = async (id, options = {}) => {
   return doc;
 };
 
-export { getManager };
+const createManager = (payload) => {
+  return new Manager({ ...payload }).save();
+};
+
+export { getManager, createManager };

@@ -17,8 +17,8 @@ const extractTemplate = async (filename) => {
   const str = await read(`${__dirname}/templates/${filename}.html`, "utf8");
   return str;
 };
-const generateTemplate = async (placeholders = {}) => {
-  let str = await extractTemplate("welcome_admin");
+const generateTemplate = async (filename, placeholders = {}) => {
+  let str = await extractTemplate(filename);
   str = str.replaceAll("%APP_NAME%", APP_NAME);
   Object.keys(placeholders).forEach((element) => {
     str = str.replaceAll(`%${element}%`, placeholders[element]);

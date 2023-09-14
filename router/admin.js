@@ -23,7 +23,10 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     await setRole(user.uid, Roles.ADMIN);
     if (query.send_email !== "false") {
       const link = await generatePasswordResetLink(body.email);
-      const html = await generateTemplate({ EMAIL: body.email, LINK: link });
+      const html = await generateTemplate("welcome_admin", {
+        EMAIL: body.email,
+        LINK: link,
+      });
       const payload = {
         to: req.body.email,
         subject: "Reset your password",

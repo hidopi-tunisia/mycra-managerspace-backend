@@ -1,3 +1,5 @@
+import { StatusCodes } from "../status-codes";
+
 class BaseError extends Error {
   #code = StatusCodes.INTERNAL_SERVER_ERROR;
   constructor() {
