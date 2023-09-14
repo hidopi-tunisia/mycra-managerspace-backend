@@ -6,7 +6,7 @@ const getConsultant = async (id, options = {}) => {
   if (!doc) {
     throw new ConsultantNotFoundError();
   }
-  if (options.join && typeof options.join === "string") {
+  if (options.join) {
     if (options.join.split(",").includes("projects")) {
       doc = await doc.populate({
         path: "projects",

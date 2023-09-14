@@ -12,8 +12,12 @@ router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
     const { id } = req.params;
     const { join } = req.query;
+    const options = {};
+    if (typeof join === "string") {
+      options["join"] = join;
+    }
     const result = await getManager(id, {
-      join,
+      ...options,
     });
     res.status(StatusCodes.OK).send(result);
   } catch (error) {

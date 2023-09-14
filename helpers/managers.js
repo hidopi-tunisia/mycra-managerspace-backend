@@ -6,7 +6,7 @@ const getManager = async (id, options = {}) => {
   if (!doc) {
     throw new ManagerNotFoundError();
   }
-  if (options.join && typeof options.join === "string") {
+  if (options.join) {
     if (options.join.split(",").includes("company")) {
       doc = await doc.populate({
         path: "company",
