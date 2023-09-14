@@ -1,7 +1,8 @@
+import { StatusCodes } from "../status-codes";
 import { BaseError } from "./base-error";
 
 class ManagerNotFoundError extends BaseError {
-  #code = 404;
+  #code = StatusCodes.NOT_FOUND;
   constructor() {
     super();
     this.message = "Manager not found";

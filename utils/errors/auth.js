@@ -1,3 +1,4 @@
+import { StatusCodes } from "../status-codes";
 import { BaseError } from "./base-error";
 
 class NoAuthorizationHeaderError extends BaseError {

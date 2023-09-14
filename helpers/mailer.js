@@ -1,4 +1,4 @@
-import { createTransport, getTestMessageUrl } from "nodemailer";
+import { createTransport, getTestMessageUrl as getTestURL } from "nodemailer";
 
 const { EMAIL_USER, EMAIL_PASSWORD, EMAIL_HOST, EMAIL_PORT } = process.env;
 
@@ -21,7 +21,7 @@ const sendEmail = (payload) => {
 };
 
 const getTestMessageUrl = (info) => {
-  return getTestMessageUrl(info);
+  return getTestURL(info);
 };
 
 export { sendEmail, getTestMessageUrl };

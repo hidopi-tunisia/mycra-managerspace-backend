@@ -2,6 +2,7 @@ import express from "express";
 import { Groups, checkGroup } from "../middlewares/check-group";
 import { getConsultant } from "../helpers/consultants";
 import { handleError } from "../utils";
+import { StatusCodes } from "../utils/status-codes";
 
 const router = express.Router();
 
