@@ -2,106 +2,131 @@ import { model, Schema } from "mongoose";
 
 const schema = new Schema({
   _id: {
+    // _id
     type: String,
     required: true,
   },
-  nom: {
+  firstName: {
+    // nom
     type: String,
     required: true,
   },
-  prenom: {
+  lastName: {
+    // prenom
     type: String,
     required: true,
   },
   email: {
+    // email
     type: String,
     required: true,
     unique: true,
   },
-  motDePasse: {
+  password: {
+    // motDePasse
     type: String,
     required: true,
   },
   consultants: [
+    // consultants
     {
       type: Schema.Types.ObjectId,
       ref: "Consultant",
     },
   ],
   clients: [
+    // clients
     {
       type: Schema.Types.ObjectId,
       ref: "Client",
     },
   ],
-  entreprise: {
-    nomSocial: {
+  company: {
+    // entreprise
+    companyNamenomSocial: {
+      // nomSocial
       type: String,
       required: true,
     },
     siret: {
+      // siret
       type: String,
       required: true,
     },
-    adresse: {
-      rue: {
+    address: {
+      // adresse
+      street: {
+        //
         type: String,
         required: true,
       },
-      codePostal: {
+      zipCode: {
+        // codePostal
         type: String,
         required: true,
       },
-      ville: {
+      city: {
+        // ville
         type: String,
         required: true,
       },
     },
-    numeroTelephone: {
+    phone: {
+      // numeroTelephone
       type: String,
       required: true,
     },
   },
-  periodeDessai: {
-    debut: {
+  trialPeriod: {
+    // periodeDessai
+    start: {
+      // debut
       type: Date,
       default: Date.now,
     },
-    fin: {
+    end: {
+      // fin
       type: Date,
       required: true,
     },
-    expiree: {
+    expired: {
+      // expiree
       type: Boolean,
       default: false,
     },
   },
-  offre: {
+  offer: {
+    // offre
     type: Schema.Types.ObjectId,
-    ref: "Offre",
+    ref: "Offer",
   },
-  aAccepteCGU: {
+  hasAcceptedTermsAndConditions: {
+    // aAccepteCGU
     type: Boolean,
     default: false,
     required: true,
   },
-  cguVersionAcceptee: {
+  acceptedTermsAndConditionsVersion: {
+    // cguVersionAcceptee
     type: String,
     default: "",
   },
-  statutCompte: {
+  accountStatus: {
+    // statutCompte
     type: String,
     enum: ["active", "inactive"],
     default: "active",
     required: true,
   },
   role: {
+    // role
     type: String,
     enum: ["manager", "consultant", "admin"],
     required: true,
     default: "manager", // Définissez le rôle par défaut
   },
   firebaseToken: {
+    // firebaseToken
     type: String, // Token d'authentification Firebase
     required: false,
   },
