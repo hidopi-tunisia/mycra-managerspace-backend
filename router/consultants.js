@@ -11,6 +11,7 @@ import {
 } from "../helpers/auth";
 import { generateTemplate } from "../utils/mailing/generate-template";
 import { sendEmail } from "../helpers/mailer";
+import { generateObjectId } from "../utils/generate-string";
 
 const router = express.Router();
 
@@ -33,17 +34,14 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.post("/x", checkGroup(Groups.MANAGERS), async (req, res) => {
-  const x = makeX();
-  console.log(x);
-});
 router.post("/", checkGroup(Groups.MANAGERS), async (req, res) => {
   try {
     const { user: manager, body, query } = req;
     if (!body.email || !isValidEmail(body.email)) {
       throw new InvalidEmailError();
     }
-    const user = await createUser({ email: body.email });
+    const uid = generateObjectId().toString();
+    const user = await createUser({ uid, email: body.email });
     await setRole(user.uid, Roles.CONSULTANT);
     if (query.send_email !== "false") {
       const link = await generatePasswordResetLink(body.email);

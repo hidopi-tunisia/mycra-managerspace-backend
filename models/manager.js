@@ -3,7 +3,7 @@ import { model, Schema } from "mongoose";
 const schema = new Schema({
   _id: {
     // _id
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true,
   },
   firstName: {
@@ -22,20 +22,6 @@ const schema = new Schema({
     required: true,
     unique: true,
   },
-  consultants: [
-    // consultants
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Consultant",
-    },
-  ],
-  clients: [
-    // clients
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Client",
-    },
-  ],
   company: {
     // entreprise
     companyName: {

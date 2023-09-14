@@ -77,7 +77,7 @@ const schema = new Schema({
     type: Date,
     default: Date.now,
   },
-  project: [
+  projects: [
     // projet
     {
       type: Schema.Types.ObjectId,

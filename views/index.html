@@ -46,6 +46,7 @@
           user: null,
           str: '',
           role: '',
+          showMessage: false,
           mounted() {
             this.auth = getAuth()
           },
@@ -75,6 +76,10 @@
           },
           handleClickCopyAuthorization() {
             navigator.clipboard.writeText(this.user.accessToken)
+            this.showMessage = true
+            setTimeout(() => {
+              this.showMessage = false
+            }, 2000)
           },
         }
       }
@@ -131,6 +136,7 @@
               Role: {{role}}
             </span>
           </div>
+          <div v-show="showMessage" class="alert alert-warning">Copied to clipboard</div>
         </div>
       </div>
     </div>

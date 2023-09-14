@@ -2,7 +2,7 @@ import express from "express";
 import "dotenv/config";
 import "./config/firebase";
 import "./config/database";
-import admin from 'firebase-admin'
+
 import { auth } from "./middlewares/auth";
 
 import {
