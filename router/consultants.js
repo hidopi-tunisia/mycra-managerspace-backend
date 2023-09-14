@@ -1,6 +1,6 @@
 import express from "express";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { createConsultant, getConsultant, makeX } from "../helpers/consultants";
+import { createConsultant, getConsultant } from "../helpers/consultants";
 import { handleError, isValidEmail } from "../utils";
 import { StatusCodes } from "../utils/status-codes";
 import { InvalidEmailError } from "../utils/errors/auth";

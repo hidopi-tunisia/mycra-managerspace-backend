@@ -1,26 +1,19 @@
 {
-  "email": "manager@apple.com",
-  "firstName": "Manager",
-  "lastName": "Toffeha",
+  "civility": "Mr.",
+  "email": "consultant.bilel@vermeg.com",
+  "firstName": "Consultant",
+  "lastName": "Bilel Vermeg",
   "trialPeriod": {
     "start": 1694713474694,
     "end": 1694714740392,
     "expired": false
   },
-  "offer": "49445f64655f6c6f66667265",
-  "hasAcceptedTermsAndConditions": true,
+  "availableAt": 1694714740392,
+  "hiredAt": 1694714740392,
+  "position": "Graphics Designer",
+  "yearsOfExperience": 4,
+  "phone": "654416515646",
+  "hasAcceptedTermsAndConditions": false,
   "acceptedTermsAndConditionsVersion": "Version 1.0",
-  "accountStatus": "active",
-  "company": {
-    "companyName": "Apple",
-    "siret": "12345678901234",
-    "address": {
-      "street": "123 Rue des Fruits",
-      "zipCode": "123456",
-      "city": "California"
-    },
-    "phone": "0123456789"
-  },
-  "consultants": [],
-  "clients": []
+  "accountStatus": "active"
 }

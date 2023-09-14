@@ -1,8 +1,8 @@
 {
   "civility": "Mme.",
-  "email": "consultant.asma@vermeg.com",
+  "email": "consultant.chayme@soprahr.com",
   "firstName": "Consultant",
-  "lastName": "Asma Vermeg",
+  "lastName": "Chayme Sopra HR",
   "trialPeriod": {
     "start": 1694713474694,
     "end": 1694714740392,
@@ -10,7 +10,7 @@
   },
   "availableAt": 1694714740392,
   "hiredAt": 1694714740392,
-  "position": "Web developer",
+  "position": "Full Stack Python",
   "yearsOfExperience": 4,
   "phone": "654416515646",
   "hasAcceptedTermsAndConditions": false,

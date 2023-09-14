@@ -21,4 +21,8 @@ const getClient = async (id, options = {}) => {
   return doc;
 };
 
-export { getClient };
+const createClient = (payload) => {
+  return new Client({ ...payload }).save();
+};
+
+export { getClient, createClient };

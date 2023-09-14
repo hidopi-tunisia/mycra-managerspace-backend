@@ -84,11 +84,6 @@ const schema = new Schema({
       ref: "Project",
     },
   ],
-  client: {
-    // client
-    type: Schema.Types.ObjectId,
-    ref: "Client",
-  },
   hasAcceptedTermsAndConditions: {
     // aAccepteCGU
     type: Boolean,

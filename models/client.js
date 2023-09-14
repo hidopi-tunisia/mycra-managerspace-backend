@@ -79,17 +79,16 @@ const schema = new Schema({
       ref: "Project",
     },
   ],
-  consultants: [
-    // consultants
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Consultant",
-    },
-  ],
   createdAt: {
     // dateCreation
     type: Date,
     default: Date.now,
+  },
+  manager: {
+    // client
+    type: Schema.Types.ObjectId,
+    ref: "Manager",
+    required: true,
   },
 });
 

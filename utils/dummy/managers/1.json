@@ -1,7 +1,7 @@
 {
-  "email": "manager@cocacola.com",
+  "email": "manager.anwer@vermeg.com",
   "firstName": "Manager",
-  "lastName": "Kouki",
+  "lastName": "Anwer Vermeg",
   "trialPeriod": {
     "start": 1694713474694,
     "end": 1694714740392,
@@ -12,15 +12,13 @@
   "acceptedTermsAndConditionsVersion": "Version 1.0",
   "accountStatus": "active",
   "company": {
-    "companyName": "Coca Cola",
+    "companyName": "Vermeg",
     "siret": "12345678901234",
     "address": {
-      "street": "123 Rue des Boissons",
+      "street": "123 Rue des Lacs",
       "zipCode": "123456",
-      "city": "Atlanta"
+      "city": "Lac"
     },
     "phone": "0123456789"
-  },
-  "consultants": [],
-  "clients": []
+  }
 }

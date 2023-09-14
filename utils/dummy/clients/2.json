@@ -1,0 +1,17 @@
+{
+  "civility": "Mme.",
+  "email": "client.yasmine@cocacola.com",
+  "firstName": "Client",
+  "lastName": "Yasmine Coca Cola",
+  "supervisorFullName": "Yacine Yekken",
+  "availableAt": 1694714740392,
+  "phone": "654416515646",
+  "secondPhone": "654416515646",
+  "address": {
+    "street": "123 Rue des Boissons",
+    "zipCode": "123456",
+    "city": "Atlanata"
+  },
+  "companyName": "Coca Cola",
+  "siret": "12345678901234"
+}

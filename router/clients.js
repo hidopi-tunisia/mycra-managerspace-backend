@@ -1,8 +1,9 @@
 import express from "express";
 import { Groups, checkGroup } from "../middlewares/check-group";
-import { getClient } from "../helpers/clients";
-import { handleError } from "../utils";
+import { createClient, getClient } from "../helpers/clients";
+import { handleError, isValidEmail } from "../utils";
 import { StatusCodes } from "../utils/status-codes";
+import { InvalidEmailError } from "../utils/errors/auth";
 
 const router = express.Router();
 
@@ -25,8 +26,20 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.post("/", (req, res) => {
-  res.send("Got a POST request");
+router.post("/", checkGroup(Groups.MANAGERS), async (req, res) => {
+  try {
+    const { user: manager, body } = req;
+    if (!body.email || !isValidEmail(body.email)) {
+      throw new InvalidEmailError();
+    }
+    const result = await createClient({
+      ...body,
+      manager: manager.uid,
+    });
+    res.status(StatusCodes.CREATED).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 router.put("/:id", (req, res) => {
   res.send("Got a PUT request at :id");
