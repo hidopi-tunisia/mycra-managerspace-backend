@@ -1,6 +1,6 @@
 import express from "express";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { createConsultant, getConsultant } from "../helpers/consultants";
+import { createConsultant, getConsultant, makeX } from "../helpers/consultants";
 import { handleError, isValidEmail } from "../utils";
 import { StatusCodes } from "../utils/status-codes";
 import { InvalidEmailError } from "../utils/errors/auth";
@@ -34,7 +34,8 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
   }
 });
 router.post("/x", checkGroup(Groups.MANAGERS), async (req, res) => {
-  console.log(req);
+  const x = makeX();
+  console.log(x);
 });
 router.post("/", checkGroup(Groups.MANAGERS), async (req, res) => {
   try {

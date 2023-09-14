@@ -1,6 +1,6 @@
 import { Consultant } from "../models";
 import { ConsultantNotFoundError } from "../utils/errors/consultants";
-
+import M from "mongoose";
 const getConsultant = async (id, options = {}) => {
   let doc = await Consultant.findById(id);
   if (!doc) {
@@ -24,4 +24,8 @@ const getConsultant = async (id, options = {}) => {
 const createConsultant = (payload) => {
   return new Consultant({ ...payload }).save();
 };
-export { getConsultant, createConsultant };
+const makeX = () => {
+  const x = new M.Types.ObjectId();
+  return x;
+};
+export { getConsultant, createConsultant, makeX };
