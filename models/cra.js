@@ -1,163 +1,198 @@
 import { Schema, model } from "mongoose";
 
 const schema = new Schema({
-  consultant: { // consultant
+  consultant: {
+    // consultant
     // Consultant en question qui a saisi le CRA
     type: Schema.Types.ObjectId,
     ref: "Consultant",
   },
-  joursTravailles: [ // joursTravailles
+  workingDates: [
+    // joursTravailles
     {
-      jourSemaine: { // jourSemaine
+      weekDay: {
+        // jourSemaine
         type: String, // la journée de la semaine
       },
-      date: { // date
+      date: {
+        // date
         // La date correspondante
         type: Date, //format ISO 8601
       },
-      travaille: { // travaille
+      worked: {
+        // travaille
         // journée travaillée ou pas
         type: Boolean,
         default: true, // Puisque le calendrier est déjà prérempli comme étant travaillé
       },
-      reason: { // reason
+      reason: {
+        // reason
         type: String,
         enum: [
-          "Absence",
-          "Arrêt maladie",
-          "CP",
-          "Jour férié",
-          "Absences",
-          "Absence autorisée non rémunérée",
-          "Absence non autorisée non rémunérée",
-          "Déménagement",
-          "Examen médical prénatal",
-          "Mariage enfant",
-          "Mariage-Pacs",
-          "Maternité",
-          "Naissance",
-          "Paternité",
-          "Soins enfants",
-          "Accident de travail-trajet",
-          "Autre",
+          "Absence", // Absence
+          "Sick leave", // Arrêt maladie
+          "Paid leave", // CP
+          "Holiday", // Jour férié
+          "Absences", // Absences
+          "Authorized unpaid leave", // Absence autorisée non rémunérée
+          "Unauthorized unpaid leave", // Absence non autorisée non rémunérée
+          "Relocation", // Déménagement
+          "Prenatal medical examination", // Examen médical prénatal
+          "Child's wedding", // Mariage enfant
+          "PACS", // Mariage-Pacs
+          "Maternity", // Maternité
+          "Birth", // Naissance
+          "Paternity", // Paternité
+          "Childcare", // Soins enfants
+          "Workplace or commuting accident", // Accident de travail-trajet
+          "Other", // Autre
         ],
         required: false,
       },
-      nomJourFerieDuMois: { // nomJourFerieDuMois
+      holidayName: { // nomJourFerieDuMois
+        // nomJourFerieDuMois
         // le nom du jour férié
         type: String,
       },
     },
   ],
-  datesNonTravaillees: [ // datesNonTravaillees
+  nonWorkingDates: [ // 
+    // datesNonTravaillees
     {
-      date: { // date
+      date: {
+        // date
         type: Date,
       },
-      raison: { // raison
+      reason: {
+        // raison
         type: String,
       },
     },
   ],
-  indisponibilites: [ // indisponibilites
+  unavailabilities: [
+    // indisponibilites
     {
-      dateDebut: { // dateDebut
+      startDate: {
+        // dateDebut
         type: Date,
         required: true,
       },
-      dateFin: { // dateFin
+      endDate: {
+        // dateFin
         type: Date,
         required: true,
       },
-      raison: { // raison
+      reason: {
+        // raison
         type: String,
         required: true,
       },
     },
   ],
-  nbJoursFeries: { // nbJoursFeries
+  holidaysCount: {
+    // nbJoursFeries
     // Nombre de semaines travaillées
     type: Number,
   },
-  nbSemaines: { // nbSemaines
+  weeksCount: {
+    // nbSemaines
     // Nombre de semaines travaillées
     type: Number,
   },
-  nbJoursTravailles: { // nbJoursTravailles
+  workingDaysCount: {
+    // nbJoursTravailles
     // valeur calculable des jours travaillés
     type: Number,
   },
-  nbJoursNonTravailles: { // nbJoursNonTravailles
+  nonWorkingDaysCount: {
+    // nbJoursNonTravailles
     // valeur calculable des jours non travaillés
     type: Number,
   },
-  mois: { // mois
+  month: {
+    // mois
     // Mois du saisi
     type: String,
   },
-  date_debut_du_mois: { // date_debut_du_mois
+  monthStartDate: {
+    // date_debut_du_mois
     type: Date,
   },
-  date_fin_du_mois: { // date_fin_du_mois
+  monthEndDate: {
+    // date_fin_du_mois
     type: Date,
   },
-  annee: { // annee
+  year: {
+    // annee
     // L'année de la saisi
     type: String,
   },
-  craType: { // craType 
+  craType: {
+    // craType
     // Type de Cra
     type: String,
   },
-  projet: { // projet 
+  project: {
+    // projet
     // Projet à laquelle le consultant a travaillé
     type: Schema.Types.ObjectId,
-    ref: "Projet",
+    ref: "Project",
   },
-  confirmation_refus: { // confirmation_refus
+  rejectionApproval: {
+    // confirmation_refus
     // les détails de confirmation et/ou refus de son CRA
-    date_confirmation: { // date_confirmation
+    approvedAt: {
+      // date_confirmation
       type: Date,
     },
-    date_refus: { //date_refus 
+    rejectedAt: {
+      //date_refus
       type: Date,
     },
-    confirmedBy: { // confirmedBy
+    approvedBy: {
+      // confirmedBy
       // Le nom du manager
       type: String,
     },
-    confirmed_by_manager: { // confirmed_by_manager
+    approved_by_manager: {
+      // confirmed_by_manager
       // La confirmation et la validation d'un CRA d'un Consultant
       type: Boolean,
       default: false,
     },
-    refused_by_manager: { // refused_by_manager
+    rejected_by_manager: {
+      // refused_by_manager
       // Le  refus d'un CRA d'un Consultant avec une raison.
       type: Boolean,
       default: false,
     },
-    raison_refus: { // raison_refus
+    rejectionReason: {
+      // raison_refus
       // raison du refus
       type: String,
     },
   },
-  status: { // status
+  status: {
+    // status
     type: String, // Validé / Refusé / En Attente
     // RG : Si confirmed_by_manager = false & refused_by_manager = false
     enum: ["rejected", "approved", "pending"], // ["Refusee", "Validee", "En Attente"]
     default: "pending",
     required: true,
   },
-  activityReportSubmittedAt: { // date_saisiCra
+  activityReportSubmittedAt: {
+    // date_saisiCra
     // la date de saisi du CRA
     type: Date,
     default: Date.now,
   },
-  remoteWorkingDaysCount: { // nb_tt_du_mois
+  remoteWorkingDaysCount: {
+    // nb_tt_du_mois
     // Nombre de jours en Télétravail
     type: Number,
   },
-  is_deleted: { // is_deleted
+  is_deleted: {
+    // is_deleted
     type: Boolean,
     default: true,
   },
