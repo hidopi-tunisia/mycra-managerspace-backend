@@ -198,6 +198,6 @@ const schema = new Schema({
   },
 });
 
-const Cra = model("Cra", schema);
+const CRA = model("CRA", schema);
 
-export default Cra;
+export default CRA;

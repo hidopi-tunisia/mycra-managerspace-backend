@@ -1,9 +1,23 @@
 import express from "express";
+import { getCRA } from "../helpers/cras";
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
   res.send("Hello Cras!");
+});
+router.get("/:id", async (req, res) => {
+  try {
+    console.log(req);
+    const { id } = req.params;
+    const { join } = req.query;
+    const result = await getCRA(id, {
+      join,
+    });
+    res.send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 router.post("/", (req, res) => {
   res.send("Got a POST request");
