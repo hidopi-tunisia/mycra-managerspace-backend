@@ -1,87 +1,87 @@
 import { Schema, model } from "mongoose";
 
 const schema = new Schema({
-  civilite: {
+  civility: { // civilite
     type: String,
     required: true,
   },
-  nom: {
+  lastName: { // nom
     type: String,
     required: true,
   },
-  prenom: {
+  firstName: { // prenom
     type: String,
     required: true,
   },
-  photo_profil: {
+  profilePhoto: { // photo_profil
     type: String,
   },
-  email: {
+  email: { // email
     type: String,
     required: true,
     unique: true,
   },
-  dateDisponibilite: {
+  availableAt: { // dateDisponibilite
     type: Date,
     required: true,
   },
-  dateEmbauche: {
+  hiredAt: { // dateEmbauche
     type: Date,
     required: true,
   },
-  dossierCompetence: {
+  skillsPortfolio: { // dossierCompetence
     type: String,
     required: false,
   },
-  profilLinkedIn: {
+  linkedInProfile: { // profilLinkedIn
     type: String,
     required: false,
   },
-  competences: [
+  skills: [ // competences
     {
       type: String,
     },
   ],
-  poste: {
+  position: { // poste
     type: String,
     required: true,
   },
-  anneesExperience: {
+  yearsOfExperience: { // anneesExperience
     type: Number,
     required: true,
   },
-  numeroTelephone: {
+  phone: { // numeroTelephone
     type: String,
     required: true,
   },
-  note: {
+  note: { // note
     type: String,
     maxlength: 500,
   },
-  date_creation: {
+  createdAt: { // date_creation
     type: Date,
     default: Date.now,
   },
-  projet: [
+  project: [ // projet
     {
       type: Schema.Types.ObjectId,
-      ref: "Projet",
+      ref: "Project",
     },
   ],
-  client: {
+  client: { // client
     type: Schema.Types.ObjectId,
     ref: "Client",
   },
-  aAccepteCGU: {
+  hasAcceptedTermsAndConditions: { // aAccepteCGU
     type: Boolean,
     default: false,
     required: true,
   },
-  cguVersionAcceptee: {
+  acceptedTermsAndConditionsVersion: { // cguVersionAcceptee
     type: String,
     default: "",
   },
-  statutCompte: {
+  accountStatus: { // statutCompte
     type: String,
     enum: ["active", "inactive"],
     default: "active",
