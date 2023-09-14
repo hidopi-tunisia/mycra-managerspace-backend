@@ -59,13 +59,13 @@ const schema = new Schema({
   },
   projets: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Projet",
     },
   ],
   consultants: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Consultant",
     },
   ],

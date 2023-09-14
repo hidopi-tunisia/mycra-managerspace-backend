@@ -22,7 +22,7 @@ const schema = new Schema({
     required: false,
   },
   client: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Client",
     required: true,
   },
@@ -31,7 +31,7 @@ const schema = new Schema({
     required: true,
   },
   consultants: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Consultant",
   },
   date_creation: {

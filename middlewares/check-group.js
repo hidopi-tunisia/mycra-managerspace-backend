@@ -24,11 +24,10 @@ const checkGroup =
     const fn = async () => {
       try {
         const user = await admin.auth().getUser(req.user.uid);
-        const { role } = user.customClaims;
-        if (!role) {
+        if (!user.customClaims || !user.customClaims.role) {
           throw new UnidentifiedRoleError();
         }
-        if (groups.includes(role)) {
+        if (groups.includes(user.customClaims.role)) {
           return next();
         }
         throw new ForbiddenError();

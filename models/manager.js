@@ -24,13 +24,13 @@ const schema = new Schema({
   },
   consultants: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Consultant",
     },
   ],
   clients: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Client",
     },
   ],
@@ -77,7 +77,7 @@ const schema = new Schema({
     },
   },
   offre: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Offre",
   },
   aAccepteCGU: {

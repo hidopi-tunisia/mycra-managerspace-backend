@@ -3,7 +3,7 @@ import { Schema, model } from "mongoose";
 const schema = new Schema({
   consultant: {
     // Consultant en question qui a saisi le CRA
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Consultant",
   },
   joursTravailles: [
@@ -111,7 +111,7 @@ const schema = new Schema({
   },
   projet: {
     // Projet à laquelle le consultant a travaillé
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Projet",
   },
   confirmation_refus: {

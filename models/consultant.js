@@ -64,12 +64,12 @@ const schema = new Schema({
   },
   projet: [
     {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Projet",
     },
   ],
   client: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Client",
   },
   aAccepteCGU: {

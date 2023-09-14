@@ -45,14 +45,27 @@
           password: '000000',
           user: null,
           str: '',
+          role: '',
           mounted() {
             this.auth = getAuth()
           },
           handleClickSignIn() {
+            this.str = ''
+            this.role = ''
             signInWithEmailAndPassword(this.auth, this.email, this.password)
               .then(({ user }) => {
                 this.user = user
                 this.str = JSON.stringify(user, null, 2)
+                this.auth.currentUser
+                  .getIdTokenResult()
+                  .then((token) => {
+                    if (token.claims && token.claims.role) {
+                      this.role = token.claims.role
+                    }
+                  })
+                  .catch((error) => {
+                    console.log(error)
+                  })
               })
               .catch((error) => {
                 console.log(error)
@@ -114,6 +127,9 @@
             >
               Copy authorization
             </button>
+            <span class="bg-info">
+              Role: {{role}}
+            </span>
           </div>
         </div>
       </div>
