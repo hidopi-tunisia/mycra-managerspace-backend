@@ -15,7 +15,7 @@ router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
     const result = await getManager(id, {
       join,
     });
-    res.send(result);
+    res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });
   }

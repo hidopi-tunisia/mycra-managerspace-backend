@@ -14,7 +14,7 @@ router.get("/:id", async (req, res) => {
     const result = await getCRA(id, {
       join,
     });
-    res.send(result);
+    res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });
   }

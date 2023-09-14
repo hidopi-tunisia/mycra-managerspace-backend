@@ -15,7 +15,7 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
     const result = await getConsultant(id, {
       join,
     });
-    res.send(result);
+    res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });
   }
