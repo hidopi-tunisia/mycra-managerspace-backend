@@ -72,13 +72,6 @@ const schema = new Schema({
     // observation
     type: String,
   },
-  projects: [
-    // projets
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Project",
-    },
-  ],
   createdAt: {
     // dateCreation
     type: Date,
