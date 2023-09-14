@@ -1,90 +1,116 @@
 import { Schema, model } from "mongoose";
 
 const schema = new Schema({
-  civility: { // civilite
+  civility: {
+    // civilite
     type: String,
     required: true,
   },
-  lastName: { // nom
+  lastName: {
+    // nom
     type: String,
     required: true,
   },
-  firstName: { // prenom
+  firstName: {
+    // prenom
     type: String,
     required: true,
   },
-  profilePhoto: { // photo_profil
+  profilePhoto: {
+    // photo_profil
     type: String,
   },
-  email: { // email
+  email: {
+    // email
     type: String,
     required: true,
     unique: true,
   },
-  availableAt: { // dateDisponibilite
+  availableAt: {
+    // dateDisponibilite
     type: Date,
     required: true,
   },
-  hiredAt: { // dateEmbauche
+  hiredAt: {
+    // dateEmbauche
     type: Date,
     required: true,
   },
-  skillsPortfolio: { // dossierCompetence
+  skillsPortfolio: {
+    // dossierCompetence
     type: String,
     required: false,
   },
-  linkedInProfile: { // profilLinkedIn
+  linkedInProfile: {
+    // profilLinkedIn
     type: String,
     required: false,
   },
-  skills: [ // competences
+  skills: [
+    // competences
     {
       type: String,
     },
   ],
-  position: { // poste
+  position: {
+    // poste
     type: String,
     required: true,
   },
-  yearsOfExperience: { // anneesExperience
+  yearsOfExperience: {
+    // anneesExperience
     type: Number,
     required: true,
   },
-  phone: { // numeroTelephone
+  phone: {
+    // numeroTelephone
     type: String,
     required: true,
   },
-  note: { // note
+  note: {
+    // note
     type: String,
     maxlength: 500,
   },
-  createdAt: { // date_creation
+  createdAt: {
+    // date_creation
     type: Date,
     default: Date.now,
   },
-  project: [ // projet
+  project: [
+    // projet
     {
       type: Schema.Types.ObjectId,
       ref: "Project",
     },
   ],
-  client: { // client
+  client: {
+    // client
     type: Schema.Types.ObjectId,
     ref: "Client",
   },
-  hasAcceptedTermsAndConditions: { // aAccepteCGU
+  hasAcceptedTermsAndConditions: {
+    // aAccepteCGU
     type: Boolean,
     default: false,
     required: true,
   },
-  acceptedTermsAndConditionsVersion: { // cguVersionAcceptee
+  acceptedTermsAndConditionsVersion: {
+    // cguVersionAcceptee
     type: String,
     default: "",
   },
-  accountStatus: { // statutCompte
+  accountStatus: {
+    // statutCompte
     type: String,
     enum: ["active", "inactive"],
     default: "active",
+    required: true,
+  },
+  manager: {
+    // client
+    type: Schema.Types.ObjectId,
+    ref: "Manager",
     required: true,
   },
 });

@@ -32,7 +32,6 @@ router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
     handleError({ res, error });
   }
 });
-
 router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
     const { body, query } = req;

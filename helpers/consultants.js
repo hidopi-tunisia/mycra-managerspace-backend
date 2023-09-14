@@ -21,4 +21,7 @@ const getConsultant = async (id, options = {}) => {
   return doc;
 };
 
-export { getConsultant };
+const createConsultant = (payload) => {
+  return new Consultant({ ...payload }).save();
+};
+export { getConsultant, createConsultant };
