@@ -1,5 +1,5 @@
 class BaseError extends Error {
-  #code = 500;
+  #code = StatusCodes.INTERNAL_SERVER_ERROR;
   constructor() {
     super();
     this.message = "Unable to perform task";

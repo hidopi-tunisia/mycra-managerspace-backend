@@ -2,13 +2,14 @@ import express from "express";
 import "dotenv/config";
 import "./config/firebase";
 import "./config/database";
-
+import admin from 'firebase-admin'
 import { auth } from "./middlewares/auth";
 
 import {
-  crasRouter,
+  adminsRouter,
   consultantsRouter,
   managersRouter,
+  crasRouter,
   clientsRouter,
 } from "./router";
 
@@ -16,10 +17,12 @@ const app = express();
 const router = express.Router();
 const APP_PORT = process.env.APP_PORT;
 
+app.use(express.json());
 app.use(express.static("./views"));
 
 router.use("/", auth);
 
+router.use("/admins", adminsRouter);
 router.use("/cras", crasRouter);
 router.use("/managers", managersRouter);
 router.use("/clients", clientsRouter);

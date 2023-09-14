@@ -7,9 +7,6 @@ export {
   UnidentifiedRoleError,
 } from "./auth";
 
-const ErrorCodes = {
-  INTERNAL_SERVER_ERROR: 500,
-};
 export function handleError({ res, error }) {
   console.info("-----ERROR-----");
   console.info(error);
@@ -19,7 +16,7 @@ export function handleError({ res, error }) {
       res.status(error.code).send({ ...error });
     } else {
       res
-        .status(ErrorCodes.INTERNAL_SERVER_ERROR)
+        .status(StatusCodes.INTERNAL_SERVER_ERROR)
         .send({ message: "Error happened", name: "InternalServerError" });
     }
   }
