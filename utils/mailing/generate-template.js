@@ -11,6 +11,7 @@ String.prototype.replaceAll = function (search, replacement) {
 
 const APP_NAME = process.env.APP_NAME;
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
 const read = promisify(readFile);
 const extractTemplate = async (filename) => {
   const str = await read(`${__dirname}/templates/${filename}.html`, "utf8");
@@ -18,7 +19,7 @@ const extractTemplate = async (filename) => {
 };
 const generateTemplate = async (placeholders = {}) => {
   let str = await extractTemplate("welcome_admin");
-  str.replaceAll("%APP_NAME%", APP_NAME);
+  str = str.replaceAll("%APP_NAME%", APP_NAME);
   Object.keys(placeholders).forEach((element) => {
     str = str.replaceAll(`%${element}%`, placeholders[element]);
   });

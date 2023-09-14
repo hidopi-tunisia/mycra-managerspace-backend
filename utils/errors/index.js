@@ -16,9 +16,15 @@ export function handleError({ res, error }) {
     if (error instanceof BaseError) {
       res.status(error.code).send({ ...error });
     } else {
-      res
-        .status(StatusCodes.INTERNAL_SERVER_ERROR)
-        .send({ message: "Error happened", name: "InternalServerError" });
+      let details = {};
+      if (typeof error === "object") {
+        details = { ...error };
+      }
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({
+        message: "Error happened",
+        name: "InternalServerError",
+        details,
+      });
     }
   }
 }

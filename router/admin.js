@@ -15,21 +15,23 @@ const router = express.Router();
 
 router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
-    const { body } = req;
+    const { body, query } = req;
     if (!body.email || !isValidEmail(body.email)) {
       throw new InvalidEmailError();
     }
     const user = await createAdmin(body);
-    const result = await setRole(user.uid, Roles.ADMIN);
-    const link = await generatePasswordResetLink(body.email);
-    const payload = {
-      to: req.body.email,
-      subject: "Reset your password",
-      html: generateTemplate({ email: body.email, link }),
-    };
-    const response = await sendEmail(payload);
-    console.log(response);
-    res.status(StatusCodes.CREATED).send(result);
+    await setRole(user.uid, Roles.ADMIN);
+    if (query.send_email !== "false") {
+      const link = await generatePasswordResetLink(body.email);
+      const html = await generateTemplate({ EMAIL: body.email, LINK: link });
+      const payload = {
+        to: req.body.email,
+        subject: "Reset your password",
+        html,
+      };
+      await sendEmail(payload);
+    }
+    res.status(StatusCodes.CREATED).send(user);
   } catch (error) {
     handleError({ res, error });
   }
