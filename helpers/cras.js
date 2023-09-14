@@ -6,7 +6,7 @@ const getCRA = async (id, options = {}) => {
   if (!doc) {
     throw new CRANotFoundError();
   }
-  if (options.join && typeof options.join === "string") {
+  if (options.join) {
     if (options.join.split(",").includes("consultant")) {
       doc = await doc.populate({
         path: "consultant",

@@ -12,7 +12,8 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     if (!body.email || !isValidEmail(body.email)) {
       throw new InvalidEmailError();
     }
-    const result = await createAdmin(body);
+    const user = await createAdmin(body);
+    const result = await setRole(user.uid, Roles.ADMIN);
     res.status(StatusCodes.CREATED).send(result);
   } catch (error) {
     handleError({ res, error });

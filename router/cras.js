@@ -8,11 +8,14 @@ router.get("/", (req, res) => {
 });
 router.get("/:id", async (req, res) => {
   try {
-    console.log(req);
     const { id } = req.params;
     const { join } = req.query;
+    const options = {};
+    if (typeof join === "string") {
+      options["join"] = join;
+    }
     const result = await getCRA(id, {
-      join,
+      ...options,
     });
     res.status(StatusCodes.OK).send(result);
   } catch (error) {
