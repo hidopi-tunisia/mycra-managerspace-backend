@@ -36,7 +36,7 @@ const assignConsultantToProject = async (projectId, consultantId) => {
 };
 
 /**
- * Assigns a consultant to a project.
+ * Unassigns a consultant from a project.
  * @function
  * @param {string} projectId - The id of the project.
  * @param {string} consultantId - The id of the consultant.
