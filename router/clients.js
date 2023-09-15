@@ -11,8 +11,7 @@ import {
   unassignConsultantFromProject,
 } from "../helpers/projects";
 import { getConsultant } from "../helpers/consultants";
-import x from "firebase-admin";
-import { UserRecord } from "firebase-admin/auth";
+
 const router = express.Router();
 
 router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
