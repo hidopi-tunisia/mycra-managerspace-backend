@@ -22,10 +22,10 @@ router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
 router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
   try {
     const { id } = req.params;
-    const { join, count } = req.query;
+    const { populate, count } = req.query;
     const options = {};
-    if (typeof join === "string") {
-      options["join"] = join;
+    if (typeof populate === "string") {
+      options["populate"] = populate;
     }
     if (typeof count === "string") {
       options["count"] = count;

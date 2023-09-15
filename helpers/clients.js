@@ -7,20 +7,17 @@ const getClient = async (id, options = {}) => {
   if (!doc) {
     throw new ClientNotFoundError();
   }
-  if (options.join) {
-    if (options.join.split(",").includes("projects")) {
-      doc = await doc.populate({
-        path: "projects",
-      });
-    }
+  if (options.populate) {
+    let populate = options.populate.split(",").map((path) => path);
+    doc = await doc.populate(populate);
   }
   if (options.count) {
     meta["count"] = {};
-    if (options.count.split(",").includes("projects")) {
-      meta["count"]["projects"] = doc.projects.length;
-    }
-    if(Object.keys(meta["count"]).length === 0){
-      delete meta["count"]
+    options.count.split(",").forEach((path) => {
+      meta["count"][path] = doc[path].length;
+    });
+    if (Object.keys(meta["count"]).length === 0) {
+      delete meta["count"];
     }
     if (Object.keys(meta).length > 0) {
       doc = doc.toObject();
