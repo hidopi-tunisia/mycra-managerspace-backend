@@ -71,7 +71,7 @@ router.post(
   }
 );
 router.patch(
-  "/:clientId/projects/:projectId/consultants/:consultantId",
+  "/:clientId/projects/:projectId/consultants/:consultantId/assign",
   checkGroup(Groups.MANAGERS),
   async (req, res) => {
     try {
