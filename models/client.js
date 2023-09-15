@@ -77,6 +77,13 @@ const schema = new Schema({
     type: Date,
     default: Date.now,
   },
+  projects: [
+    // projet
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+    },
+  ],
   manager: {
     // client
     type: Schema.Types.ObjectId,

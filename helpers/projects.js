@@ -1,4 +1,4 @@
-import { Consultant, Project } from "../models";
+import { Client, Consultant, Project } from "../models";
 import { ProjectNotFoundError } from "../utils/errors/projects";
 
 const getProject = async (id) => {
@@ -9,8 +9,35 @@ const getProject = async (id) => {
   return doc;
 };
 
-const createProject = (payload) => {
-  return new Project({ ...payload }).save();
+const createProject = async (payload) => {
+  const doc = await new Project({ ...payload }).save();
+  await Client.findOneAndUpdate(
+    { _id: payload.client },
+    { $addToSet: { projects: doc._id } }
+  );
+  return doc;
+};
+
+/**
+ * Assigns a client to a project.
+ * @function
+ * @param {string} projectId - The id of the project.
+ * @param {string} clientId - The id of the client.
+ * @returns {Promise<Project>}
+ */
+const assignProjectToClient = async (projectId, clientId) => {
+  const doc = await Project.findOneAndUpdate(
+    { _id: projectId },
+    { $set: { client: clientId } },
+    {
+      new: true,
+    }
+  );
+  await Client.findOneAndUpdate(
+    { _id: clientId },
+    { $addToSet: { projects: projectId } }
+  );
+  return doc;
 };
 
 /**
@@ -57,4 +84,10 @@ const unassignConsultantFromProject = async (projectId, consultantId) => {
   return doc;
 };
 
-export { createProject, getProject, assignConsultantToProject, unassignConsultantFromProject };
+export {
+  createProject,
+  getProject,
+  assignProjectToClient,
+  assignConsultantToProject,
+  unassignConsultantFromProject,
+};

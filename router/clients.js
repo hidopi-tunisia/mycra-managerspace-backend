@@ -6,6 +6,7 @@ import { StatusCodes } from "../utils/status-codes";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
 import {
   assignConsultantToProject,
+  assignProjectToClient,
   createProject,
   getProject,
   unassignConsultantFromProject,
@@ -54,15 +55,16 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   res.send("Got a DELETE request at /user");
 });
+
+// Create a project for a client
 router.post(
   "/:clientId/projects",
   checkGroup(Groups.MANAGERS),
   async (req, res) => {
-    // Create a project for a client
     try {
       const { user, body, params } = req;
       const client = await getClient(params.clientId);
-      if (client.manager.toString() !== user.uid) {
+      if (!client.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await createProject({
@@ -76,6 +78,34 @@ router.post(
     }
   }
 );
+
+// Assign consultant to a project
+router.patch(
+  "/:clientId/projects/:projectId/assign",
+  checkGroup(Groups.MANAGERS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.manager.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const project = await getProject(params.projectId);
+      if (!project.manager.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const result = await assignProjectToClient(
+        params.projectId,
+        params.clientId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Assign consultant to a project
 router.patch(
   "/:clientId/projects/:projectId/consultants/:consultantId/assign",
   checkGroup(Groups.MANAGERS),
@@ -83,15 +113,15 @@ router.patch(
     try {
       const { user, params } = req;
       const client = await getClient(params.clientId);
-      if (client.manager.toString() !== user.uid) {
+      if (!client.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (project.manager.toString() !== user.uid) {
+      if (!project.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const consultant = await getConsultant(params.consultantId);
-      if (consultant.manager.toString() !== user.uid) {
+      if (!consultant.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await assignConsultantToProject(
@@ -104,6 +134,8 @@ router.patch(
     }
   }
 );
+
+// Unassign consultant from a project
 router.patch(
   "/:clientId/projects/:projectId/consultants/:consultantId/unassign",
   checkGroup(Groups.MANAGERS),
@@ -111,15 +143,15 @@ router.patch(
     try {
       const { user, params } = req;
       const client = await getClient(params.clientId);
-      if (client.manager.toString() !== user.uid) {
+      if (!client.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (project.manager.toString() !== user.uid) {
+      if (!project.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const consultant = await getConsultant(params.consultantId);
-      if (consultant.manager.toString() !== user.uid) {
+      if (!consultant.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await unassignConsultantFromProject(
