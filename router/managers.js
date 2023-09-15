@@ -20,10 +20,10 @@ router.get("/", (req, res) => {
 router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
     const { id } = req.params;
-    const { join } = req.query;
+    const { populate } = req.query;
     const options = {};
-    if (typeof join === "string") {
-      options["join"] = join;
+    if (typeof populate === "string") {
+      options["populate"] = populate;
     }
     const result = await getManager(id, {
       ...options,

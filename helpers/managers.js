@@ -6,18 +6,18 @@ const getManager = async (id, options = {}) => {
   if (!doc) {
     throw new ManagerNotFoundError();
   }
-  if (options.join) {
-    if (options.join.split(",").includes("company")) {
+  if (options.populate) {
+    if (options.populate.split(",").includes("company")) {
       doc = await doc.populate({
         path: "company",
       });
     }
-    if (options.join.split(",").includes("consultants")) {
+    if (options.populate.split(",").includes("consultants")) {
       doc = await doc.populate({
         path: "consultants",
       });
     }
-    if (options.join.split(",").includes("clients")) {
+    if (options.populate.split(",").includes("clients")) {
       doc = await doc.populate({
         path: "clients",
       });

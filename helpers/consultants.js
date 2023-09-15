@@ -6,13 +6,13 @@ const getConsultant = async (id, options = {}) => {
   if (!doc) {
     throw new ConsultantNotFoundError();
   }
-  if (options.join) {
-    if (options.join.split(",").includes("projects")) {
+  if (options.populate) {
+    if (options.populate.split(",").includes("projects")) {
       doc = await doc.populate({
         path: "projects",
       });
     }
-    if (options.join.split(",").includes("clients")) {
+    if (options.populate.split(",").includes("clients")) {
       doc = await doc.populate({
         path: "client",
       });
