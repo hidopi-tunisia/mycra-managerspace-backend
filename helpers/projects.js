@@ -41,6 +41,28 @@ const assignProjectToClient = async (projectId, clientId) => {
 };
 
 /**
+ * Unassigns a client form a project.
+ * @function
+ * @param {string} projectId - The id of the project.
+ * @param {string} clientId - The id of the client.
+ * @returns {Promise<Project>}
+ */
+const unassignProjectToClient = async (projectId, clientId) => {
+  const doc = await Project.findOneAndUpdate(
+    { _id: projectId },
+    { $unset: { client: clientId } },
+    {
+      new: true,
+    }
+  );
+  await Client.findOneAndUpdate(
+    { _id: clientId },
+    { $pull: { projects: projectId } }
+  );
+  return doc;
+};
+
+/**
  * Assigns a consultant to a project.
  * @function
  * @param {string} projectId - The id of the project.
@@ -88,6 +110,7 @@ export {
   createProject,
   getProject,
   assignProjectToClient,
+  unassignProjectToClient,
   assignConsultantToProject,
   unassignConsultantFromProject,
 };

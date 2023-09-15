@@ -10,6 +10,7 @@ import {
   createProject,
   getProject,
   unassignConsultantFromProject,
+  unassignProjectToClient,
 } from "../helpers/projects";
 import { getConsultant } from "../helpers/consultants";
 
@@ -79,7 +80,7 @@ router.post(
   }
 );
 
-// Assign consultant to a project
+// Assign client to a project
 router.patch(
   "/:clientId/projects/:projectId/assign",
   checkGroup(Groups.MANAGERS),
@@ -95,6 +96,32 @@ router.patch(
         throw new ForbiddenError();
       }
       const result = await assignProjectToClient(
+        params.projectId,
+        params.clientId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Unassign client form a project
+router.patch(
+  "/:clientId/projects/:projectId/unassign",
+  checkGroup(Groups.MANAGERS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.manager.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const project = await getProject(params.projectId);
+      if (!project.manager.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const result = await unassignProjectToClient(
         params.projectId,
         params.clientId
       );
