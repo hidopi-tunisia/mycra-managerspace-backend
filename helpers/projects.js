@@ -32,13 +32,13 @@ const createProject = async (payload) => {
 };
 
 /**
- * Assigns a client to a project.
+ * Affect a project to a client.
  * @function
  * @param {string} projectId - The id of the project.
  * @param {string} clientId - The id of the client.
  * @returns {Promise<Project>}
  */
-const assignProjectToClient = async (projectId, clientId) => {
+const affectProjectToClient = async (projectId, clientId) => {
   const doc = await Project.findOneAndUpdate(
     { _id: projectId },
     { $set: { client: clientId } },
@@ -54,13 +54,13 @@ const assignProjectToClient = async (projectId, clientId) => {
 };
 
 /**
- * Unassigns a client form a project.
+ * Unaffect a project form a client.
  * @function
  * @param {string} projectId - The id of the project.
  * @param {string} clientId - The id of the client.
  * @returns {Promise<Project>}
  */
-const unassignProjectToClient = async (projectId, clientId) => {
+const unaffectProjectFromClient = async (projectId, clientId) => {
   const doc = await Project.findOneAndUpdate(
     { _id: projectId },
     { $unset: { client: clientId } },
@@ -122,8 +122,8 @@ const unassignConsultantFromProject = async (projectId, consultantId) => {
 export {
   createProject,
   getProject,
-  assignProjectToClient,
-  unassignProjectToClient,
+  affectProjectToClient,
+  unaffectProjectFromClient,
   assignConsultantToProject,
   unassignConsultantFromProject,
 };

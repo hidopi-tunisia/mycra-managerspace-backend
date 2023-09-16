@@ -6,11 +6,11 @@ import { StatusCodes } from "../utils/status-codes";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
 import {
   assignConsultantToProject,
-  assignProjectToClient,
+  affectProjectToClient,
   createProject,
   getProject,
   unassignConsultantFromProject,
-  unassignProjectToClient,
+  unaffectProjectFromClient,
 } from "../helpers/projects";
 import { getConsultant } from "../helpers/consultants";
 
@@ -98,7 +98,7 @@ router.patch(
       if (!project.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await assignProjectToClient(
+      const result = await affectProjectToClient(
         params.projectId,
         params.clientId
       );
@@ -124,7 +124,7 @@ router.patch(
       if (!project.manager.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await unassignProjectToClient(
+      const result = await unaffectProjectFromClient(
         params.projectId,
         params.clientId
       );
