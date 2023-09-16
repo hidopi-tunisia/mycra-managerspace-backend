@@ -5,7 +5,6 @@ import { CRANotFoundError } from "../utils/errors/cras";
 
 const getCRA = async (id, options = {}) => {
   let doc = await CRA.findById(id);
-  console.log('dddd');
   let meta = {};
   if (!doc) {
     throw new CRANotFoundError();
