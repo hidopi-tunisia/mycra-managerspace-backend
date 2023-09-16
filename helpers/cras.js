@@ -4,30 +4,61 @@ import { countData, populateData } from "../utils/data-options";
 import { CRANotFoundError } from "../utils/errors/cras";
 
 const getCRAs = async ({
+  consultant,
+  manager,
   page,
   limit,
   sort,
   project,
   client,
+  year,
+  month,
   start,
   end,
+  // Use this on demand
   populate,
   count,
-  consultant,
-  manager,
 } = {}) => {
   const predicate = {};
   if (consultant) {
     predicate["consultant"] = consultant;
-  }
-  else if (manager) {
+  } else if (manager) {
     predicate["manager"] = manager;
   }
-  console.log(predicate);
+  if (project) {
+    predicate["project"] = project;
+  } else if (client) {
+    predicate["client"] = client;
+  }
+  if (year !== undefined || month !== undefined) {
+    if (year !== undefined && month === undefined) {
+      predicate["date.year"] = year;
+    } else if (year === undefined && month !== undefined) {
+      predicate["date.month.number"] = month;
+    } else if (year !== undefined && month !== undefined) {
+      predicate["date.year"] = year;
+      predicate["date.month.number"] = month;
+    }
+  } else if (start || end) {
+    if (start && !end) {
+      predicate["createdAt"] = {
+        $gte: new Date(start),
+      };
+    } else if (!start && end) {
+      predicate["createdAt"] = {
+        $lt: new Date(end),
+      };
+    } else {
+      predicate["createdAt"] = {
+        $gte: new Date(start),
+        $lt: new Date(end),
+      };
+    }
+  }
   return CRA.find(predicate)
     .skip(page * limit)
     .limit(limit)
-    .sort({ submittedAt: sort === "ASC" ? 1 : -1 });
+    .sort({ createdAt: sort === "ASC" ? 1 : -1 });
 };
 
 const getCRA = async (id, options = {}) => {

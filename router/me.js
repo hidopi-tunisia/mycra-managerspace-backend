@@ -41,6 +41,7 @@ router.get(
   }
 );
 
+// http://localhost:30000/me/cras?page=1&limit=2&sort=DESC&year=2023&month=5&start=2020-02-22&end=2020-10-23
 router.get("/cras", async (req, res) => {
   try {
     const { user } = req;
@@ -51,6 +52,8 @@ router.get("/cras", async (req, res) => {
       project,
       consultant,
       client,
+      year,
+      month,
       start,
       end,
       populate,
@@ -75,7 +78,16 @@ router.get("/cras", async (req, res) => {
     if (typeof client === "client") {
       options["client"] = client;
     }
-    if (typeof start === "start") {
+    if (!isNaN(year) && Number(year) >= 2000) {
+      options["year"] = Number(year);
+    }
+    if (!isNaN(month) && Number(month) >= 0 && Number(month) <= 11) {
+      options["month"] = Number(month);
+    }
+    if (typeof start === "string") {
+      options["start"] = start;
+    }
+    if (typeof end === "string") {
       options["end"] = end;
     }
     if (typeof populate === "string") {
@@ -98,7 +110,6 @@ router.get("/cras", async (req, res) => {
       default:
         break;
     }
-    result = await getCRAs();
     res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });
