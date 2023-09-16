@@ -13,7 +13,7 @@ import { StatusCodes } from "../utils/status-codes";
 
 const router = express.Router();
 
-router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
+router.post("/admins", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
     const { body, query } = req;
     if (!body.email || !isValidEmail(body.email)) {

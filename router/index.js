@@ -1,11 +1,11 @@
-import adminsRouter from "./admin";
+import authRouter from "./auth";
 import crasRouter from "./cras";
 import consultantsRouter from "./consultants";
 import managersRouter from "./managers";
 import clientsRouter from "./clients";
 
 export {
-  adminsRouter,
+  authRouter,
   crasRouter,
   managersRouter,
   consultantsRouter,

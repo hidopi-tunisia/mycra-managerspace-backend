@@ -6,7 +6,7 @@ import "./config/database";
 import { auth } from "./middlewares/auth";
 
 import {
-  adminsRouter,
+  authRouter,
   consultantsRouter,
   managersRouter,
   crasRouter,
@@ -22,7 +22,7 @@ app.use(express.static("./views"));
 
 router.use("/", auth);
 
-router.use("/admins", adminsRouter);
+router.use("/auth", authRouter);
 router.use("/cras", crasRouter);
 router.use("/managers", managersRouter);
 router.use("/clients", clientsRouter);
