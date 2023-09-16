@@ -36,7 +36,7 @@ const ProjetSchema = new mongoose.Schema({
   },
   date_creation: {
     type: Date,
-    default: Date.now,
+    default: Date.now()
   }
 });
 

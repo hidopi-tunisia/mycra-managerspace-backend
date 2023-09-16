@@ -58,7 +58,7 @@ const Consultant = mongoose.model("Consultant", {
   },
   date_creation: {
     type: Date,
-    default: Date.now,
+    default: Date.now()
   },
   projet: [
     {

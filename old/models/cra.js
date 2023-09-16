@@ -151,7 +151,7 @@ const schema = new Schema({
   date_saisiCra: {
     // la date de saisi du CRA
     type: Date,
-    default: Date.now,
+    default: Date.now()
   },
   nb_tt_du_mois: {
     // Nombre de jours en Télétravail

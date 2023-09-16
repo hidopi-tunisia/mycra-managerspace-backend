@@ -65,7 +65,7 @@ const ManagerSchema = new mongoose.Schema({
   periodeDessai: {
     debut: {
       type: Date,
-      default: Date.now,
+      default: Date.now()
     },
     fin: {
       type: Date,

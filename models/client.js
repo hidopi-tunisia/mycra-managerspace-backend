@@ -75,7 +75,7 @@ const schema = new Schema({
   createdAt: {
     // dateCreation
     type: Date,
-    default: Date.now,
+    default: Date.now(),
   },
   projects: [
     // projets

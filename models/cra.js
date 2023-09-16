@@ -150,6 +150,13 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Project",
   },
+  submittedAt: {
+    type: Date,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now()
+  },
   isDeleted: {
     // is_deleted
     type: Boolean,

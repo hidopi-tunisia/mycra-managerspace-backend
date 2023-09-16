@@ -8,6 +8,7 @@ const Consultant = require("../models/consultant");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const bodyParser = require("body-parser");
+const { getCRAs } = require("../../helpers/cras");
 
 //TODO: Envoie e-mail avec sendgrid une fois le cra d'un consultant est confirmé ou refusé.
 //TODO: un emai sera envoyé une fois le consultant saisi son CRA
@@ -404,13 +405,8 @@ router.put("/update-cra/:id", async (req, res) => {
 
 router.get("/getall-cra", async (req, res) => {
   try {
-    const { sort, page, limit } = req.query;
-
-    cras = await CRA.find()
-      .skip(page * limit)
-      .limit(limit)
-      .sort({ date_saisiCra: sort === "ASC" ? 1 : -1 });
-    res.send(cras);
+    const result = await getCRAs()
+    res.send(result);
   } catch (error) {
     res.status(500).json({ message: "Erreur lors de la récupération des CRA" });
   }

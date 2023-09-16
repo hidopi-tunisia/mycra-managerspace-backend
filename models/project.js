@@ -53,7 +53,7 @@ const schema = new Schema({
   createdAt: {
     // date_creation
     type: Date,
-    default: Date.now,
+    default: Date.now()
   },
 });
 

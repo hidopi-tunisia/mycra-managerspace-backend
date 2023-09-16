@@ -63,7 +63,7 @@ const schema = new Schema({
     start: {
       // debut
       type: Date,
-      default: Date.now,
+      default: Date.now()
     },
     end: {
       // fin

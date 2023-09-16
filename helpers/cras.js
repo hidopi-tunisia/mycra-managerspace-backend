@@ -3,6 +3,33 @@ import { CRAStatuses } from "../models/cra";
 import { countData, populateData } from "../utils/data-options";
 import { CRANotFoundError } from "../utils/errors/cras";
 
+const getCRAs = async ({
+  page,
+  limit,
+  sort,
+  project,
+  client,
+  start,
+  end,
+  populate,
+  count,
+  consultant,
+  manager,
+} = {}) => {
+  const predicate = {};
+  if (consultant) {
+    predicate["consultant"] = consultant;
+  }
+  else if (manager) {
+    predicate["manager"] = manager;
+  }
+  console.log(predicate);
+  return CRA.find(predicate)
+    .skip(page * limit)
+    .limit(limit)
+    .sort({ submittedAt: sort === "ASC" ? 1 : -1 });
+};
+
 const getCRA = async (id, options = {}) => {
   let doc = await CRA.findById(id);
   let meta = {};
@@ -52,4 +79,4 @@ const approveCRA = async (id, action) => {
   );
 };
 
-export { getCRA, createCRA, rejectCRA, approveCRA };
+export { getCRAs, getCRA, createCRA, rejectCRA, approveCRA };
