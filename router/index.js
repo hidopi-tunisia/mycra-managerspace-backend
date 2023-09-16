@@ -3,6 +3,7 @@ import crasRouter from "./cras";
 import consultantsRouter from "./consultants";
 import managersRouter from "./managers";
 import clientsRouter from "./clients";
+import offersRouter from "./offers";
 
 export {
   authRouter,
@@ -10,4 +11,5 @@ export {
   managersRouter,
   consultantsRouter,
   clientsRouter,
+  offersRouter,
 };

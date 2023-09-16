@@ -1,4 +1,4 @@
-import { Client, Offer } from "../models";
+import { Manager, Offer } from "../models";
 import { countData, populateData } from "../utils/data-options";
 import { OfferNotFoundError } from "../utils/errors/projects";
 
@@ -28,15 +28,15 @@ const createOffer = async (payload) => {
 };
 
 /**
- * Affects an offer to a client.
+ * Affects an offer to a manager.
  * @function
  * @param {string} offerId - The id of the offer.
- * @param {string} clientId - The id of the client.
+ * @param {string} managerId - The id of the manager.
  * @returns {Promise<Offer>}
  */
-const affectOfferToClient = async (offerId, clientId) => {
-  return Client.findOneAndUpdate(
-    { _id: clientId },
+const affectOfferToManager = async (offerId, managerId) => {
+  return Manager.findOneAndUpdate(
+    { _id: managerId },
     { $set: { offer: offerId } },
     {
       new: true,
@@ -45,15 +45,15 @@ const affectOfferToClient = async (offerId, clientId) => {
 };
 
 /**
- * Unaffects an offer form a client.
+ * Unaffects an offer form a manager.
  * @function
  * @param {string} offerId - The id of the offer.
- * @param {string} clientId - The id of the client.
+ * @param {string} managerId - The id of the manager.
  * @returns {Promise<Offer>}
  */
-const unaffectOfferFromClient = async (offerId, clientId) => {
-  return Client.findOneAndUpdate(
-    { _id: clientId },
+const unaffectOfferFromManager = async (offerId, managerId) => {
+  return Manager.findOneAndUpdate(
+    { _id: managerId },
     { $unset: { offer: offerId } },
     {
       new: true,
@@ -61,4 +61,9 @@ const unaffectOfferFromClient = async (offerId, clientId) => {
   );
 };
 
-export { affectOfferToClient, createOffer, getOffer, unaffectOfferFromClient };
+export {
+  getOffer,
+  createOffer,
+  affectOfferToManager,
+  unaffectOfferFromManager,
+};

@@ -1,18 +1,21 @@
-import express from "express";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { createManager, getManager } from "../helpers/managers";
-import { handleError, isValidEmail } from "../utils";
-import { StatusCodes } from "../utils/status-codes";
 import {
   createUser,
   generatePasswordResetLink,
   setRole,
 } from "../helpers/auth";
-import { generateTemplate } from "../utils/mailing/generate-template";
 import { sendEmail } from "../helpers/mailer";
+import { createManager, getManager } from "../helpers/managers";
+import {
+  affectOfferToManager,
+  unaffectOfferFromManager,
+} from "../helpers/offers";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group";
+import { handleError, isValidEmail } from "../utils";
 import { generateObjectId } from "../utils/generate-string";
+import { generateTemplate } from "../utils/mailing/generate-template";
+import { StatusCodes } from "../utils/status-codes";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", (req, res) => {
   res.send("Hello Managers!");
@@ -61,6 +64,42 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     handleError({ res, error });
   }
 });
+
+// Affect an offer to a manager
+router.patch(
+  "/:managerId/offer/:offerId/affect",
+  checkGroup(Groups.ADMINS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const result = await affectOfferToManager(
+        params.offerId,
+        params.managerId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Unaffect an offer from a manager
+router.patch(
+  "/:managerId/offer/:offerId/unaffect",
+  checkGroup(Groups.ADMINS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const result = await unaffectOfferFromManager(
+        params.managerId,
+        params.offerId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 router.put("/:id", (req, res) => {
   res.send("Got a PUT request at :id");
 });

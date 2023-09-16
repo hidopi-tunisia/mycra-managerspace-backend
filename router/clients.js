@@ -1,20 +1,19 @@
-import express from "express";
-import { Groups, checkGroup } from "../middlewares/check-group";
 import { createClient, getClient } from "../helpers/clients";
-import { handleError, isValidEmail } from "../utils";
-import { StatusCodes } from "../utils/status-codes";
-import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
+import { getConsultant } from "../helpers/consultants";
 import {
-  assignConsultantToProject,
   affectProjectToClient,
+  assignConsultantToProject,
   createProject,
   getProject,
-  unassignConsultantFromProject,
   unaffectProjectFromClient,
+  unassignConsultantFromProject,
 } from "../helpers/projects";
-import { getConsultant } from "../helpers/consultants";
+import { Groups, checkGroup } from "../middlewares/check-group";
+import { handleError, isValidEmail } from "../utils";
+import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
+import { StatusCodes } from "../utils/status-codes";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
   res.send("Hello Consultants!");
@@ -83,9 +82,9 @@ router.post(
   }
 );
 
-// Assign client to a project
+// Affect a project to a client
 router.patch(
-  "/:clientId/projects/:projectId/assign",
+  "/:clientId/projects/:projectId/affect",
   checkGroup(Groups.MANAGERS),
   async (req, res) => {
     try {
@@ -109,9 +108,9 @@ router.patch(
   }
 );
 
-// Unassign client form a project
+// Unffect a project from a client
 router.patch(
-  "/:clientId/projects/:projectId/unassign",
+  "/:clientId/projects/:projectId/unaffect",
   checkGroup(Groups.MANAGERS),
   async (req, res) => {
     try {
@@ -135,7 +134,7 @@ router.patch(
   }
 );
 
-// Assign consultant to a project
+// Assign a consultant to a project
 router.patch(
   "/:clientId/projects/:projectId/consultants/:consultantId/assign",
   checkGroup(Groups.MANAGERS),
@@ -165,7 +164,7 @@ router.patch(
   }
 );
 
-// Unassign consultant from a project
+// Unassign a consultant from a project
 router.patch(
   "/:clientId/projects/:projectId/consultants/:consultantId/unassign",
   checkGroup(Groups.MANAGERS),

@@ -1,20 +1,21 @@
-import express from "express";
 import "dotenv/config";
-import "./config/firebase";
+import express from "express";
 import "./config/database";
+import "./config/firebase";
 
 import { auth } from "./middlewares/auth";
 
 import {
   authRouter,
-  consultantsRouter,
-  managersRouter,
-  crasRouter,
   clientsRouter,
+  consultantsRouter,
+  crasRouter,
+  managersRouter,
+  offersRouter,
 } from "./router";
 
 const app = express();
-const router = express.Router();
+const router = Router();
 const APP_PORT = process.env.APP_PORT;
 
 app.use(express.json());
@@ -27,6 +28,7 @@ router.use("/cras", crasRouter);
 router.use("/managers", managersRouter);
 router.use("/clients", clientsRouter);
 router.use("/consultants", consultantsRouter);
+router.use("/offers", offersRouter);
 
 app.use("/", router);
 

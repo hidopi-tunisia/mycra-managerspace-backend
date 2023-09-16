@@ -1,8 +1,7 @@
-import express from "express";
 import { getCRA } from "../helpers/cras";
 import { StatusCodes } from "../utils/status-codes";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", (req, res) => {
   res.send("Hello Cras!");

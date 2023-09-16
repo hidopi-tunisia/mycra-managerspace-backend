@@ -1,17 +1,16 @@
-import express from "express";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import {
   createUser,
   generatePasswordResetLink,
   setRole,
 } from "../helpers/auth";
+import { sendEmail } from "../helpers/mailer";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { handleError, isValidEmail } from "../utils";
 import { InvalidEmailError, InvalidRoleError } from "../utils/errors/auth";
 import { generateTemplate } from "../utils/mailing/generate-template";
-import { sendEmail } from "../helpers/mailer";
 import { StatusCodes } from "../utils/status-codes";
 
-const router = express.Router();
+const router = Router();
 
 router.post("/admins", checkGroup(Groups.ADMINS), async (req, res) => {
   try {

@@ -1,19 +1,18 @@
-import express from "express";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { createConsultant, getConsultant } from "../helpers/consultants";
-import { handleError, isValidEmail } from "../utils";
-import { StatusCodes } from "../utils/status-codes";
-import { InvalidEmailError } from "../utils/errors/auth";
 import {
   createUser,
   generatePasswordResetLink,
   setRole,
 } from "../helpers/auth";
-import { generateTemplate } from "../utils/mailing/generate-template";
+import { createConsultant, getConsultant } from "../helpers/consultants";
 import { sendEmail } from "../helpers/mailer";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group";
+import { handleError, isValidEmail } from "../utils";
+import { InvalidEmailError } from "../utils/errors/auth";
 import { generateObjectId } from "../utils/generate-string";
+import { generateTemplate } from "../utils/mailing/generate-template";
+import { StatusCodes } from "../utils/status-codes";
 
-const router = express.Router();
+const router = Router();
 
 router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
   res.send("Hello Consultants!");

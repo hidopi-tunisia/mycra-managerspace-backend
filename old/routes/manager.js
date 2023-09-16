@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = Router();
 const admin = require("../config/firebaseConfig");
 const functions = require("firebase-functions");
 const nodemailer = require("nodemailer");

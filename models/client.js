@@ -90,11 +90,6 @@ const schema = new Schema({
     ref: "Manager",
     required: true,
   },
-  offer: {
-    // offre
-    type: Schema.Types.ObjectId,
-    ref: "Offer",
-  },
 });
 
 const Client = model("Client", schema);
