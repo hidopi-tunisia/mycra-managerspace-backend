@@ -14,7 +14,7 @@ router.get("/", (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { populate } = req.query;
+    const { populate, count } = req.query;
     const options = {};
     if (typeof populate === "string") {
       options["populate"] = populate;

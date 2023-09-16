@@ -1,23 +1,27 @@
 import { CRA } from "../models";
 import { CRAStatuses } from "../models/cra";
+import { countData, populateData } from "../utils/data-options";
 import { CRANotFoundError } from "../utils/errors/cras";
 
 const getCRA = async (id, options = {}) => {
   let doc = await CRA.findById(id);
+  console.log('dddd');
+  let meta = {};
   if (!doc) {
     throw new CRANotFoundError();
   }
   if (options.populate) {
-    if (options.join.split(",").includes("consultant")) {
-      doc = await doc.populate({
-        path: "consultant",
-      });
+    doc = await populateData(doc, options.populate);
+  }
+  if (options.count) {
+    const count = countData(doc, options.count);
+    if (Object.keys(count).length > 0) {
+      meta["count"] = count;
     }
-    if (options.populate.split(",").includes("project")) {
-      doc = await doc.populate({
-        path: "project",
-      });
-    }
+  }
+  if (Object.keys(meta).length > 0) {
+    doc = doc.toObject();
+    doc["meta"] = meta;
   }
   return doc;
 };
