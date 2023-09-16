@@ -78,17 +78,22 @@ const schema = new Schema({
     default: Date.now,
   },
   projects: [
-    // projet
+    // projets
     {
       type: Schema.Types.ObjectId,
       ref: "Project",
     },
   ],
   manager: {
-    // client
+    // manager
     type: Schema.Types.ObjectId,
     ref: "Manager",
     required: true,
+  },
+  offer: {
+    // offre
+    type: Schema.Types.ObjectId,
+    ref: "Offer",
   },
 });
 

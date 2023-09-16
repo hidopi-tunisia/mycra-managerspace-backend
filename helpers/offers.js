@@ -35,18 +35,13 @@ const createOffer = async (payload) => {
  * @returns {Promise<Offer>}
  */
 const affectOfferToClient = async (offerId, clientId) => {
-  const doc = await Offer.findOneAndUpdate(
-    { _id: projectId },
-    { $set: { client: clientId } },
+  return Client.findOneAndUpdate(
+    { _id: clientId },
+    { $set: { offer: offerId } },
     {
       new: true,
     }
   );
-  await Client.findOneAndUpdate(
-    { _id: clientId },
-    { $addToSet: { projects: projectId } }
-  );
-  return doc;
 };
 
 /**
@@ -57,18 +52,13 @@ const affectOfferToClient = async (offerId, clientId) => {
  * @returns {Promise<Offer>}
  */
 const unaffectOfferFromClient = async (offerId, clientId) => {
-  const doc = await Offer.findOneAndUpdate(
-    { _id: offerId },
-    { $unset: { client: clientId } },
+  return Client.findOneAndUpdate(
+    { _id: clientId },
+    { $unset: { offer: offerId } },
     {
       new: true,
     }
   );
-  await Client.findOneAndUpdate(
-    { _id: clientId },
-    { $pull: { offers: offerId } }
-  );
-  return doc;
 };
 
 export { affectOfferToClient, createOffer, getOffer, unaffectOfferFromClient };
