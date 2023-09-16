@@ -15,3 +15,5 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     handleError({ res, error });
   }
 });
+
+export default router;
