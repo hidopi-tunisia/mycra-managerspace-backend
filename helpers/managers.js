@@ -1,4 +1,4 @@
-import { Manager } from "../models";
+import { Client, Manager } from "../models";
 import { countData, populateData } from "../utils/data-options";
 import { ManagerNotFoundError } from "../utils/errors/managers";
 
@@ -27,4 +27,21 @@ const createManager = (payload) => {
   return new Manager({ ...payload }).save();
 };
 
-export { getManager, createManager };
+/**
+ * Assigns a manager to a client.
+ * @function
+ * @param {string} managerId - The id of the manager.
+ * @param {string} clientId - The id of the client.
+ * @returns {Promise<Project>}
+ */
+const assignManagerToClient = async (managerId, clientId) => {
+  return Client.findOneAndUpdate(
+    { _id: clientId },
+    { $set: { manager: managerId } },
+    {
+      new: true,
+    }
+  );
+};
+
+export { getManager, createManager, assignManagerToClient };

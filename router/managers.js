@@ -5,7 +5,7 @@ import {
   setRole,
 } from "../helpers/auth";
 import { sendEmail } from "../helpers/mailer";
-import { createManager, getManager } from "../helpers/managers";
+import { assignManagerToClient, createManager, getManager } from "../helpers/managers";
 import {
   affectOfferToManager,
   unaffectOfferFromManager,
@@ -95,6 +95,24 @@ router.patch(
     try {
       const { params } = req;
       const result = await unaffectOfferFromManager(params.managerId);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Assign a manager to a client
+router.patch(
+  "/:managerId/client/:clientId/assign",
+  checkGroup(Groups.ADMINS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const result = await assignManagerToClient(
+        params.managerId,
+        params.clientId,
+      );
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });
