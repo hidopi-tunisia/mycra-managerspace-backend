@@ -1,0 +1,73 @@
+{
+  "type": "normal",
+  "date": {
+    "month": {
+      "number": 5,
+      "start": 2,
+      "end": 7
+    },
+    "year": 2023
+  },
+  "working": [
+    {
+      "date": "2023-05-01"
+    },
+    {
+      "date": "2023-05-02",
+      "meta": {
+        "value": "I used the PC of the company."
+      }
+    }
+  ],
+  "half": [
+    {
+      "date": "2023-05-03"
+    },
+    {
+      "date": "2023-05-04",
+      "meta": {
+        "value": "I worked from 10AM to 2PM."
+      }
+    }
+  ],
+  "remote": [
+    {
+      "date": "2023-05-05"
+    }
+  ],
+  "off": [
+    {
+      "date": "2023-05-06"
+    },
+    {
+      "date": "2023-05-07",
+      "meta": {
+        "value": "Absence"
+      }
+    }
+  ],
+  "unavailable": [
+    {
+      "date": "2023-05-08",
+      "meta": {
+        "value": "I had a connectivity issue"
+      }
+    }
+  ],
+  "holidays": [
+    {
+      "date": "2023-05-09",
+      "meta": {
+        "value": "Eid Idhha"
+      }
+    }
+  ],
+  "weekends": [
+    {
+      "date": "2023-05-10",
+      "meta": {
+        "value": 6
+      }
+    }
+  ]
+}

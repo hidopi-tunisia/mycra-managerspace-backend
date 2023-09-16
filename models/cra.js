@@ -10,9 +10,11 @@ const schema = new Schema({
       number: {
         type: Number,
       },
+      // From 1 to 7
       start: {
         type: Date,
       },
+      // From 1 to 7
       end: {
         type: Date,
       },
@@ -101,12 +103,6 @@ const schema = new Schema({
       },
     },
   ],
-  submittedAt: {
-    // date_saisiCra
-    // la date de saisi du CRA
-    type: Date,
-    default: Date.now,
-  },
   status: {
     // status
     type: String, // Validé / Refusé / En Attente
@@ -114,8 +110,25 @@ const schema = new Schema({
     enum: ["rejected", "approved", "pending"], // ["Refusee", "Validee", "En Attente"]
     default: "pending",
     required: true,
-    meta: Schema.Types.Mixed,
   },
+  history: [
+    {
+      action: {
+        type: String,
+        enum: ["created", "rejected", "approved"],
+      },
+      meta: {
+        at: { type: Date },
+        by: {
+          _id: { type: String },
+          role: {
+            type: String,
+            enum: ["consultant", "admin", "manager", "client"],
+          },
+        },
+      },
+    },
+  ],
   consultant: {
     // consultant
     // Consultant en question qui a saisi le CRA
@@ -131,7 +144,6 @@ const schema = new Schema({
   isDeleted: {
     // is_deleted
     type: Boolean,
-    default: false,
   },
 });
 

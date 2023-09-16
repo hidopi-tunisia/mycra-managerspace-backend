@@ -6,13 +6,13 @@ const getCRA = async (id, options = {}) => {
   if (!doc) {
     throw new CRANotFoundError();
   }
-  if (options.join) {
+  if (options.populate) {
     if (options.join.split(",").includes("consultant")) {
       doc = await doc.populate({
         path: "consultant",
       });
     }
-    if (options.join.split(",").includes("project")) {
+    if (options.populate.split(",").includes("project")) {
       doc = await doc.populate({
         path: "project",
       });
@@ -21,4 +21,7 @@ const getCRA = async (id, options = {}) => {
   return doc;
 };
 
-export { getCRA };
+const createCRA = async (payload) => {
+  return new CRA({ ...payload }).save();
+};
+export { getCRA, createCRA };
