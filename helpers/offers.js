@@ -51,10 +51,10 @@ const affectOfferToManager = async (offerId, managerId) => {
  * @param {string} managerId - The id of the manager.
  * @returns {Promise<Offer>}
  */
-const unaffectOfferFromManager = async (offerId, managerId) => {
+const unaffectOfferFromManager = async (managerId) => {
   return Manager.findOneAndUpdate(
     { _id: managerId },
-    { $unset: { offer: offerId } },
+    { $unset: { offer: 1 } }, // Use 1 to unset the field
     {
       new: true,
     }

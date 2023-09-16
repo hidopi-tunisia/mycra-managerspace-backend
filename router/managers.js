@@ -94,10 +94,7 @@ router.patch(
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await unaffectOfferFromManager(
-        params.managerId,
-        params.offerId
-      );
+      const result = await unaffectOfferFromManager(params.managerId);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });
