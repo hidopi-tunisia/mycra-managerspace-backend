@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express from "express";
+import express, { Router } from "express";
 import "./config/database";
 import "./config/firebase";
 

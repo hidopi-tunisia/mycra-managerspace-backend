@@ -1,3 +1,4 @@
+import { Router } from "express";
 import { createClient, getClient } from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
 import {
