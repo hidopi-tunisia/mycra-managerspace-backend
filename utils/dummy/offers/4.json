@@ -1,0 +1,9 @@
+{
+  "name": "Diamond",
+  "description": "Diamond",
+  "trialPeriod": 30,
+  "price": 50,
+  "includedFeatures": [
+    "Unlimited clients"
+  ]
+}
