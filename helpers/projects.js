@@ -1,10 +1,23 @@
 import { Client, Consultant, Project } from "../models";
 import { ProjectNotFoundError } from "../utils/errors/projects";
 
-const getProject = async (id) => {
+const getProject = async (id, options = {}) => {
   let doc = await Project.findById(id);
   if (!doc) {
     throw new ProjectNotFoundError();
+  }
+  if (options.populate) {
+    doc = await populateData(doc, options.populate);
+  }
+  if (options.count) {
+    const count = countData(doc, options.count);
+    if (Object.keys(count).length > 0) {
+      meta["count"] = count;
+    }
+  }
+  if (Object.keys(meta).length > 0) {
+    doc = doc.toObject();
+    doc["meta"] = meta;
   }
   return doc;
 };

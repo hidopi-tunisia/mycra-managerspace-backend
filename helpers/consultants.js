@@ -1,4 +1,5 @@
 import { Consultant } from "../models";
+import { countData, populateData } from "../utils/data-options";
 import { ConsultantNotFoundError } from "../utils/errors/consultants";
 
 const getConsultant = async (id, options = {}) => {
@@ -7,16 +8,17 @@ const getConsultant = async (id, options = {}) => {
     throw new ConsultantNotFoundError();
   }
   if (options.populate) {
-    if (options.populate.split(",").includes("projects")) {
-      doc = await doc.populate({
-        path: "projects",
-      });
+    doc = await populateData(doc, options.populate);
+  }
+  if (options.count) {
+    const count = countData(doc, options.count);
+    if (Object.keys(count).length > 0) {
+      meta["count"] = count;
     }
-    if (options.populate.split(",").includes("clients")) {
-      doc = await doc.populate({
-        path: "client",
-      });
-    }
+  }
+  if (Object.keys(meta).length > 0) {
+    doc = doc.toObject();
+    doc["meta"] = meta;
   }
   return doc;
 };

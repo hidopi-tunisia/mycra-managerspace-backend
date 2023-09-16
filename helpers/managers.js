@@ -1,4 +1,5 @@
 import { Manager } from "../models";
+import { countData, populateData } from "../utils/data-options";
 import { ManagerNotFoundError } from "../utils/errors/managers";
 
 const getManager = async (id, options = {}) => {
@@ -7,21 +8,17 @@ const getManager = async (id, options = {}) => {
     throw new ManagerNotFoundError();
   }
   if (options.populate) {
-    if (options.populate.split(",").includes("company")) {
-      doc = await doc.populate({
-        path: "company",
-      });
+    doc = await populateData(doc, options.populate);
+  }
+  if (options.count) {
+    const count = countData(doc, options.count);
+    if (Object.keys(count).length > 0) {
+      meta["count"] = count;
     }
-    if (options.populate.split(",").includes("consultants")) {
-      doc = await doc.populate({
-        path: "consultants",
-      });
-    }
-    if (options.populate.split(",").includes("clients")) {
-      doc = await doc.populate({
-        path: "clients",
-      });
-    }
+  }
+  if (Object.keys(meta).length > 0) {
+    doc = doc.toObject();
+    doc["meta"] = meta;
   }
   return doc;
 };
