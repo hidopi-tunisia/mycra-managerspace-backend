@@ -16,6 +16,7 @@ export const Groups = {
   ADMINS_OR_MANAGERS: [Roles.ADMIN, Roles.MANAGER],
   ADMINS_OR_CLIENTS: [Roles.ADMIN, Roles.CLIENT],
   ADMINS_OR_CONSULTANTS: [Roles.ADMIN, Roles.CONSULTANT],
+  MANAGERS_OR_CONSULTANTS: [Roles.MANAGER, Roles.CONSULTANT],
 };
 
 const checkGroup =

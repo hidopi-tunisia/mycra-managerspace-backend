@@ -12,6 +12,7 @@ import {
   crasRouter,
   managersRouter,
   offersRouter,
+  meRouter,
 } from "./router";
 
 const app = express();
@@ -29,6 +30,7 @@ router.use("/managers", managersRouter);
 router.use("/clients", clientsRouter);
 router.use("/consultants", consultantsRouter);
 router.use("/offers", offersRouter);
+router.use("/me", meRouter);
 
 app.use("/", router);
 
