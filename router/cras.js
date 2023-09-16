@@ -1,8 +1,10 @@
 import { Router } from "express";
-import { createCRA, getCRA } from "../helpers/cras";
+import { approveCRA, createCRA, getCRA, rejectCRA } from "../helpers/cras";
 import { StatusCodes } from "../utils/status-codes";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { handleError } from "../utils";
+import { getConsultant } from "../helpers/consultants";
+import { CRAStatuses } from "../models/cra";
 
 const router = Router();
 
@@ -49,6 +51,64 @@ router.post("/", checkGroup(Groups.CONSULTANTS), async (req, res) => {
       history,
     });
     res.status(StatusCodes.CREATED).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
+});
+router.patch("/:id/approve", checkGroup(Groups.MANAGERS), async (req, res) => {
+  try {
+    const { user, body, params } = req;
+    const cra = await getCRA(params.id);
+    const consultantId = cra.consultant;
+    const consultant = await getConsultant(consultantId);
+    if (!consultant.manager.equals(user.uid)) {
+      throw new ForbiddenError();
+    }
+    const meta = {
+      at: new Date(),
+      by: {
+        _id: user.uid,
+        role: Roles.MANAGER,
+      },
+    };
+    if (body && body.motive) {
+      meta.by.motive = body.motive;
+    }
+    const action = {
+      action: CRAStatuses.APPROVED,
+      meta,
+    };
+    const result = await approveCRA(params.id, action);
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
+});
+router.patch("/:id/reject", checkGroup(Groups.MANAGERS), async (req, res) => {
+  try {
+    const { user, body, params } = req;
+    const cra = await getCRA(params.id);
+    const consultantId = cra.consultant;
+    const consultant = await getConsultant(consultantId);
+    if (!consultant.manager.equals(user.uid)) {
+      throw new ForbiddenError();
+    }
+    const meta = {
+      at: new Date(),
+      by: {
+        _id: user.uid,
+        role: Roles.MANAGER,
+      },
+    };
+    if (body && body.motive) {
+      meta.by.motive = body.motive;
+    }
+    const action = {
+      action: CRAStatuses.REJECTED,
+      meta,
+    };
+    const result = await rejectCRA(params.id, action);
+    res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });
   }

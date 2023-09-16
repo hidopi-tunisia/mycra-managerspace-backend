@@ -4,6 +4,7 @@ import { ConsultantNotFoundError } from "../utils/errors/consultants";
 
 const getConsultant = async (id, options = {}) => {
   let doc = await Consultant.findById(id);
+  let meta = {};
   if (!doc) {
     throw new ConsultantNotFoundError();
   }

@@ -3,6 +3,7 @@ import { ProjectNotFoundError } from "../utils/errors/projects";
 
 const getProject = async (id, options = {}) => {
   let doc = await Project.findById(id);
+  let meta = {};
   if (!doc) {
     throw new ProjectNotFoundError();
   }

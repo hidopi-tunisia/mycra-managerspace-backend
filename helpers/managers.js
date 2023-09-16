@@ -4,6 +4,7 @@ import { ManagerNotFoundError } from "../utils/errors/managers";
 
 const getManager = async (id, options = {}) => {
   let doc = await Manager.findById(id);
+  let meta = {};
   if (!doc) {
     throw new ManagerNotFoundError();
   }

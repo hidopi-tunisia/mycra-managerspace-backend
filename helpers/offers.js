@@ -4,6 +4,7 @@ import { OfferNotFoundError } from "../utils/errors/offers";
 
 const getOffer = async (id, options = {}) => {
   let doc = await Offer.findById(id);
+  let meta = {};
   if (!doc) {
     throw new OfferNotFoundError();
   }

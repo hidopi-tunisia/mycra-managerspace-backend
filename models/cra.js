@@ -1,4 +1,12 @@
 import { Schema, model } from "mongoose";
+import { Roles } from "../middlewares/check-group";
+
+export const CRAStatuses = {
+  CREATED: "created",
+  PENDING: "pending",
+  APPROVED: "approved",
+  REJECTED: "rejected",
+};
 
 const schema = new Schema({
   type: {
@@ -99,7 +107,7 @@ const schema = new Schema({
         required: true,
       },
       meta: {
-        value: { type: String },
+        value: { type: Number },
       },
     },
   ],
@@ -107,15 +115,15 @@ const schema = new Schema({
     // status
     type: String, // Validé / Refusé / En Attente
     // RG : Si confirmed_by_manager = false & refused_by_manager = false
-    enum: ["rejected", "approved", "pending"], // ["Refusee", "Validee", "En Attente"]
-    default: "pending",
+    enum: [CRAStatuses.PENDING, CRAStatuses.APPROVED, CRAStatuses.REJECTED], // ["Refusee", "Validee", "En Attente"]
+    default: CRAStatuses.PENDING,
     required: true,
   },
   history: [
     {
       action: {
         type: String,
-        enum: ["created", "rejected", "approved"],
+        enum: [CRAStatuses.CREATED, CRAStatuses.APPROVED, CRAStatuses.REJECTED],
       },
       meta: {
         at: { type: Date },
@@ -123,8 +131,9 @@ const schema = new Schema({
           _id: { type: String },
           role: {
             type: String,
-            enum: ["consultant", "admin", "manager", "client"],
+            enum: [Roles.ADMIN, Roles.MANAGER, Roles.CONSULTANT, Roles.CLIENT],
           },
+          motive: { type: String },
         },
       },
     },
