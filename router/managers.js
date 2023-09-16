@@ -28,6 +28,9 @@ router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
     if (typeof populate === "string") {
       options["populate"] = populate;
     }
+    if (typeof count === "string") {
+      options["count"] = count;
+    }
     const result = await getManager(id, {
       ...options,
     });

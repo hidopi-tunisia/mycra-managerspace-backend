@@ -25,6 +25,9 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
     if (typeof populate === "string") {
       options["populate"] = populate;
     }
+    if (typeof count === "string") {
+      options["count"] = count;
+    }
     const result = await getConsultant(id, {
       ...options,
     });
