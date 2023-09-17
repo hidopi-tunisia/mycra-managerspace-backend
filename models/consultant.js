@@ -97,6 +97,12 @@ const schema = new Schema({
       ref: "Project",
     },
   ],
+  supervisor: {
+    // supervisor
+    type: Schema.Types.ObjectId,
+    ref: "Supervisor",
+    required: true,
+  },
   createdAt: {
     // dateCreation
     type: Date,

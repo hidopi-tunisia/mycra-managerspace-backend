@@ -150,10 +150,6 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const consultant = await getConsultant(params.consultantId);
-      if (!consultant.supervisor.equals(user.uid)) {
-        throw new ForbiddenError();
-      }
       const result = await assignConsultantToProject(
         params.projectId,
         params.consultantId
