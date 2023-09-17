@@ -44,6 +44,7 @@ const schema = new Schema({
     required: true,
   },
   status: {
+    type: String,
     enum: ["active", "inactive"],
     default: "inactive",
   },
