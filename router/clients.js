@@ -238,6 +238,9 @@ router.patch(
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
+      if (!project.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
       if (project.supervisor.equals(params.supervisorId)) {
         throw new AlreadyAssignedError();
       }
@@ -251,4 +254,5 @@ router.patch(
     }
   }
 );
+
 export default router;
