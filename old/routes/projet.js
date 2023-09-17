@@ -101,7 +101,7 @@ router.delete("/supp-projet/:id", async (req, res) => {
   }
 });
 
-router.put("/affecter-projet/:clientId/:projetId", async (req, res) => {
+router.put("/assigner-projet/:clientId/:projetId", async (req, res) => {
   try {
     const { clientId, projetId } = req.params;
 
@@ -119,12 +119,12 @@ router.put("/affecter-projet/:clientId/:projetId", async (req, res) => {
 
     await Promise.all([client.save(), projet.save()]);
 
-    res.json({ message: "Projet affecté au client avec succès" });
+    res.json({ message: "Projet assigné au client avec succès" });
   } catch (error) {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Erreur lors de l'affectation du projet au client" });
+      .json({ message: "Erreur lors de l'assignation du projet au client" });
   }
 });
 

@@ -1,12 +1,17 @@
 import { Router } from "express";
-import { assignSupervisorToClient, createClient, getClient } from "../helpers/clients";
+import {
+  assignSupervisorToClient,
+  createClient,
+  getClient,
+} from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
 import {
-  affectProjectToClient,
+  assignProjectToClient,
+  assignSupervisorToProject,
   assignConsultantToProject,
   createProject,
   getProject,
-  unaffectProjectFromClient,
+  unassignProjectFromClient,
   unassignConsultantFromProject,
 } from "../helpers/projects";
 import { Groups, checkGroup } from "../middlewares/check-group";
@@ -109,9 +114,9 @@ router.post(
   }
 );
 
-// Affect a project to a client
+// Assign a project to a client
 router.patch(
-  "/:clientId/projects/:projectId/affect",
+  "/:clientId/projects/:projectId/assign",
   checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
@@ -124,7 +129,7 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await affectProjectToClient(
+      const result = await assignProjectToClient(
         params.projectId,
         params.clientId
       );
@@ -137,7 +142,7 @@ router.patch(
 
 // Unffect a project from a client
 router.patch(
-  "/:clientId/projects/:projectId/unaffect",
+  "/:clientId/projects/:projectId/unassign",
   checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
@@ -150,7 +155,7 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await unaffectProjectFromClient(
+      const result = await unassignProjectFromClient(
         params.projectId,
         params.clientId
       );
@@ -217,4 +222,29 @@ router.patch(
   }
 );
 
+// Assign a supervisor to a project
+router.patch(
+  "/:clientId/projects/:projectId/supervisors/:supervisorId/assign",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const project = await getProject(params.projectId);
+      if (!project.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const result = await assignSupervisorToProject(
+        params.projectId,
+        params.supervisorId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 export default router;

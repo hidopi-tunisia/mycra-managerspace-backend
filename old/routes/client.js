@@ -113,8 +113,8 @@ router.delete("/supp-client/:id", async (req, res) => {
   }
 });
 
-// Endpoint pour affecter un projet à un client
-router.post("/affecter-projet/:id/affecter-projet", async (req, res) => {
+// Endpoint pour assigner un projet à un client
+router.post("/assigner-projet/:id/assigner-projet", async (req, res) => {
   try {
     const id = req.params.id;
     const projetId = req.body.projetId;
@@ -128,12 +128,12 @@ router.post("/affecter-projet/:id/affecter-projet", async (req, res) => {
     client.projets.push(projetId);
     await client.save();
 
-    res.json({ message: "Projet affecté au client avec succès", client });
+    res.json({ message: "Projet assigné au client avec succès", client });
   } catch (error) {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Erreur lors de l'affectation du projet au client" });
+      .json({ message: "Erreur lors de l'assignation du projet au client" });
   }
 });
 
@@ -189,7 +189,7 @@ router.get("/nb-projects-client/:clientId/nombre-projets", async (req, res) => {
     }
   });
   
-//Nombre des consultants qui sont affectés à ce client
+//Nombre des consultants qui sont assignés à ce client
 // Endpoint pour obtenir le nombre de consultants travaillant chez un client précis
 router.get("/clients/:clientId/nombre-consultants", async (req, res) => {
   try {
@@ -226,7 +226,7 @@ router.get("/liste-consultants/:clientId/consultants", async (req, res) => {
       return res.status(404).json({ message: "Client introuvable" });
     }
 
-    // Récupérer la liste des consultants affectés au client
+    // Récupérer la liste des consultants assignés au client
     const consultants = client.consultants;
 
     res.json({ consultants });
@@ -258,11 +258,11 @@ router.delete(
           .json({ message: "Client ou consultant introuvable" });
       }
 
-      // Vérifier si le consultant est bien affecté au client
+      // Vérifier si le consultant est bien assigné au client
       if (!client.consultants.includes(consultantId)) {
         return res
           .status(400)
-          .json({ message: "Le consultant n'est pas affecté à ce client" });
+          .json({ message: "Le consultant n'est pas assigné à ce client" });
       }
 
       // Supprimer le consultant de la liste des consultants du client

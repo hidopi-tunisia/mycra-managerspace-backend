@@ -151,7 +151,7 @@ router.get("/getall-consultants", async (req, res) => {
 // Si l'un ou l'autre n'est pas trouvé, il renvoie une réponse avec un statut 404.
 
 router.put(
-  "/affecter-consultant-projet/:consultantId/:projetId",
+  "/assigner-consultant-projet/:consultantId/:projetId",
   async (req, res) => {
     const consultantId = req.params.consultantId;
     const projetId = req.params.projetId;
@@ -170,22 +170,22 @@ router.put(
       await consultant.save();
 
       res.json({
-        message: "Consultant affecté au projet avec succès",
+        message: "Consultant assigné au projet avec succès",
         consultant,
       });
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        message: "Erreur lors de l'affectation du consultant au projet",
+        message: "Erreur lors de l'assignation du consultant au projet",
       });
     }
   }
 );
 
-// Affecter un consultant à un client
-// Endpoint pour affecter un consultant à un client
+// Assigner un consultant à un client
+// Endpoint pour assigner un consultant à un client
 router.put(
-  "/affecter-consultant-client/:consultantId/:clientId",
+  "/assigner-consultant-client/:consultantId/:clientId",
   async (req, res) => {
     const consultantId = req.params.consultantId;
     const clientId = req.params.clientId;
@@ -200,24 +200,24 @@ router.put(
           .json({ message: "Consultant ou client introuvable" });
       }
 
-      // Vérifier si le consultant est déjà affecté au client
+      // Vérifier si le consultant est déjà assigné au client
       if (client.consultants.includes(consultantId)) {
         return res
           .status(400)
-          .json({ message: "Le consultant est déjà affecté à ce client" });
+          .json({ message: "Le consultant est déjà assigné à ce client" });
       }
 
       client.consultants.push(consultantId);
       await client.save();
 
       res.json({
-        message: "Consultant affecté au client avec succès",
+        message: "Consultant assigné au client avec succès",
         consultant,
       });
     } catch (error) {
       console.log(error);
       res.status(500).json({
-        message: "Erreur lors de l'affectation du consultant au client",
+        message: "Erreur lors de l'assignation du consultant au client",
       });
     }
   }
