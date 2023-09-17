@@ -24,12 +24,7 @@ const getProject = async (id, options = {}) => {
 };
 
 const createProject = async (payload) => {
-  const doc = await new Project({ ...payload }).save();
-  await Client.findOneAndUpdate(
-    { _id: payload.client },
-    { $addToSet: { projects: doc._id } }
-  );
-  return doc;
+  return Project({ ...payload }).save();
 };
 
 /**
