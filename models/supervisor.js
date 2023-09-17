@@ -76,11 +76,6 @@ const schema = new Schema({
       default: false,
     },
   },
-  offer: {
-    // offre
-    type: Schema.Types.ObjectId,
-    ref: "Offer",
-  },
   hasAcceptedTermsAndConditions: {
     // aAccepteCGU
     type: Boolean,
@@ -98,6 +93,11 @@ const schema = new Schema({
     enum: ["active", "inactive"],
     default: "active",
     required: true,
+  },
+  offer: {
+    // offre
+    type: Schema.Types.ObjectId,
+    ref: "Offer",
   },
 });
 

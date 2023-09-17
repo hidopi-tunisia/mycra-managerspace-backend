@@ -75,15 +75,8 @@ const schema = new Schema({
   createdAt: {
     // date_creation
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
-  projects: [
-    // projet
-    {
-      type: Schema.Types.ObjectId,
-      ref: "Project",
-    },
-  ],
   hasAcceptedTermsAndConditions: {
     // aAccepteCGU
     type: Boolean,
@@ -102,12 +95,13 @@ const schema = new Schema({
     default: "active",
     required: true,
   },
-  supervisor: {
-    // supervisor
-    type: Schema.Types.ObjectId,
-    ref: "Supervisor",
-    required: true,
-  },
+  projects: [
+    // projet
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Project",
+    },
+  ],
 });
 
 const Consultant = model("Consultant", schema);
