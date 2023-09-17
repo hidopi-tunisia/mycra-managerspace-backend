@@ -21,6 +21,11 @@ const schema = new Schema({
     type: [String],
     required: true,
   },
+  createdAt: {
+    // date_creation
+    type: Date,
+    default: Date.now(),
+  },
   // Autres champs spécifiques à l'offre
 });
 

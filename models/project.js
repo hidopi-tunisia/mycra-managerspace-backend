@@ -37,23 +37,20 @@ const schema = new Schema({
     ref: "Client",
     required: true,
   },
-  consultants: [
-    {
-      // consultants
-      type: Schema.Types.ObjectId,
-      ref: "Consultant",
-    },
-  ],
   supervisor: {
     // supervisor
     type: Schema.Types.ObjectId,
     ref: "Supervisor",
     required: true,
   },
+  status: {
+    enum: ["active", "inactive"],
+    default: "inactive",
+  },
   createdAt: {
     // date_creation
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
 });
 

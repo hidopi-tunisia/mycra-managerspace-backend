@@ -72,11 +72,6 @@ const schema = new Schema({
     type: String,
     maxlength: 500,
   },
-  createdAt: {
-    // date_creation
-    type: Date,
-    default: Date.now(),
-  },
   hasAcceptedTermsAndConditions: {
     // aAccepteCGU
     type: Boolean,
@@ -102,6 +97,11 @@ const schema = new Schema({
       ref: "Project",
     },
   ],
+  createdAt: {
+    // dateCreation
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Consultant = model("Consultant", schema);

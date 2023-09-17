@@ -72,11 +72,6 @@ const schema = new Schema({
     // observation
     type: String,
   },
-  createdAt: {
-    // dateCreation
-    type: Date,
-    default: Date.now(),
-  },
   projects: [
     // projets
     {
@@ -89,6 +84,11 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Supervisor",
     required: true,
+  },
+  createdAt: {
+    // dateCreation
+    type: Date,
+    default: Date.now(),
   },
 });
 

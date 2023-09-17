@@ -99,6 +99,11 @@ const schema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Offer",
   },
+  createdAt: {
+    // date_creation
+    type: Date,
+    default: Date.now(),
+  },
 });
 
 const Supervisor = model("Supervisor", schema);
