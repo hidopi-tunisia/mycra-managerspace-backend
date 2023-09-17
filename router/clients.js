@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createClient, getClient } from "../helpers/clients";
+import { assignSupervisorToClient, createClient, getClient } from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
 import {
   affectProjectToClient,
@@ -19,25 +19,29 @@ const router = Router();
 router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), (req, res) => {
   res.send("Hello Consultants!");
 });
-router.get("/:id", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { populate, count } = req.query;
-    const options = {};
-    if (typeof populate === "string") {
-      options["populate"] = populate;
+router.get(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { populate, count } = req.query;
+      const options = {};
+      if (typeof populate === "string") {
+        options["populate"] = populate;
+      }
+      if (typeof count === "string") {
+        options["count"] = count;
+      }
+      const result = await getClient(id, {
+        ...options,
+      });
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
     }
-    if (typeof count === "string") {
-      options["count"] = count;
-    }
-    const result = await getClient(id, {
-      ...options,
-    });
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
   }
-});
+);
 router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
     const { user: supervisor, body } = req;
@@ -59,6 +63,28 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   res.send("Got a DELETE request at /user");
 });
+
+// Assign a client to a supervisor
+router.patch(
+  "/:clientId/supervisors/:supervisorId/assign",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const result = await assignSupervisorToClient(
+        params.clientId,
+        params.supervisorId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 
 // Create a project for a client
 router.post(
