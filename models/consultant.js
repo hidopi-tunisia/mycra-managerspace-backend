@@ -102,10 +102,10 @@ const schema = new Schema({
     default: "active",
     required: true,
   },
-  manager: {
-    // manager
+  supervisor: {
+    // supervisor
     type: Schema.Types.ObjectId,
-    ref: "Manager",
+    ref: "Supervisor",
     required: true,
   },
 });

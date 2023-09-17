@@ -3,7 +3,7 @@ const router = Router();
 const admin = require("../config/firebaseConfig");
 const functions = require("firebase-functions");
 const nodemailer = require("nodemailer");
-const Manager = require("../models/manager");
+const Supervisor = require("../models/supervisor");
 const Consultant = require("../models/consultant");
 
 // Configuration de Nodemailer pour utiliser un service de messagerie (par exemple, Gmail)
@@ -15,8 +15,8 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-//Liste des managers + nbr total
-router.get("/managers", async (req, res) => {
+//Liste des supervisors + nbr total
+router.get("/supervisors", async (req, res) => {
   try {
     const page = parseInt(req.query.page) || 1; // Page à afficher, par défaut 1
     const limit = parseInt(req.query.limit) || 10; // Nombre d'éléments par page, par défaut 10
@@ -24,33 +24,33 @@ router.get("/managers", async (req, res) => {
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
 
-    // Récupérer la liste des managers avec pagination
-    const managers = await Manager.find().skip(startIndex).limit(limit);
+    // Récupérer la liste des supervisors avec pagination
+    const supervisors = await Supervisor.find().skip(startIndex).limit(limit);
 
-    // Comptage total des managers
-    const totalManagers = await Manager.countDocuments();
+    // Comptage total des supervisors
+    const totalSupervisors = await Supervisor.countDocuments();
 
     // Préparer les informations de pagination
     const pagination = {
       currentPage: page,
-      totalPages: Math.ceil(totalManagers / limit),
-      totalItems: totalManagers,
+      totalPages: Math.ceil(totalSupervisors / limit),
+      totalItems: totalSupervisors,
     };
 
     res.json({
-      managers,
+      supervisors,
       pagination,
     });
   } catch (error) {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Erreur lors de la récupération des managers" });
+      .json({ message: "Erreur lors de la récupération des supervisors" });
   }
 });
-// liste des managers qui ont expiré la date d'essai
-// Créer un manager avec un compte
-router.post("/create-manager", async (req, res) => {
+// liste des supervisors qui ont expiré la date d'essai
+// Créer un supervisor avec un compte
+router.post("/create-supervisor", async (req, res) => {
   try {
     const {
       nom,
@@ -70,10 +70,10 @@ router.post("/create-manager", async (req, res) => {
       displayName: `${prenom} ${nom}`,
     });
 
-    await admin.auth().setCustomUserClaims(userRecord.uid, { role: "manager" });
+    await admin.auth().setCustomUserClaims(userRecord.uid, { role: "supervisor" });
 
-    // Créer un nouvel objet Manager avec les données fournies
-    const manager = new Manager({
+    // Créer un nouvel objet Supervisor avec les données fournies
+    const supervisor = new Supervisor({
       _id: userRecord.uid, // Enregistrer l'UID du compte Firebase
       nom,
       prenom,
@@ -86,8 +86,8 @@ router.post("/create-manager", async (req, res) => {
       statutCompte,
     });
 
-    // Sauvegarder le manager dans la base de données MongoDB
-    const savedManager = await manager.save();
+    // Sauvegarder le supervisor dans la base de données MongoDB
+    const savedSupervisor = await supervisor.save();
 
     // Envoyer l'e-mail de bienvenue via Nodemailer et les modèles d'e-mails Firebase
     const emailVerificationLink = await admin
@@ -112,66 +112,66 @@ router.post("/create-manager", async (req, res) => {
     });
 
     res.json({
-      message: "Manager créé avec succès",
-      manager: savedManager,
+      message: "Supervisor créé avec succès",
+      supervisor: savedSupervisor,
     });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: "Erreur lors de la création du manager" });
+    res.status(500).json({ message: "Erreur lors de la création du supervisor" });
   }
 });
 exports.api = functions.https.onRequest(router);
-// modifier et archiver un manager
-router.put("/update-manager/:id", async (req, res) => {
+// modifier et archiver un supervisor
+router.put("/update-supervisor/:id", async (req, res) => {
   try {
-    const managerId = req.params.id;
+    const supervisorId = req.params.id;
     const updatedData = req.body;
 
-    // Recherche et mise à jour du manager dans la base de données
-    const updatedManager = await Manager.findByIdAndUpdate(
-      managerId,
+    // Recherche et mise à jour du supervisor dans la base de données
+    const updatedSupervisor = await Supervisor.findByIdAndUpdate(
+      supervisorId,
       updatedData,
       {
-        new: true, // Renvoyer le manager mis à jour
+        new: true, // Renvoyer le supervisor mis à jour
       }
     );
 
-    if (!updatedManager) {
-      return res.status(404).json({ message: "Manager non trouvé" });
+    if (!updatedSupervisor) {
+      return res.status(404).json({ message: "Supervisor non trouvé" });
     }
 
     res.json({
-      message: "Manager mis à jour avec succès",
-      manager: updatedManager,
+      message: "Supervisor mis à jour avec succès",
+      supervisor: updatedSupervisor,
     });
   } catch (error) {
     console.log(error);
     res
       .status(500)
-      .json({ message: "Erreur lors de la mise à jour du manager" });
+      .json({ message: "Erreur lors de la mise à jour du supervisor" });
   }
 });
 
-// Afficher un manager en détail
-router.get("/manager/:id", async (req, res) => {
+// Afficher un supervisor en détail
+router.get("/supervisor/:id", async (req, res) => {
   try {
-    const managerId = req.params.id;
+    const supervisorId = req.params.id;
 
-    // Recherche du manager dans la base de données avec les consultants associés
-    const manager = await Manager.findById(managerId)
+    // Recherche du supervisor dans la base de données avec les consultants associés
+    const supervisor = await Supervisor.findById(supervisorId)
       .populate("consultants")
       .exec();
 
-    if (!manager) {
-      return res.status(404).json({ message: "Manager non trouvé" });
+    if (!supervisor) {
+      return res.status(404).json({ message: "Supervisor non trouvé" });
     }
 
-    const detailedManager = {
-      nom: manager.nom,
-      prenom: manager.prenom,
-      email: manager.email,
-      // ... Autres informations du manager
-      consultants: manager.consultants.map((consultant) => ({
+    const detailedSupervisor = {
+      nom: supervisor.nom,
+      prenom: supervisor.prenom,
+      email: supervisor.email,
+      // ... Autres informations du supervisor
+      consultants: supervisor.consultants.map((consultant) => ({
         nom: consultant.nom,
         prenom: consultant.prenom,
         email: consultant.email,
@@ -179,33 +179,33 @@ router.get("/manager/:id", async (req, res) => {
       })),
     };
 
-    res.json({ manager: detailedManager });
+    res.json({ supervisor: detailedSupervisor });
   } catch (error) {
     console.log(error);
     res.status(500).json({
-      message: "Erreur lors de la récupération des informations du manager",
+      message: "Erreur lors de la récupération des informations du supervisor",
     });
   }
 });
 
-// Endpoint pour afficher le nombre de jours travaillés des consultants d'un manager
+// Endpoint pour afficher le nombre de jours travaillés des consultants d'un supervisor
 router.get(
-  "/consultants/:managerId/nombre-jours-travailles",
+  "/consultants/:supervisorId/nombre-jours-travailles",
   async (req, res) => {
     try {
-      const managerId = req.params.managerId;
+      const supervisorId = req.params.supervisorId;
 
-      // Recherche du manager dans la base de données
-      const manager = await Manager.findById(managerId);
+      // Recherche du supervisor dans la base de données
+      const supervisor = await Supervisor.findById(supervisorId);
 
-      if (!manager) {
-        return res.status(404).json({ message: "Manager non trouvé" });
+      if (!supervisor) {
+        return res.status(404).json({ message: "Supervisor non trouvé" });
       }
 
-      // Calcul du nombre total de jours travaillés par tous les consultants du manager
+      // Calcul du nombre total de jours travaillés par tous les consultants du supervisor
       let totalDaysWorked = 0;
 
-      for (const consultantId of manager.consultants) {
+      for (const consultantId of supervisor.consultants) {
         const consultant = await Consultant.findById(consultantId);
         if (consultant) {
           totalDaysWorked += consultant.nombreJoursTravailles;
@@ -213,7 +213,7 @@ router.get(
       }
 
       res.json({
-        message: "Nombre de jours travaillés des consultants du manager",
+        message: "Nombre de jours travaillés des consultants du supervisor",
         totalDaysWorked,
       });
     } catch (error) {
@@ -224,9 +224,9 @@ router.get(
     }
   }
 );
-router.delete("/manager/:id", async (req, res) => {
+router.delete("/supervisor/:id", async (req, res) => {
   console.log(req.params.id);
-  await Manager.deleteOne({ email:'internet.download.manager@gmail.com' });
+  await Supervisor.deleteOne({ email:'internet.download.supervisor@gmail.com' });
   console.log("done");
   // admin.auth().deleteUser("")
 });

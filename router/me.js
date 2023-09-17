@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { getConsultant } from "../helpers/consultants";
 import { getCRA, getCRAs } from "../helpers/cras";
-import { getManager } from "../helpers/managers";
+import { getSupervisor } from "../helpers/supervisors";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { handleError } from "../utils";
 import { StatusCodes } from "../utils/status-codes";
@@ -10,7 +10,7 @@ const router = Router();
 
 router.get(
   "/",
-  checkGroup(Groups.MANAGERS_OR_CONSULTANTS),
+  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
   async (req, res) => {
     try {
       const { user } = req;
@@ -24,8 +24,8 @@ router.get(
       }
       let result;
       switch (user.role) {
-        case Roles.MANAGER:
-          result = await getManager(user.uid, options);
+        case Roles.SUPERVISOR:
+          result = await getSupervisor(user.uid, options);
           break;
         case Roles.CONSULTANT:
           result = await getConsultant(user.uid, options);
@@ -98,8 +98,8 @@ router.get("/cras", async (req, res) => {
     }
     let result;
     switch (user.role) {
-      case Roles.MANAGER:
-        options["manager"] = user.uid;
+      case Roles.SUPERVISOR:
+        options["supervisor"] = user.uid;
         result = await getCRAs(options);
         break;
       case Roles.CONSULTANT:

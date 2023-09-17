@@ -8,7 +8,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 router.get("/", function (req, res, next) {
-  res.send("La liste des clients dun manager");
+  res.send("La liste des clients dun supervisor");
 });
 
 // Endpoint pour créer un nouveau client

@@ -114,7 +114,7 @@ const schema = new Schema({
   status: {
     // status
     type: String, // Validé / Refusé / En Attente
-    // RG : Si confirmed_by_manager = false & refused_by_manager = false
+    // RG : Si confirmed_by_supervisor = false & refused_by_supervisor = false
     enum: [CRAStatuses.PENDING, CRAStatuses.APPROVED, CRAStatuses.REJECTED], // ["Refusee", "Validee", "En Attente"]
     default: CRAStatuses.PENDING,
     required: true,
@@ -131,7 +131,7 @@ const schema = new Schema({
           _id: { type: String },
           role: {
             type: String,
-            enum: [Roles.ADMIN, Roles.MANAGER, Roles.CONSULTANT, Roles.CLIENT],
+            enum: [Roles.ADMIN, Roles.SUPERVISOR, Roles.CONSULTANT, Roles.CLIENT],
           },
           motive: { type: String },
         },

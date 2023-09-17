@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ManagerSchema = new mongoose.Schema({
+const SupervisorSchema = new mongoose.Schema({
   _id: {
     type: String,
     required: true,
@@ -97,9 +97,9 @@ const ManagerSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ["manager", "consultant", "admin"],
+    enum: ["supervisor", "consultant", "admin"],
     required: true,
-    default: "manager", // Définissez le rôle par défaut
+    default: "supervisor", // Définissez le rôle par défaut
   },
   firebaseToken: {
     type: String, // Token d'authentification Firebase
@@ -107,5 +107,5 @@ const ManagerSchema = new mongoose.Schema({
   },
 });
 
-const Manager = mongoose.model("Manager", ManagerSchema);
-module.exports = Manager;
+const Supervisor = mongoose.model("Supervisor", SupervisorSchema);
+module.exports = Supervisor;

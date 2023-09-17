@@ -10,7 +10,7 @@ import {
   clientsRouter,
   consultantsRouter,
   crasRouter,
-  managersRouter,
+  supervisorsRouter,
   offersRouter,
   meRouter,
 } from "./router";
@@ -26,7 +26,7 @@ router.use("/", auth);
 
 router.use("/auth", authRouter);
 router.use("/cras", crasRouter);
-router.use("/managers", managersRouter);
+router.use("/supervisors", supervisorsRouter);
 router.use("/clients", clientsRouter);
 router.use("/consultants", consultantsRouter);
 router.use("/offers", offersRouter);

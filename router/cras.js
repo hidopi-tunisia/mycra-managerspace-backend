@@ -55,20 +55,20 @@ router.post("/", checkGroup(Groups.CONSULTANTS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.patch("/:id/approve", checkGroup(Groups.MANAGERS), async (req, res) => {
+router.patch("/:id/approve", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
     const { user, body, params } = req;
     const cra = await getCRA(params.id);
     const consultantId = cra.consultant;
     const consultant = await getConsultant(consultantId);
-    if (!consultant.manager.equals(user.uid)) {
+    if (!consultant.supervisor.equals(user.uid)) {
       throw new ForbiddenError();
     }
     const meta = {
       at: new Date(),
       by: {
         _id: user.uid,
-        role: Roles.MANAGER,
+        role: Roles.SUPERVISOR,
       },
     };
     if (body && body.motive) {
@@ -84,20 +84,20 @@ router.patch("/:id/approve", checkGroup(Groups.MANAGERS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.patch("/:id/reject", checkGroup(Groups.MANAGERS), async (req, res) => {
+router.patch("/:id/reject", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
     const { user, body, params } = req;
     const cra = await getCRA(params.id);
     const consultantId = cra.consultant;
     const consultant = await getConsultant(consultantId);
-    if (!consultant.manager.equals(user.uid)) {
+    if (!consultant.supervisor.equals(user.uid)) {
       throw new ForbiddenError();
     }
     const meta = {
       at: new Date(),
       by: {
         _id: user.uid,
-        role: Roles.MANAGER,
+        role: Roles.SUPERVISOR,
       },
     };
     if (body && body.motive) {

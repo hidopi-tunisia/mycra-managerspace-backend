@@ -101,6 +101,6 @@ const schema = new Schema({
   },
 });
 
-const Manager = model("Manager", schema);
+const Supervisor = model("Supervisor", schema);
 
-export default Manager;
+export default Supervisor;

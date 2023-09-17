@@ -1,9 +1,9 @@
-// Importez Mongoose et le modèle du manager
+// Importez Mongoose et le modèle du supervisor
 const mongoose = require("mongoose");
-const Manager = require("../models/manager");
+const Supervisor = require("../models/supervisor");
 
-// Définissez le middleware pour le modèle Manager
-ManagerSchema.pre("save", function (next) {
+// Définissez le middleware pour le modèle Supervisor
+SupervisorSchema.pre("save", function (next) {
   const now = new Date();
   const periodeDessaiFin = this.periodeDessai.fin;
 

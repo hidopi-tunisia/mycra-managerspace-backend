@@ -21,7 +21,7 @@ app.route("/users").post((req, res) => {
     .auth()
     .createUser(req.body)
     .then(async (user) => {
-      await admin.auth().setCustomUserClaims(user.uid, { role: "consultant", manager: "" });
+      await admin.auth().setCustomUserClaims(user.uid, { role: "consultant", supervisor: "" });
 
       admin
         .auth()

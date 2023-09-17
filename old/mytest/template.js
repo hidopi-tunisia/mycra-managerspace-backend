@@ -352,7 +352,7 @@ table{
                             <h2>Reset password</h2>
                         </div>
                         <div class="text" style="padding: 0 3em; text-align: center; margin-top: 24px;">
-                            <h3>Welcome to My CRA, Your manager created an account using your email <span style="color: #1976D2;">${email}</span>, please click on the button to create a new password.</h3>
+                            <h3>Welcome to My CRA, Your supervisor created an account using your email <span style="color: #1976D2;">${email}</span>, please click on the button to create a new password.</h3>
                         </div>
                         <div class="text" style="padding: 0 3em; text-align: center;">
                             <a target="_blank" class="btn btn-primary" style="border-radius: 32px; padding-top: 8px; padding-bottom: 8px;" href="${link}">Create password</a>

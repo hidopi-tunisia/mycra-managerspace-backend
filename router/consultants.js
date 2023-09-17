@@ -15,10 +15,10 @@ import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
 
-router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
+router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), (req, res) => {
   res.send("Hello Consultants!");
 });
-router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
+router.get("/:id", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
   try {
     const { id } = req.params;
     const { populate } = req.query;
@@ -37,9 +37,9 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.post("/", checkGroup(Groups.MANAGERS), async (req, res) => {
+router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
-    const { user: manager, body, query } = req;
+    const { user: supervisor, body, query } = req;
     if (!body.email || !isValidEmail(body.email)) {
       throw new InvalidEmailError();
     }
@@ -62,7 +62,7 @@ router.post("/", checkGroup(Groups.MANAGERS), async (req, res) => {
     const result = await createConsultant({
       ...body,
       _id: user.uid,
-      manager: manager.uid,
+      supervisor: supervisor.uid,
     });
     res.status(StatusCodes.CREATED).send(result);
   } catch (error) {

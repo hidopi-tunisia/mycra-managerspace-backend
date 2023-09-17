@@ -44,10 +44,10 @@ const schema = new Schema({
       ref: "Consultant",
     },
   ],
-  manager: {
-    // manager
+  supervisor: {
+    // supervisor
     type: Schema.Types.ObjectId,
-    ref: "Manager",
+    ref: "Supervisor",
     required: true,
   },
   createdAt: {

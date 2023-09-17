@@ -1,7 +1,7 @@
 {
-  "email": "manager.anwer@vermeg.com",
-  "firstName": "Manager",
-  "lastName": "Anwer Vermeg",
+  "email": "supervisor.bechir@soprahr.com",
+  "firstName": "Supervisor",
+  "lastName": "Bechir Sopra HR",
   "trialPeriod": {
     "start": 1694713474694,
     "end": 1694714740392,
@@ -12,7 +12,7 @@
   "acceptedTermsAndConditionsVersion": "Version 1.0",
   "accountStatus": "active",
   "company": {
-    "companyName": "Vermeg",
+    "companyName": "Sopra HR",
     "siret": "12345678901234",
     "address": {
       "street": "123 Rue des Lacs",

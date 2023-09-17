@@ -5,10 +5,10 @@ import {
   setRole,
 } from "../helpers/auth";
 import { sendEmail } from "../helpers/mailer";
-import { assignManagerToClient, createManager, getManager } from "../helpers/managers";
+import { assignSupervisorToClient, createSupervisor, getSupervisor } from "../helpers/supervisors";
 import {
-  affectOfferToManager,
-  unaffectOfferFromManager,
+  affectOfferToSupervisor,
+  unaffectOfferFromSupervisor,
 } from "../helpers/offers";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { handleError, isValidEmail } from "../utils";
@@ -19,7 +19,7 @@ import { StatusCodes } from "../utils/status-codes";
 const router = Router();
 
 router.get("/", (req, res) => {
-  res.send("Hello Managers!");
+  res.send("Hello Supervisors!");
 });
 router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
@@ -32,7 +32,7 @@ router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
     if (typeof count === "string") {
       options["count"] = count;
     }
-    const result = await getManager(id, {
+    const result = await getSupervisor(id, {
       ...options,
     });
     res.status(StatusCodes.OK).send(result);
@@ -48,10 +48,10 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     }
     const uid = generateObjectId().toString();
     const user = await createUser({ uid, email: body.email });
-    await setRole(uid, Roles.MANAGER);
+    await setRole(uid, Roles.SUPERVISOR);
     if (query.send_email !== "false") {
       const link = await generatePasswordResetLink(body.email);
-      const html = await generateTemplate("manager_reset-password", {
+      const html = await generateTemplate("supervisor_reset-password", {
         EMAIL: body.email,
         LINK: link,
       });
@@ -62,23 +62,23 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
       };
       await sendEmail(payload);
     }
-    const result = await createManager({ ...body, _id: user.uid });
+    const result = await createSupervisor({ ...body, _id: user.uid });
     res.status(StatusCodes.CREATED).send(result);
   } catch (error) {
     handleError({ res, error });
   }
 });
 
-// Affect an offer to a manager
+// Affect an offer to a supervisor
 router.patch(
-  "/:managerId/offer/:offerId/affect",
+  "/:supervisorId/offer/:offerId/affect",
   checkGroup(Groups.ADMINS),
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await affectOfferToManager(
+      const result = await affectOfferToSupervisor(
         params.offerId,
-        params.managerId
+        params.supervisorId
       );
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
@@ -87,14 +87,14 @@ router.patch(
   }
 );
 
-// Unaffect an offer from a manager
+// Unaffect an offer from a supervisor
 router.patch(
-  "/:managerId/offer/:offerId/unaffect",
+  "/:supervisorId/offer/:offerId/unaffect",
   checkGroup(Groups.ADMINS),
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await unaffectOfferFromManager(params.managerId);
+      const result = await unaffectOfferFromSupervisor(params.supervisorId);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });
@@ -102,15 +102,15 @@ router.patch(
   }
 );
 
-// Assign a manager to a client
+// Assign a supervisor to a client
 router.patch(
-  "/:managerId/client/:clientId/assign",
+  "/:supervisorId/client/:clientId/assign",
   checkGroup(Groups.ADMINS),
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await assignManagerToClient(
-        params.managerId,
+      const result = await assignSupervisorToClient(
+        params.supervisorId,
         params.clientId,
       );
       res.status(StatusCodes.OK).send(result);

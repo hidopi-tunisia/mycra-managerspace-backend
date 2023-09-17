@@ -123,15 +123,15 @@ const schema = new Schema({
       type: Date,
     },
     confirmedBy: {
-      // Le nom du manager
+      // Le nom du supervisor
       type: String,
     },
-    confirmed_by_manager: {
+    confirmed_by_supervisor: {
       // La confirmation et la validation d'un CRA d'un Consultant
       type: Boolean,
       default: false,
     },
-    refused_by_manager: {
+    refused_by_supervisor: {
       // Le  refus d'un CRA d'un Consultant avec une raison.
       type: Boolean,
       default: false,
@@ -143,7 +143,7 @@ const schema = new Schema({
   },
   status: {
     type: String, // Validé / Refusé / En Attente
-    // RG : Si confirmed_by_manager = false & refused_by_manager = false
+    // RG : Si confirmed_by_supervisor = false & refused_by_supervisor = false
     enum: ["Refusee", "Validee", "En Attente"],
     default: "En Attente",
     required: true,

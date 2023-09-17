@@ -207,19 +207,19 @@ router.put("/valider-cra/:id", async (req, res) => {
       return res.status(404).json({ message: "CRA introuvable" });
     }
 
-    if (cra.confirmation_refus.confirmed_by_manager) {
+    if (cra.confirmation_refus.confirmed_by_supervisor) {
       return res.status(400).json({ message: "Le CRA a déjà été confirmé" });
     }
 
-    if (cra.confirmation_refus.refused_by_manager) {
+    if (cra.confirmation_refus.refused_by_supervisor) {
       // Réinitialiser le CRA en cas de validation après refus
-      cra.confirmation_refus.refused_by_manager = false;
+      cra.confirmation_refus.refused_by_supervisor = false;
       cra.confirmation_refus.date_refus = null;
       cra.confirmation_refus.raison_refus = null;
     }
 
-    cra.confirmation_refus.confirmed_by_manager = true;
-    cra.confirmation_refus.refused_by_manager = false;
+    cra.confirmation_refus.confirmed_by_supervisor = true;
+    cra.confirmation_refus.refused_by_supervisor = false;
     cra.status = "Validee";
     cra.confirmation_refus.date_confirmation = new Date();
     cra.confirmation_refus.confirmedBy = "Lecorp";
@@ -249,13 +249,13 @@ router.put("/refuser-cra/:id", async (req, res) => {
 
     // Mettre à jour les détails de refus
     cra.confirmation_refus.date_refus = currentDate;
-    cra.confirmation_refus.refused_by_manager = true;
+    cra.confirmation_refus.refused_by_supervisor = true;
     cra.confirmation_refus.raison_refus = raison;
     cra.status = "Refusee";
 
-    // Réinitialiser confirmed_by_manager à false si déjà true
-    if (cra.confirmation_refus.confirmed_by_manager) {
-      cra.confirmation_refus.confirmed_by_manager = false;
+    // Réinitialiser confirmed_by_supervisor à false si déjà true
+    if (cra.confirmation_refus.confirmed_by_supervisor) {
+      cra.confirmation_refus.confirmed_by_supervisor = false;
     }
 
     // Sauvegarder les modifications du CRA

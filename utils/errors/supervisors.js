@@ -1,14 +1,14 @@
 import { StatusCodes } from "../status-codes";
 import { BaseError } from "./base-error";
 
-class ManagerNotFoundError extends BaseError {
+class SupervisorNotFoundError extends BaseError {
   #code = StatusCodes.NOT_FOUND;
   constructor() {
     super();
-    this.message = "Manager not found";
-    this.name = "ManagerNotFound";
+    this.message = "Supervisor not found";
+    this.name = "SupervisorNotFound";
     this.code = this.#code;
   }
 }
 
-export { ManagerNotFoundError };
+export { SupervisorNotFoundError };

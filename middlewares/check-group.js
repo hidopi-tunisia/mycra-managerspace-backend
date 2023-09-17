@@ -3,20 +3,20 @@ import { ForbiddenError, UnidentifiedRoleError, handleError } from "../utils";
 
 export const Roles = {
   CONSULTANT: "consultant",
-  MANAGER: "manager",
+  SUPERVISOR: "supervisor",
   CLIENT: "client",
   ADMIN: "admin",
 };
 
 export const Groups = {
   ADMINS: [Roles.ADMIN],
-  MANAGERS: [Roles.MANAGER],
+  SUPERVISORS: [Roles.SUPERVISOR],
   CLIENTS: [Roles.CLIENT],
   CONSULTANTS: [Roles.CONSULTANT],
-  ADMINS_OR_MANAGERS: [Roles.ADMIN, Roles.MANAGER],
+  ADMINS_OR_SUPERVISORS: [Roles.ADMIN, Roles.SUPERVISOR],
   ADMINS_OR_CLIENTS: [Roles.ADMIN, Roles.CLIENT],
   ADMINS_OR_CONSULTANTS: [Roles.ADMIN, Roles.CONSULTANT],
-  MANAGERS_OR_CONSULTANTS: [Roles.MANAGER, Roles.CONSULTANT],
+  SUPERVISORS_OR_CONSULTANTS: [Roles.SUPERVISOR, Roles.CONSULTANT],
 };
 
 const checkGroup =

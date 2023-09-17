@@ -16,10 +16,10 @@ import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
 
-router.get("/", checkGroup(Groups.ADMINS_OR_MANAGERS), (req, res) => {
+router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), (req, res) => {
   res.send("Hello Consultants!");
 });
-router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
+router.get("/:id", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
   try {
     const { id } = req.params;
     const { populate, count } = req.query;
@@ -38,15 +38,15 @@ router.get("/:id", checkGroup(Groups.ADMINS_OR_MANAGERS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.post("/", checkGroup(Groups.MANAGERS), async (req, res) => {
+router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
-    const { user: manager, body } = req;
+    const { user: supervisor, body } = req;
     if (!body.email || !isValidEmail(body.email)) {
       throw new InvalidEmailError();
     }
     const result = await createClient({
       ...body,
-      manager: manager.uid,
+      supervisor: supervisor.uid,
     });
     res.status(StatusCodes.CREATED).send(result);
   } catch (error) {
@@ -63,18 +63,18 @@ router.delete("/:id", (req, res) => {
 // Create a project for a client
 router.post(
   "/:clientId/projects",
-  checkGroup(Groups.MANAGERS),
+  checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
       const { user, body, params } = req;
       const client = await getClient(params.clientId);
-      if (!client.manager.equals(user.uid)) {
+      if (!client.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await createProject({
         ...body,
         client: client._id,
-        manager: user.uid,
+        supervisor: user.uid,
       });
       res.status(StatusCodes.CREATED).send(result);
     } catch (error) {
@@ -86,16 +86,16 @@ router.post(
 // Affect a project to a client
 router.patch(
   "/:clientId/projects/:projectId/affect",
-  checkGroup(Groups.MANAGERS),
+  checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
       const { user, params } = req;
       const client = await getClient(params.clientId);
-      if (!client.manager.equals(user.uid)) {
+      if (!client.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (!project.manager.equals(user.uid)) {
+      if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await affectProjectToClient(
@@ -112,16 +112,16 @@ router.patch(
 // Unffect a project from a client
 router.patch(
   "/:clientId/projects/:projectId/unaffect",
-  checkGroup(Groups.MANAGERS),
+  checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
       const { user, params } = req;
       const client = await getClient(params.clientId);
-      if (!client.manager.equals(user.uid)) {
+      if (!client.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (!project.manager.equals(user.uid)) {
+      if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await unaffectProjectFromClient(
@@ -138,20 +138,20 @@ router.patch(
 // Assign a consultant to a project
 router.patch(
   "/:clientId/projects/:projectId/consultants/:consultantId/assign",
-  checkGroup(Groups.MANAGERS),
+  checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
       const { user, params } = req;
       const client = await getClient(params.clientId);
-      if (!client.manager.equals(user.uid)) {
+      if (!client.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (!project.manager.equals(user.uid)) {
+      if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const consultant = await getConsultant(params.consultantId);
-      if (!consultant.manager.equals(user.uid)) {
+      if (!consultant.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await assignConsultantToProject(
@@ -168,20 +168,20 @@ router.patch(
 // Unassign a consultant from a project
 router.patch(
   "/:clientId/projects/:projectId/consultants/:consultantId/unassign",
-  checkGroup(Groups.MANAGERS),
+  checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
       const { user, params } = req;
       const client = await getClient(params.clientId);
-      if (!client.manager.equals(user.uid)) {
+      if (!client.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (!project.manager.equals(user.uid)) {
+      if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const consultant = await getConsultant(params.consultantId);
-      if (!consultant.manager.equals(user.uid)) {
+      if (!consultant.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await unassignConsultantFromProject(

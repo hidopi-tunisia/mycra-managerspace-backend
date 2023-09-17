@@ -12,7 +12,7 @@ const clientRoute = require("./routes/client");
 const consultantRoute = require("./routes/consultant");
 const projetRoute = require("./routes/projet");
 const craRoute = require("./routes/cra");
-const managerRoute = require("./routes/manager");
+const supervisorRoute = require("./routes/supervisor");
 const offreRoute = require("./routes/offre");
 
 var app = express();
@@ -34,7 +34,7 @@ app.use("/client", clientRoute);
 app.use("/consultant", consultantRoute);
 app.use("/projet", projetRoute);
 app.use("/cra", craRoute);
-app.use("/manager", managerRoute);
+app.use("/supervisor", supervisorRoute);
 app.use("/offre", offreRoute);
 
 // catch 404 and forward to error handler

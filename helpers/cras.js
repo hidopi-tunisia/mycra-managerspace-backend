@@ -5,7 +5,7 @@ import { CRANotFoundError } from "../utils/errors/cras";
 
 const getCRAs = async ({
   consultant,
-  manager,
+  supervisor,
   page,
   limit,
   sort,
@@ -22,8 +22,8 @@ const getCRAs = async ({
   const predicate = {};
   if (consultant) {
     predicate["consultant"] = consultant;
-  } else if (manager) {
-    predicate["manager"] = manager;
+  } else if (supervisor) {
+    predicate["supervisor"] = supervisor;
   }
   if (project) {
     predicate["project"] = project;

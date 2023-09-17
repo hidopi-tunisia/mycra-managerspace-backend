@@ -1,12 +1,12 @@
-import { Client, Manager } from "../models";
+import { Client, Supervisor } from "../models";
 import { countData, populateData } from "../utils/data-options";
-import { ManagerNotFoundError } from "../utils/errors/managers";
+import { SupervisorNotFoundError } from "../utils/errors/supervisors";
 
-const getManager = async (id, options = {}) => {
-  let doc = await Manager.findById(id);
+const getSupervisor = async (id, options = {}) => {
+  let doc = await Supervisor.findById(id);
   let meta = {};
   if (!doc) {
-    throw new ManagerNotFoundError();
+    throw new SupervisorNotFoundError();
   }
   if (options.populate) {
     doc = await populateData(doc, options.populate);
@@ -24,25 +24,25 @@ const getManager = async (id, options = {}) => {
   return doc;
 };
 
-const createManager = (payload) => {
-  return new Manager({ ...payload }).save();
+const createSupervisor = (payload) => {
+  return new Supervisor({ ...payload }).save();
 };
 
 /**
- * Assigns a manager to a client.
+ * Assigns a supervisor to a client.
  * @function
- * @param {string} managerId - The id of the manager.
+ * @param {string} supervisorId - The id of the supervisor.
  * @param {string} clientId - The id of the client.
  * @returns {Promise<Project>}
  */
-const assignManagerToClient = async (managerId, clientId) => {
+const assignSupervisorToClient = async (supervisorId, clientId) => {
   return Client.findOneAndUpdate(
     { _id: clientId },
-    { $set: { manager: managerId } },
+    { $set: { supervisor: supervisorId } },
     {
       new: true,
     }
   );
 };
 
-export { getManager, createManager, assignManagerToClient };
+export { getSupervisor, createSupervisor, assignSupervisorToClient };

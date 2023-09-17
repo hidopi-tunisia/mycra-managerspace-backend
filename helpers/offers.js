@@ -1,4 +1,4 @@
-import { Manager, Offer } from "../models";
+import { Supervisor, Offer } from "../models";
 import { countData, populateData } from "../utils/data-options";
 import { OfferNotFoundError } from "../utils/errors/offers";
 
@@ -29,15 +29,15 @@ const createOffer = async (payload) => {
 };
 
 /**
- * Affects an offer to a manager.
+ * Affects an offer to a supervisor.
  * @function
  * @param {string} offerId - The id of the offer.
- * @param {string} managerId - The id of the manager.
+ * @param {string} supervisorId - The id of the supervisor.
  * @returns {Promise<Offer>}
  */
-const affectOfferToManager = async (offerId, managerId) => {
-  return Manager.findOneAndUpdate(
-    { _id: managerId },
+const affectOfferToSupervisor = async (offerId, supervisorId) => {
+  return Supervisor.findOneAndUpdate(
+    { _id: supervisorId },
     { $set: { offer: offerId } },
     {
       new: true,
@@ -46,15 +46,15 @@ const affectOfferToManager = async (offerId, managerId) => {
 };
 
 /**
- * Unaffects an offer form a manager.
+ * Unaffects an offer form a supervisor.
  * @function
  * @param {string} offerId - The id of the offer.
- * @param {string} managerId - The id of the manager.
+ * @param {string} supervisorId - The id of the supervisor.
  * @returns {Promise<Offer>}
  */
-const unaffectOfferFromManager = async (managerId) => {
-  return Manager.findOneAndUpdate(
-    { _id: managerId },
+const unaffectOfferFromSupervisor = async (supervisorId) => {
+  return Supervisor.findOneAndUpdate(
+    { _id: supervisorId },
     { $unset: { offer: 1 } }, // Use 1 to unset the field
     {
       new: true,
@@ -65,6 +65,6 @@ const unaffectOfferFromManager = async (managerId) => {
 export {
   getOffer,
   createOffer,
-  affectOfferToManager,
-  unaffectOfferFromManager,
+  affectOfferToSupervisor,
+  unaffectOfferFromSupervisor,
 };
