@@ -17,6 +17,7 @@ import {
 import { Groups, checkGroup } from "../middlewares/check-group";
 import { handleError, isValidEmail } from "../utils";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
+import { AlreadyAssignedError } from "../utils/errors/shared";
 import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
@@ -80,6 +81,9 @@ router.patch(
       if (!client.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
+      if (client.supervisor.equals(params.supervisorId)) {
+        throw new AlreadyAssignedError();
+      }
       const result = await assignSupervisorToClient(
         params.clientId,
         params.supervisorId
@@ -140,7 +144,7 @@ router.patch(
   }
 );
 
-// Unffect a project from a client
+// Unassign a project from a client
 router.patch(
   "/:clientId/projects/:projectId/unassign",
   checkGroup(Groups.SUPERVISORS),
@@ -234,8 +238,8 @@ router.patch(
         throw new ForbiddenError();
       }
       const project = await getProject(params.projectId);
-      if (!project.supervisor.equals(user.uid)) {
-        throw new ForbiddenError();
+      if (project.supervisor.equals(params.supervisorId)) {
+        throw new AlreadyAssignedError();
       }
       const result = await assignSupervisorToProject(
         params.projectId,
