@@ -13,8 +13,10 @@ const getCRAs = async ({
   client,
   year,
   month,
-  start,
-  end,
+  createdAtMin,
+  createdAtMax,
+  submittedAtMin,
+  submittedAtMax,
   // Use this on demand
   populate,
   count,
@@ -34,24 +36,39 @@ const getCRAs = async ({
     if (year !== undefined && month === undefined) {
       predicate["date.year"] = year;
     } else if (year === undefined && month !== undefined) {
-      predicate["date.month.number"] = month;
+      predicate["date.month"] = month;
     } else if (year !== undefined && month !== undefined) {
       predicate["date.year"] = year;
-      predicate["date.month.number"] = month;
+      predicate["date.month"] = month;
     }
-  } else if (start || end) {
+  } else if (createdAtMin || createdAtMax) {
     if (start && !end) {
       predicate["createdAt"] = {
-        $gte: new Date(start),
+        $gte: new Date(createdAtMin),
       };
-    } else if (!start && end) {
+    } else if (!createdAtMin && createdAtMax) {
       predicate["createdAt"] = {
         $lt: new Date(end),
       };
     } else {
       predicate["createdAt"] = {
-        $gte: new Date(start),
+        $gte: new Date(createdAtMin),
+        $lt: new Date(createdAtMax),
+      };
+    }
+  } else if (submittedAtMin || submittedAtMax) {
+    if (start && !end) {
+      predicate["submittedAt"] = {
+        $gte: new Date(submittedAtMin),
+      };
+    } else if (!submittedAtMin && submittedAtMax) {
+      predicate["submittedAt"] = {
         $lt: new Date(end),
+      };
+    } else {
+      predicate["submittedAtAt"] = {
+        $gte: new Date(submittedAtMin),
+        $lt: new Date(submittedAtMax),
       };
     }
   }

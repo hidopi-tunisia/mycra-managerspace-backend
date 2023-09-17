@@ -14,20 +14,15 @@ const schema = new Schema({
   },
   date: {
     month: {
-      // From 0 to 11
-      number: {
-        type: Number,
-      },
-      // From 1 to 7
-      start: {
-        type: Date,
-      },
-      // From 1 to 7
-      end: {
-        type: Date,
-      },
+      type: Number,
     },
     year: {
+      type: Number,
+    },
+    start: {
+      type: Number,
+    },
+    end: {
       type: Number,
     },
   },
@@ -131,7 +126,12 @@ const schema = new Schema({
           _id: { type: String },
           role: {
             type: String,
-            enum: [Roles.ADMIN, Roles.SUPERVISOR, Roles.CONSULTANT, Roles.CLIENT],
+            enum: [
+              Roles.ADMIN,
+              Roles.SUPERVISOR,
+              Roles.CONSULTANT,
+              Roles.CLIENT,
+            ],
           },
           motive: { type: String },
         },
@@ -155,7 +155,7 @@ const schema = new Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now()
+    default: Date.now(),
   },
   isDeleted: {
     // is_deleted

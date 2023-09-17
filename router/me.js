@@ -54,8 +54,10 @@ router.get("/cras", async (req, res) => {
       client,
       year,
       month,
-      start,
-      end,
+      createdAtMin,
+      createdAtMax,
+      submittedAtMin,
+      submittedAtMax,
       populate,
       count,
     } = req.query;
@@ -84,11 +86,17 @@ router.get("/cras", async (req, res) => {
     if (!isNaN(month) && Number(month) >= 0 && Number(month) <= 11) {
       options["month"] = Number(month);
     }
-    if (typeof start === "string") {
-      options["start"] = start;
+    if (typeof createdAtMin === "string") {
+      options["created-at-min"] = createdAtMin;
     }
-    if (typeof end === "string") {
-      options["end"] = end;
+    if (typeof createdAtMax === "string") {
+      options["created-at-min"] = createdAtMax;
+    }
+    if (typeof submittedAtMin === "string") {
+      options["submitted-at-min"] =submittedAtMin;
+    }
+    if (typeof submittedAtMax === "string") {
+      options["submitted-at-max"] = submittedAtMax;
     }
     if (typeof populate === "string") {
       options["populate"] = populate;
