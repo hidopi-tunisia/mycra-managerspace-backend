@@ -13,8 +13,10 @@ import {
   getProject,
   unassignProjectFromClient,
   unassignConsultantFromProject,
+  setProjectStatus,
 } from "../helpers/projects";
 import { Groups, checkGroup } from "../middlewares/check-group";
+import { Statuses } from "../models/project";
 import { handleError, isValidEmail } from "../utils";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
 import { AlreadyAssignedError } from "../utils/errors/shared";
@@ -163,6 +165,33 @@ router.patch(
         params.projectId,
         params.clientId
       );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Toggles a project status from "active" to "inactive" and vice-versa
+router.patch(
+  "/:clientId/projects/:projectId/status",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const project = await getProject(params.projectId);
+      if (!project.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const status =
+        project.status === Statuses.ACTIVE
+          ? Statuses.INACTIVE
+          : Statuses.ACTIVE;
+      const result = await setProjectStatus(params.projectId, status);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });

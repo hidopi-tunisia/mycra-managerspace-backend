@@ -132,6 +132,23 @@ const assignSupervisorToProject = async (projectId, supervisorId) => {
   );
 };
 
+/**
+ * Assign a project to a supervisor.
+ * @function
+ * @param {string} projectId - The id of the client.
+ * @param {('active'|'inactive')} status - The status of the project.
+ * @returns {Promise<Project>}
+ */
+const setProjectStatus = async (projectId, status) => {
+  return Project.findOneAndUpdate(
+    { _id: projectId },
+    { $set: { status } },
+    {
+      new: true,
+    }
+  );
+};
+
 export {
   createProject,
   getProject,
@@ -139,5 +156,6 @@ export {
   unassignProjectFromClient,
   assignConsultantToProject,
   unassignConsultantFromProject,
-  assignSupervisorToProject
+  assignSupervisorToProject,
+  setProjectStatus
 };
