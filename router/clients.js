@@ -1,17 +1,25 @@
 import { Router } from "express";
-import { createClient, getClient } from "../helpers/clients";
+import {
+  assignSupervisorToClient,
+  createClient,
+  getClient,
+} from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
 import {
-  affectProjectToClient,
+  assignProjectToClient,
+  assignSupervisorToProject,
   assignConsultantToProject,
   createProject,
   getProject,
-  unaffectProjectFromClient,
+  unassignProjectFromClient,
   unassignConsultantFromProject,
+  setProjectStatus,
 } from "../helpers/projects";
 import { Groups, checkGroup } from "../middlewares/check-group";
+import { Statuses } from "../models/project";
 import { handleError, isValidEmail } from "../utils";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
+import { AlreadyAssignedError } from "../utils/errors/shared";
 import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
@@ -19,25 +27,29 @@ const router = Router();
 router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), (req, res) => {
   res.send("Hello Consultants!");
 });
-router.get("/:id", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { populate, count } = req.query;
-    const options = {};
-    if (typeof populate === "string") {
-      options["populate"] = populate;
+router.get(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+      const { populate, count } = req.query;
+      const options = {};
+      if (typeof populate === "string") {
+        options["populate"] = populate;
+      }
+      if (typeof count === "string") {
+        options["count"] = count;
+      }
+      const result = await getClient(id, {
+        ...options,
+      });
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
     }
-    if (typeof count === "string") {
-      options["count"] = count;
-    }
-    const result = await getClient(id, {
-      ...options,
-    });
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
   }
-});
+);
 router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
     const { user: supervisor, body } = req;
@@ -59,6 +71,31 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   res.send("Got a DELETE request at /user");
 });
+
+// Assign a client to a supervisor
+router.patch(
+  "/:clientId/supervisors/:supervisorId/assign",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      if (client.supervisor.equals(params.supervisorId)) {
+        throw new AlreadyAssignedError();
+      }
+      const result = await assignSupervisorToClient(
+        params.clientId,
+        params.supervisorId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 
 // Create a project for a client
 router.post(
@@ -83,9 +120,9 @@ router.post(
   }
 );
 
-// Affect a project to a client
+// Assign a project to a client
 router.patch(
-  "/:clientId/projects/:projectId/affect",
+  "/:clientId/projects/:projectId/assign",
   checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
@@ -98,7 +135,7 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await affectProjectToClient(
+      const result = await assignProjectToClient(
         params.projectId,
         params.clientId
       );
@@ -109,9 +146,9 @@ router.patch(
   }
 );
 
-// Unffect a project from a client
+// Unassign a project from a client
 router.patch(
-  "/:clientId/projects/:projectId/unaffect",
+  "/:clientId/projects/:projectId/unassign",
   checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
@@ -124,10 +161,37 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await unaffectProjectFromClient(
+      const result = await unassignProjectFromClient(
         params.projectId,
         params.clientId
       );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Toggles a project status from "active" to "inactive" and vice-versa
+router.patch(
+  "/:clientId/projects/:projectId/status",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const project = await getProject(params.projectId);
+      if (!project.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const status =
+        project.status === Statuses.ACTIVE
+          ? Statuses.INACTIVE
+          : Statuses.ACTIVE;
+      const result = await setProjectStatus(params.projectId, status);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });
@@ -148,10 +212,6 @@ router.patch(
       }
       const project = await getProject(params.projectId);
       if (!project.supervisor.equals(user.uid)) {
-        throw new ForbiddenError();
-      }
-      const consultant = await getConsultant(params.consultantId);
-      if (!consultant.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
       const result = await assignConsultantToProject(
@@ -187,6 +247,35 @@ router.patch(
       const result = await unassignConsultantFromProject(
         params.projectId,
         params.consultantId
+      );
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+// Assign a supervisor to a project
+router.patch(
+  "/:clientId/projects/:projectId/supervisors/:supervisorId/assign",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.clientId);
+      if (!client.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const project = await getProject(params.projectId);
+      if (!project.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      if (project.supervisor.equals(params.supervisorId)) {
+        throw new AlreadyAssignedError();
+      }
+      const result = await assignSupervisorToProject(
+        params.projectId,
+        params.supervisorId
       );
       res.status(StatusCodes.OK).send(result);
     } catch (error) {

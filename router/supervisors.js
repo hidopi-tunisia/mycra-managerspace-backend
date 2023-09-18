@@ -7,8 +7,8 @@ import {
 import { sendEmail } from "../helpers/mailer";
 import { assignSupervisorToClient, createSupervisor, getSupervisor } from "../helpers/supervisors";
 import {
-  affectOfferToSupervisor,
-  unaffectOfferFromSupervisor,
+  assignOfferToSupervisor,
+  unassignOfferFromSupervisor,
 } from "../helpers/offers";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { handleError, isValidEmail } from "../utils";
@@ -69,14 +69,14 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
   }
 });
 
-// Affect an offer to a supervisor
+// Assign an offer to a supervisor
 router.patch(
-  "/:supervisorId/offer/:offerId/affect",
+  "/:supervisorId/offer/:offerId/assign",
   checkGroup(Groups.ADMINS),
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await affectOfferToSupervisor(
+      const result = await assignOfferToSupervisor(
         params.offerId,
         params.supervisorId
       );
@@ -87,14 +87,14 @@ router.patch(
   }
 );
 
-// Unaffect an offer from a supervisor
+// Unassign an offer from a supervisor
 router.patch(
-  "/:supervisorId/offer/:offerId/unaffect",
+  "/:supervisorId/offer/:offerId/unassign",
   checkGroup(Groups.ADMINS),
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await unaffectOfferFromSupervisor(params.supervisorId);
+      const result = await unassignOfferFromSupervisor(params.supervisorId);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });

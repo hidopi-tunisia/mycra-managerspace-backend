@@ -75,7 +75,7 @@ const getCRAs = async ({
   return CRA.find(predicate)
     .skip(page * limit)
     .limit(limit)
-    .sort({ createdAt: sort === "ASC" ? 1 : -1 });
+    .sort({ createdAt: sort === "asc" ? 1 : -1 });
 };
 
 const getCRA = async (id, options = {}) => {

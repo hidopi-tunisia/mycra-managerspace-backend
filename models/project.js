@@ -48,6 +48,13 @@ const schema = new Schema({
     ref: "Supervisor",
     required: true,
   },
+  consultants: [
+    // consultants
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Consultant",
+    },
+  ],
   status: {
     type: String,
     enum: [Statuses.ACTIVE, Statuses.INACTIVE],

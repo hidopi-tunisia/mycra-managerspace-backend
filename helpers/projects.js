@@ -24,22 +24,17 @@ const getProject = async (id, options = {}) => {
 };
 
 const createProject = async (payload) => {
-  const doc = await new Project({ ...payload }).save();
-  await Client.findOneAndUpdate(
-    { _id: payload.client },
-    { $addToSet: { projects: doc._id } }
-  );
-  return doc;
+  return Project({ ...payload }).save();
 };
 
 /**
- * Affect a project to a client.
+ * Assign a project to a client.
  * @function
  * @param {string} projectId - The id of the project.
  * @param {string} clientId - The id of the client.
  * @returns {Promise<Project>}
  */
-const affectProjectToClient = async (projectId, clientId) => {
+const assignProjectToClient = async (projectId, clientId) => {
   const doc = await Project.findOneAndUpdate(
     { _id: projectId },
     { $set: { client: clientId } },
@@ -55,13 +50,13 @@ const affectProjectToClient = async (projectId, clientId) => {
 };
 
 /**
- * Unaffect a project form a client.
+ * Unassign a project form a client.
  * @function
  * @param {string} projectId - The id of the project.
  * @param {string} clientId - The id of the client.
  * @returns {Promise<Project>}
  */
-const unaffectProjectFromClient = async (projectId, clientId) => {
+const unassignProjectFromClient = async (projectId, clientId) => {
   const doc = await Project.findOneAndUpdate(
     { _id: projectId },
     { $unset: { client: clientId } },
@@ -120,11 +115,47 @@ const unassignConsultantFromProject = async (projectId, consultantId) => {
   return doc;
 };
 
+/**
+ * Assign a project to a supervisor.
+ * @function
+ * @param {string} projectId - The id of the client.
+ * @param {string} supervisorId - The id of the project.
+ * @returns {Promise<Project>}
+ */
+const assignSupervisorToProject = async (projectId, supervisorId) => {
+  return Project.findOneAndUpdate(
+    { _id: projectId },
+    { $set: { supervisor: supervisorId } },
+    {
+      new: true,
+    }
+  );
+};
+
+/**
+ * Assign a project to a supervisor.
+ * @function
+ * @param {string} projectId - The id of the client.
+ * @param {('active'|'inactive')} status - The status of the project.
+ * @returns {Promise<Project>}
+ */
+const setProjectStatus = async (projectId, status) => {
+  return Project.findOneAndUpdate(
+    { _id: projectId },
+    { $set: { status } },
+    {
+      new: true,
+    }
+  );
+};
+
 export {
   createProject,
   getProject,
-  affectProjectToClient,
-  unaffectProjectFromClient,
+  assignProjectToClient,
+  unassignProjectFromClient,
   assignConsultantToProject,
   unassignConsultantFromProject,
+  assignSupervisorToProject,
+  setProjectStatus
 };

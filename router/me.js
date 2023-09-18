@@ -41,7 +41,7 @@ router.get(
   }
 );
 
-// http://localhost:30000/me/cras?page=1&limit=2&sort=DESC&year=2023&month=5&start=2020-02-22&end=2020-10-23
+// http://localhost:30000/me/cras?page=1&limit=2&sort=desc&year=2023&month=5&start=2020-02-22&end=2020-10-23
 router.get("/cras", async (req, res) => {
   try {
     const { user } = req;
@@ -68,7 +68,7 @@ router.get("/cras", async (req, res) => {
     if (!isNaN(limit) && limit > 0) {
       options["limit"] = limit;
     }
-    if (sort === "ASC" || sort === "DESC") {
+    if (sort === "asc" || sort === "desc") {
       options["sort"] = sort;
     }
     if (typeof project === "string") {

@@ -29,4 +29,21 @@ const createClient = (payload) => {
   return new Client({ ...payload }).save();
 };
 
-export { getClient, createClient };
+/**
+ * Assigns a supervisor to a client.
+ * @function
+ * @param {string} clientId - The id of the client.
+ * @param {string} supervisorId - The id of the supervisor.
+ * @returns {Promise<Client>}
+ */
+const assignSupervisorToClient = async (clientId, supervisorId) => {
+  return Client.findOneAndUpdate(
+    { _id: clientId },
+    { $set: { supervisor: supervisorId } },
+    {
+      new: true,
+    }
+  );
+};
+
+export { getClient, createClient, assignSupervisorToClient };

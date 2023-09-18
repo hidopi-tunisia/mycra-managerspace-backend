@@ -29,13 +29,13 @@ const createOffer = async (payload) => {
 };
 
 /**
- * Affects an offer to a supervisor.
+ * Assigns an offer to a supervisor.
  * @function
  * @param {string} offerId - The id of the offer.
  * @param {string} supervisorId - The id of the supervisor.
  * @returns {Promise<Offer>}
  */
-const affectOfferToSupervisor = async (offerId, supervisorId) => {
+const assignOfferToSupervisor = async (offerId, supervisorId) => {
   return Supervisor.findOneAndUpdate(
     { _id: supervisorId },
     { $set: { offer: offerId } },
@@ -46,13 +46,13 @@ const affectOfferToSupervisor = async (offerId, supervisorId) => {
 };
 
 /**
- * Unaffects an offer form a supervisor.
+ * Unassigns an offer form a supervisor.
  * @function
  * @param {string} offerId - The id of the offer.
  * @param {string} supervisorId - The id of the supervisor.
  * @returns {Promise<Offer>}
  */
-const unaffectOfferFromSupervisor = async (supervisorId) => {
+const unassignOfferFromSupervisor = async (supervisorId) => {
   return Supervisor.findOneAndUpdate(
     { _id: supervisorId },
     { $unset: { offer: 1 } }, // Use 1 to unset the field
@@ -65,6 +65,6 @@ const unaffectOfferFromSupervisor = async (supervisorId) => {
 export {
   getOffer,
   createOffer,
-  affectOfferToSupervisor,
-  unaffectOfferFromSupervisor,
+  assignOfferToSupervisor,
+  unassignOfferFromSupervisor,
 };
