@@ -1,5 +1,10 @@
 import { model, Schema } from "mongoose";
 
+export const Statuses = {
+  ACTIVE: "active",
+  INACTIVE: "inactive",
+};
+
 const schema = new Schema({
   name: {
     // nom
@@ -44,8 +49,9 @@ const schema = new Schema({
     required: true,
   },
   status: {
-    enum: ["active", "inactive"],
-    default: "inactive",
+    type: String,
+    enum: [Statuses.ACTIVE, Statuses.INACTIVE],
+    default: Statuses.INACTIVE,
   },
   createdAt: {
     // date_creation
