@@ -1,9 +1,0 @@
-{
-  "name": "Silver",
-  "description": "Silver",
-  "trialPeriod": 7,
-  "price": 20,
-  "includedFeatures": [
-    "3 clients"
-  ]
-}
