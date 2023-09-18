@@ -1,6 +1,7 @@
 /node_modules/
 /mytest
 /mytest/*
-play.js
+/play
+/play/*
 /old
 /old/*
