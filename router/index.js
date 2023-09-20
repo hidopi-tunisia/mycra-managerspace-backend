@@ -5,6 +5,7 @@ import crasRouter from "./cras";
 import supervisorsRouter from "./supervisors";
 import offersRouter from "./offers";
 import meRouter from "./me";
+import miscsRouter from "./miscs";
 
 export {
   authRouter,
@@ -14,4 +15,5 @@ export {
   supervisorsRouter,
   offersRouter,
   meRouter,
+  miscsRouter
 };

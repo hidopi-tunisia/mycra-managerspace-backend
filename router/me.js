@@ -1,18 +1,18 @@
 import { Router } from "express";
 import { getConsultant } from "../helpers/consultants";
-import { getCRA, getCRAs } from "../helpers/cras";
+import { getCRAs } from "../helpers/cras";
 import { getSupervisor } from "../helpers/supervisors";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
+import { checkGroup, Groups, Roles } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
 import { handleError } from "../utils";
 import {
   filtedCRAsByStatus,
   filterCurrentProjects,
-  sortCRAsByHistory,
+  sortCRAsByHistory
 } from "../utils/data-options";
 import {
   NoCurrentProjectsError,
-  NoProjectsError,
+  NoProjectsError
 } from "../utils/errors/projects";
 import { StatusCodes } from "../utils/status-codes";
 
@@ -191,4 +191,5 @@ router.get(
     }
   }
 );
+
 export default router;

@@ -13,6 +13,7 @@ import {
   supervisorsRouter,
   offersRouter,
   meRouter,
+  miscsRouter,
 } from "./router";
 
 const app = express();
@@ -31,6 +32,7 @@ router.use("/clients", clientsRouter);
 router.use("/consultants", consultantsRouter);
 router.use("/offers", offersRouter);
 router.use("/me", meRouter);
+router.use("/miscs", miscsRouter);
 
 app.use("/", router);
 
