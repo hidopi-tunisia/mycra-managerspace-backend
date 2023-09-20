@@ -2,7 +2,7 @@ import { Schema, model } from "mongoose";
 import { Roles } from "../middlewares/check-group";
 
 export const CRAStatuses = {
-  CREATED: "created",
+  SUBMITTED: "submitted",
   PENDING: "pending",
   APPROVED: "approved",
   REJECTED: "rejected",
@@ -118,7 +118,7 @@ const schema = new Schema({
     {
       action: {
         type: String,
-        enum: [CRAStatuses.CREATED, CRAStatuses.APPROVED, CRAStatuses.REJECTED],
+        enum: [CRAStatuses.SUBMITTED, CRAStatuses.APPROVED, CRAStatuses.REJECTED],
       },
       meta: {
         at: { type: Date },
@@ -149,13 +149,6 @@ const schema = new Schema({
     // Projet à laquelle le consultant a travaillé
     type: Schema.Types.ObjectId,
     ref: "Project",
-  },
-  submittedAt: {
-    type: Date,
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
   },
   isDeleted: {
     // is_deleted

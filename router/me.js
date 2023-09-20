@@ -3,7 +3,17 @@ import { getConsultant } from "../helpers/consultants";
 import { getCRA, getCRAs } from "../helpers/cras";
 import { getSupervisor } from "../helpers/supervisors";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
+import { CRAStatuses } from "../models/cra";
 import { handleError } from "../utils";
+import {
+  filtedCRAsByStatus,
+  filterCurrentProjects,
+  sortCRAsByHistory,
+} from "../utils/data-options";
+import {
+  NoCurrentProjectsError,
+  NoProjectsError,
+} from "../utils/errors/projects";
 import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
@@ -56,8 +66,6 @@ router.get("/cras", async (req, res) => {
       month,
       createdAtMin,
       createdAtMax,
-      submittedAtMin,
-      submittedAtMax,
       populate,
       count,
     } = req.query;
@@ -92,12 +100,6 @@ router.get("/cras", async (req, res) => {
     if (typeof createdAtMax === "string") {
       options["created-at-min"] = createdAtMax;
     }
-    if (typeof submittedAtMin === "string") {
-      options["submitted-at-min"] =submittedAtMin;
-    }
-    if (typeof submittedAtMax === "string") {
-      options["submitted-at-max"] = submittedAtMax;
-    }
     if (typeof populate === "string") {
       options["populate"] = populate;
     }
@@ -123,5 +125,70 @@ router.get("/cras", async (req, res) => {
     handleError({ res, error });
   }
 });
-
+router.get(
+  "/cras/current",
+  checkGroup(Groups.CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user } = req;
+      const { projects } = await getConsultant(user.uid, {
+        populate: "projects",
+      });
+      if (!Array.isArray(projects) || projects.length === 0) {
+        throw new NoProjectsError();
+      }
+      const today = new Date();
+      const currentProjects = filterCurrentProjects(projects, today);
+      if (!Array.isArray(currentProjects) || currentProjects.length === 0) {
+        throw new NoCurrentProjectsError();
+      }
+      const month = today.getMonth();
+      const year = today.getFullYear();
+      const cras = await getCRAs({
+        projectIds: currentProjects.map((p) => p._id),
+        month,
+        year,
+      });
+      let criteria = CRAStatuses.REJECTED;
+      const rejectedCRAs = [...cras.filter(filtedCRAsByStatus(criteria))];
+      let sortedRejectedCRAs;
+      if (rejectedCRAs.length > 0) {
+        sortedRejectedCRAs = [
+          ...rejectedCRAs.sort(sortCRAsByHistory(criteria)),
+        ];
+      }
+      criteria = CRAStatuses.APPROVED;
+      const approvedCRAs = [...cras.filter(filtedCRAsByStatus(criteria))];
+      let sortedApprovedCRAs;
+      if (approvedCRAs.length > 0) {
+        sortedApprovedCRAs = [
+          ...approvedCRAs.sort(sortCRAsByHistory(criteria)),
+        ];
+      }
+      criteria = CRAStatuses.PENDING;
+      const pendingCRAs = [...cras.filter(filtedCRAsByStatus(criteria))];
+      let sortedPendingCRAs;
+      if (pendingCRAs.length > 0) {
+        sortedPendingCRAs = [...pendingCRAs.sort(sortCRAsByHistory(criteria))];
+      }
+      let result = {
+        approved: [],
+        pending: [],
+        rejected: [],
+      };
+      if (Array.isArray(sortedApprovedCRAs) && sortedApprovedCRAs.length > 0) {
+        result.approved = sortedApprovedCRAs;
+      }
+      if (Array.isArray(sortedPendingCRAs) && sortedPendingCRAs.length > 0) {
+        result.pending = sortedPendingCRAs;
+      }
+      if (Array.isArray(sortedRejectedCRAs) && sortedRejectedCRAs.length > 0) {
+        result.rejected = sortedRejectedCRAs;
+      }
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 export default router;

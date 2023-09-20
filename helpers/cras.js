@@ -56,21 +56,6 @@ const getCRAs = async ({
         $lt: new Date(createdAtMax),
       };
     }
-  } else if (submittedAtMin || submittedAtMax) {
-    if (start && !end) {
-      predicate["submittedAt"] = {
-        $gte: new Date(submittedAtMin),
-      };
-    } else if (!submittedAtMin && submittedAtMax) {
-      predicate["submittedAt"] = {
-        $lt: new Date(end),
-      };
-    } else {
-      predicate["submittedAtAt"] = {
-        $gte: new Date(submittedAtMin),
-        $lt: new Date(submittedAtMax),
-      };
-    }
   }
   return CRA.find(predicate)
     .skip(page * limit)

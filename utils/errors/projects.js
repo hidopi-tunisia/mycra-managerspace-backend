@@ -10,5 +10,23 @@ class ProjectNotFoundError extends BaseError {
     this.code = this.#code;
   }
 }
+class NoProjectsError extends BaseError {
+  #code = StatusCodes.NOT_FOUND;
+  constructor() {
+    super();
+    this.message = "No projects";
+    this.name = "NoProjects";
+    this.code = this.#code;
+  }
+}
+class NoCurrentProjectsError extends BaseError {
+  #code = StatusCodes.NOT_FOUND;
+  constructor() {
+    super();
+    this.message = "No current projects";
+    this.name = "NoCurrentProjects";
+    this.code = this.#code;
+  }
+}
 
-export { ProjectNotFoundError };
+export { ProjectNotFoundError, NoProjectsError, NoCurrentProjectsError };
