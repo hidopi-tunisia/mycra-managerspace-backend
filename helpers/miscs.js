@@ -1,4 +1,4 @@
-import axios from "axios";
+import { getHolidaysData } from "../utils/holidays";
 
 export const HolidayCountries = {
   FRANCE: "fr",
@@ -8,12 +8,7 @@ const getHolidays = async (
   year = new Date().getFullYear(),
   month
 ) => {
-  let endpoint =
-    process.env[`HOLIDAYS_ENDPOINT_${HolidayCountries.FRANCE.toUpperCase()}`];
-  if (country) {
-    process.env[`HOLIDAYS_ENDPOINT_${country.toUpperCase()}`];
-  }
-  const { data } = await axios.get(`${endpoint}/${year}`);
+  const data = getHolidaysData(country, year)
   if (!isNaN(month) && month <= 12 && month >= 1) {
     let m;
     if (month < 10) {
@@ -32,7 +27,7 @@ const getWeekends = (
 ) => {
   var saturdays = [];
   var sundays = [];
-  for (var i = 0; i <= new Date(year, month, 0).getDate(); i++) {
+  for (var i = 0; i <= new Date(year, month + 1, 0).getDate(); i++) {
     var date = new Date(year, month, i);
     if (date.getDay() == 6) {
       saturdays.push(date.getDate());
@@ -47,3 +42,4 @@ const getWeekends = (
 };
 
 export { getHolidays, getWeekends };
+

@@ -21,7 +21,7 @@ router.get("/dates/holidays", async (req, res) => {
     if (!Object.values(HolidayCountries).includes(country.toLowerCase())) {
       throw new InvalidCountryError();
     }
-    const result = await getHolidays(year, country);
+    const result = await getHolidays(country, year);
     res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });

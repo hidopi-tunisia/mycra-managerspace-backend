@@ -45,7 +45,7 @@ router.post(
       ];
       const year = new Date().getFullYear();
       const month = new Date().getMonth();
-      const h = await getHolidays(HolidayCountries.FRANCE, year, 1);
+      const h = await getHolidays(HolidayCountries.FRANCE, year, month + 1);
       const w = getWeekends(year, month);
       const holidays = h.map(({ date, nom_jour_ferie }) => ({
         date,
@@ -68,7 +68,16 @@ router.post(
       }));
       const weekends = [...d0, ...d6];
       const date = { month, year };
-      const result = { ...body, holidays, weekends, history, status, date };
+      const result = await createCRA({
+        ...body,
+        holidays,
+        weekends,
+        history,
+        status,
+        date,
+        project: params.id,
+        consultant: user.uid,
+      });
       res.status(StatusCodes.CREATED).send(result);
     } catch (error) {
       handleError({ res, error });
