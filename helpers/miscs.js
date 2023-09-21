@@ -8,7 +8,11 @@ const getHolidays = async (
   year = new Date().getFullYear(),
   month
 ) => {
-  const endpoint = process.env[`HOLIDAYS_ENDPOINT_${country.toUpperCase()}`];
+  let endpoint =
+    process.env[`HOLIDAYS_ENDPOINT_${HolidayCountries.FRANCE.toUpperCase()}`];
+  if (country) {
+    process.env[`HOLIDAYS_ENDPOINT_${country.toUpperCase()}`];
+  }
   const { data } = await axios.get(`${endpoint}/${year}`);
   if (!isNaN(month) && month <= 12 && month >= 1) {
     let m;
