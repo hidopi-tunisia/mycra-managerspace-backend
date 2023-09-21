@@ -20,5 +20,14 @@ class InvalidCountryError extends BaseError {
     this.code = this.#code;
   }
 }
+class InvalidMonthError extends BaseError {
+  #code = StatusCodes.NOT_ACCEPTABLE;
+  constructor() {
+    super();
+    this.message = "Invalid month";
+    this.name = "InvalidMonth";
+    this.code = this.#code;
+  }
+}
 
-export { InvalidYearError, InvalidCountryError };
+export { InvalidYearError, InvalidMonthError, InvalidCountryError };

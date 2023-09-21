@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { getConsultant } from "../helpers/consultants";
-import { getCRAs } from "../helpers/cras";
+import { createCRA, getCRAs } from "../helpers/cras";
+import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs";
 import { getSupervisor } from "../helpers/supervisors";
 import { checkGroup, Groups, Roles } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
@@ -8,15 +9,72 @@ import { handleError } from "../utils";
 import {
   filtedCRAsByStatus,
   filterCurrentProjects,
-  sortCRAsByHistory
+  sortCRAsByHistory,
 } from "../utils/data-options";
 import {
   NoCurrentProjectsError,
-  NoProjectsError
+  NoProjectsError,
+  ProjectNotFoundError,
 } from "../utils/errors/projects";
 import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
+
+router.post(
+  "/projects/:id/cras",
+  checkGroup(Groups.CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user, body, params } = req;
+      const { projects } = await getConsultant(user.uid);
+      if (!projects.includes(params.id)) {
+        throw new ProjectNotFoundError();
+      }
+      const status = CRAStatuses.PENDING;
+      const history = [
+        {
+          action: CRAStatuses.SUBMITTED,
+          meta: {
+            at: new Date(),
+            by: {
+              _id: user.uid,
+              role: Roles.CONSULTANT,
+            },
+          },
+        },
+      ];
+      const year = new Date().getFullYear();
+      const month = new Date().getMonth();
+      const h = await getHolidays(HolidayCountries.FRANCE, year, 1);
+      const w = getWeekends(year, month);
+      const holidays = h.map(({ date, nom_jour_ferie }) => ({
+        date,
+        meta: {
+          value: nom_jour_ferie,
+        },
+      }));
+      const { saturdays, sundays } = w;
+      const d0 = sundays.map((d) => ({
+        date: new Date(year, month, d).toISOString().substring(0, 10),
+        meta: {
+          value: 0,
+        },
+      }));
+      const d6 = saturdays.map((d) => ({
+        date: new Date(year, month, d).toISOString().substring(0, 10),
+        meta: {
+          value: 6,
+        },
+      }));
+      const weekends = [...d0, ...d6];
+      const date = { month, year };
+      const result = { ...body, holidays, weekends, history, status, date };
+      res.status(StatusCodes.CREATED).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 
 router.get(
   "/",
@@ -125,6 +183,7 @@ router.get("/cras", async (req, res) => {
     handleError({ res, error });
   }
 });
+
 router.get(
   "/cras/current",
   checkGroup(Groups.CONSULTANTS),

@@ -95,7 +95,7 @@ const schema = new Schema({
     },
   ],
   weekends: [
-    // indisponibilites
+    // week-ends
     {
       date: {
         type: String,

@@ -30,31 +30,6 @@ router.get("/:id", async (req, res) => {
     handleError({ res, error });
   }
 });
-router.post("/", checkGroup(Groups.CONSULTANTS), async (req, res) => {
-  try {
-    const { user, body } = req;
-    const history = [
-      {
-        action: "created",
-        meta: {
-          at: new Date(),
-          by: {
-            _id: user.uid,
-            role: Roles.CONSULTANT,
-          },
-        },
-      },
-    ];
-    const result = await createCRA({
-      ...body,
-      consultant: user.uid,
-      history,
-    });
-    res.status(StatusCodes.CREATED).send(result);
-  } catch (error) {
-    handleError({ res, error });
-  }
-});
 router.patch("/:id/approve", checkGroup(Groups.SUPERVISORS), async (req, res) => {
   try {
     const { user, body, params } = req;
