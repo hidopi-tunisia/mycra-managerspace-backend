@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getConsultant } from "../helpers/consultants";
-import { createCRA, getCRAs } from "../helpers/cras";
+import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras";
 import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs";
 import { getSupervisor } from "../helpers/supervisors";
 import { checkGroup, Groups, Roles } from "../middlewares/check-group";
@@ -47,21 +47,21 @@ router.post(
       const month = new Date().getMonth();
       const h = await getHolidays(HolidayCountries.FRANCE, year, month + 1);
       const w = getWeekends(year, month);
-      const holidays = h.map(({ date, nom_jour_ferie }) => ({
+      const holidays = h.map(({ date, name }) => ({
         date,
         meta: {
-          value: nom_jour_ferie,
+          value: name,
         },
       }));
       const { saturdays, sundays } = w;
       const d0 = sundays.map((d) => ({
-        date: new Date(year, month, d).toISOString().substring(0, 10),
+        date: new Date(year, month, d + 1).toISOString().substring(0, 10),
         meta: {
           value: 0,
         },
       }));
       const d6 = saturdays.map((d) => ({
-        date: new Date(year, month, d).toISOString().substring(0, 10),
+        date: new Date(year, month, d + 1).toISOString().substring(0, 10),
         meta: {
           value: 6,
         },
@@ -84,6 +84,40 @@ router.post(
     }
   }
 );
+
+router.put("/cras/:id", checkGroup(Groups.CONSULTANTS), async (req, res) => {
+  try {
+    const { user, body, params } = req;
+    const cra = await getCRA(params.id);
+    if (!cra.consultant.equals(user.uid)) {
+      throw "not yours";
+    }
+    if (cra.status !== CRAStatuses.REJECTED) {
+      throw "not rejected";
+    }
+    const status = CRAStatuses.PENDING;
+    const history = [
+      {
+        action: CRAStatuses.SUBMITTED,
+        meta: {
+          at: new Date(),
+          by: {
+            _id: user.uid,
+            role: Roles.CONSULTANT,
+          },
+        },
+      },
+    ];
+    const result = await updateCRA(params.id, {
+      ...body,
+      history,
+      status,
+    });
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
+});
 
 router.get(
   "/",

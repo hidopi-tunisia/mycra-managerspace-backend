@@ -8,7 +8,7 @@ const getHolidays = async (
   year = new Date().getFullYear(),
   month
 ) => {
-  const data = getHolidaysData(country, year)
+  const data = getHolidaysData(country, year);
   if (!isNaN(month) && month <= 12 && month >= 1) {
     let m;
     if (month < 10) {
@@ -27,11 +27,11 @@ const getWeekends = (
 ) => {
   var saturdays = [];
   var sundays = [];
-  for (var i = 0; i <= new Date(year, month + 1, 0).getDate(); i++) {
+  for (var i = 0; i <= new Date(year, month, 0).getDate(); i++) {
     var date = new Date(year, month, i);
-    if (date.getDay() == 6) {
+    if (date.getDay() == 6 && date.getMonth() === month) {
       saturdays.push(date.getDate());
-    } else if (date.getDay() == 0) {
+    } else if (date.getDay() == 0 && date.getMonth() === month) {
       sundays.push(date.getDate());
     }
   }
@@ -42,4 +42,3 @@ const getWeekends = (
 };
 
 export { getHolidays, getWeekends };
-

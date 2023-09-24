@@ -89,6 +89,10 @@ const createCRA = async (payload) => {
   return new CRA({ ...payload }).save();
 };
 
+const updateCRA = async (id, payload) => {
+  return CRA.findByIdAndUpdate(id, { ...payload });
+};
+
 const rejectCRA = async (id, action) => {
   return CRA.findOneAndUpdate(
     { _id: id, status: CRAStatuses.PENDING },
@@ -112,4 +116,4 @@ const approveCRA = async (id, action) => {
   );
 };
 
-export { getCRAs, getCRA, createCRA, rejectCRA, approveCRA };
+export { getCRAs, getCRA, createCRA, rejectCRA, approveCRA, updateCRA };
