@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "nodemon --experimental-specifier-resolution=node app.js",
-    "play": "nodemon --experimental-specifier-resolution=node play",
+    "dev:inspect": "nodemon --experimental-specifier-resolution=node app.js",
+    "play": "nodemon --inspect --experimental-specifier-resolution=node play",
     "test": "reset && jest --watchAll"
   },
   "dependencies": {
