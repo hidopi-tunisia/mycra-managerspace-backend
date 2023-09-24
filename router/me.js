@@ -97,6 +97,7 @@ router.put("/cras/:id", checkGroup(Groups.CONSULTANTS), async (req, res) => {
     }
     const status = CRAStatuses.PENDING;
     const history = [
+      ...cra.history,
       {
         action: CRAStatuses.SUBMITTED,
         meta: {
