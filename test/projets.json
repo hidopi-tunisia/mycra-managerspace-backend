@@ -1,0 +1,72 @@
+[
+    {
+      "nom": "Plateforme de Gestion des Stocks",
+      "codeProjet": "PGS2023",
+      "description": "Développement d'une application web pour la gestion des stocks d'une entreprise.",
+      "dateDebut": "2023-09-01",
+      "dateFin": "2024-03-15",
+      "client": null,
+      "categorie": "Informatique",
+      "consultants": [],
+      "date_creation": "2023-08-06T00:00:00.000Z"
+    },
+    {
+      "nom": "Campagne Marketing Digitale",
+      "codeProjet": "CMD2023",
+      "description": "Conception et exécution d'une campagne marketing digitale pour un produit nouveau.",
+      "dateDebut": "2023-07-15",
+      "dateFin": "2023-12-31",
+      "client": null,
+      "categorie": "Marketing",
+      "consultants": [],
+      "date_creation": "2023-08-06T00:00:00.000Z"
+    },
+    {
+      "nom": "Application Mobile de Suivi Fitness",
+      "codeProjet": "AMS2023",
+      "description": "Développement d'une application mobile pour le suivi de la condition physique et des activités sportives.",
+      "dateDebut": "2023-10-01",
+      "dateFin": "2024-04-30",
+      "client": null,
+      "categorie": "Santé et Fitness",
+      "consultants": [],
+      "date_creation": "2023-08-10T00:00:00.000Z"
+    },
+    {
+      "nom": "Refonte Site Web E-commerce",
+      "codeProjet": "RSE2023",
+      "description": "Modernisation et amélioration de l'expérience utilisateur d'un site web e-commerce existant.",
+      "dateDebut": "2023-09-15",
+      "dateFin": "2024-02-28",
+      "client": null,
+      "categorie": "Commerce électronique",
+      "consultants": [],
+      "date_creation": "2023-08-12T00:00:00.000Z"
+    },
+    {
+      "nom": "Système de Gestion des Ressources Humaines",
+      "codeProjet": "SGRH2023",
+      "description": "Développement d'un système complet de gestion des ressources humaines pour une entreprise.",
+      "dateDebut": "2023-11-01",
+      "dateFin": "2024-06-30",
+      "client": null,
+      "categorie": "Ressources Humaines",
+      "consultants": [],
+      "date_creation": "2023-08-15T00:00:00.000Z"
+    },
+    {
+      "nom": "Plateforme d'Apprentissage en Ligne",
+      "codeProjet": "PAL2023",
+      "description": "Création d'une plateforme d'apprentissage en ligne offrant des cours dans divers domaines.",
+      "dateDebut": "2023-10-15",
+      "dateFin": "2024-05-31",
+      "client": null,
+      "categorie": "Éducation",
+      "consultants": [],
+      "date_creation": "2023-08-20T00:00:00.000Z"
+    }
+    
+    
+            
+  ]
+  

@@ -3,7 +3,7 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var config = require("./config/connect");
+var config = require(process.env.NODE_ENV === 'test' ? './config/test.connect' : './config/connect');
 var firebaseConfig = require('./config/firebaseConfig');
 
 var indexRouter = require("./routes/index");

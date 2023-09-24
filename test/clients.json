@@ -1,0 +1,65 @@
+[
+    {
+      "civilite": "M.",
+      "nom": "Dupont",
+      "prenom": "Jean",
+      "email": "jean.dupont@example.com",
+      "numeroTelephone": "123-456-7890",
+      "deuxiemeNumeroTelephone": "987-654-3210",
+      "adresse": {
+        "rue": "123 Rue Principale",
+        "codePostal": "75001",
+        "ville": "Paris"
+      },
+      "nomCompletResponsable": "Marie Dupont",
+      "nomSocialEntreprise": "Entreprise ABC",
+      "siretEntreprise": "12345678900001",
+      "dateSignature": "2023-08-01",
+      "observation": "Client régulier",
+      "projets": [],
+      "consultants": [],
+      "dateCreation": "2023-08-04T00:00:00.000Z"
+    },
+    {
+      "civilite": "Mme",
+      "nom": "Martin",
+      "prenom": "Sophie",
+      "email": "sophie.martin@example.com",
+      "numeroTelephone": "555-123-4567",
+      "adresse": {
+        "rue": "456 Avenue Secondaire",
+        "codePostal": "90001",
+        "ville": "Los Angeles"
+      },
+      "nomCompletResponsable": "Pierre Martin",
+      "nomSocialEntreprise": "Entreprise XYZ",
+      "siretEntreprise": "98765432100002",
+      "dateSignature": "2023-07-15",
+      "observation": "Nouveau client",
+      "projets": [],
+      "consultants": [],
+      "dateCreation": "2023-08-04T00:00:00.000Z"
+    },
+    {
+      "civilite": "Mme",
+      "nom": "Dubois",
+      "prenom": "Isabelle",
+      "email": "isabelle.dubois@example.com",
+      "numeroTelephone": "222-333-4444",
+      "adresse": {
+        "rue": "789 Rue Secondaire",
+        "codePostal": "12345",
+        "ville": "Montréal"
+      },
+      "nomCompletResponsable": "Marc Dubois",
+      "nomSocialEntreprise": "Entreprise QWE",
+      "siretEntreprise": "45678912300003",
+      "dateSignature": "2023-08-05",
+      "observation": "En attente de devis",
+      "projets": [],
+      "consultants": [],
+      "dateCreation": "2023-08-06T00:00:00.000Z"
+    }
+    
+  ]
+  

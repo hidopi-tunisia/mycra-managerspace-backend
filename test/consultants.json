@@ -1,0 +1,47 @@
+[
+    {
+      "civilite": "M.",
+      "nom": "Ferret",
+      "prenom": "Pierre",
+      "photo_profil": "lien_vers_photo.jpg",
+      "email": "Fpierre@example.com",
+      "dateDisponibilite": "2023-08-15",
+      "dateEmbauche": "2022-01-10",
+      "dossierCompetence": "lien_vers_dossier.pdf",
+      "profilLinkedIn": "https://www.linkedin.com/in/jeandupont/",
+      "competences": ["JavaScript", "Node.js", "React"],
+      "poste": "Développeur Full Stack",
+      "anneesExperience": 5,
+      "numeroTelephone": "123-456-7890",
+      "note": "Excellent développeur, très efficace dans les projets.",
+      "date_creation": "2023-08-06T00:00:00.000Z",
+      "projet": [],
+      "client": null,
+      "aAccepteCGU": true,
+      "cguVersionAcceptee": "v1.2",
+      "statutCompte": "active"
+    },
+    {
+      "civilite": "Mme",
+      "nom": "Martin",
+      "prenom": "Céline",
+      "photo_profil": "lien_vers_photo.jpg",
+      "email": "celine.martin@example.com",
+      "dateDisponibilite": "2023-09-01",
+      "dateEmbauche": "2021-03-20",
+      "dossierCompetence": "",
+      "profilLinkedIn": "",
+      "competences": ["Python", "Data Analysis", "Machine Learning"],
+      "poste": "Data Scientist",
+      "anneesExperience": 3,
+      "numeroTelephone": "555-123-4567",
+      "note": "Très talentueuse dans l'analyse de données complexes.",
+      "date_creation": "2023-08-06T00:00:00.000Z",
+      "projet": [],
+      "client": null,
+      "aAccepteCGU": true,
+      "cguVersionAcceptee": "v1.2",
+      "statutCompte": "active"
+    }
+  ]
+  
