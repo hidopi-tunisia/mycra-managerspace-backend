@@ -1,5 +1,10 @@
 import { Schema, model } from "mongoose";
 
+const Statuses = {
+  ACTIVE: "active",
+  INACTIVE: "inactive",
+};
+
 const schema = new Schema({
   civility: {
     // civilite
@@ -86,8 +91,8 @@ const schema = new Schema({
   accountStatus: {
     // statutCompte
     type: String,
-    enum: ["active", "inactive"],
-    default: "active",
+    enum: [Statuses.ACTIVE, Statuses.INACTIVE],
+    default: Statuses.ACTIVE,
     required: true,
   },
   projects: [
