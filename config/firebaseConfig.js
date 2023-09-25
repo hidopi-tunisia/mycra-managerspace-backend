@@ -4,5 +4,4 @@ const credentials = require("../mycra-dev-firebase-adminsdk-yd5qy-156c051fb2.jso
 admin.initializeApp({
   credential: admin.credential.cert(credentials),
 });
-
 module.exports = admin;
