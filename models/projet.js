@@ -24,7 +24,7 @@ const ProjetSchema = new mongoose.Schema({
   client: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Client",
-    required: true,
+    //required: true,
   },
   categorie: {
     type: String,
@@ -37,7 +37,7 @@ const ProjetSchema = new mongoose.Schema({
   date_creation: {
     type: Date,
     default: Date.now,
-  }
+  },
 });
 
 const Projet = mongoose.model("Projet", ProjetSchema);

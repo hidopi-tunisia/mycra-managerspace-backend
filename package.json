@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "test": "mocha --exit"
+    "test": " mocha --exit"
   },
   "dependencies": {
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "chai": "^4.3.8",
+    "chai-http": "^4.4.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "express": "^4.18.2",

@@ -3,8 +3,14 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-var config = require(process.env.NODE_ENV === 'test' ? './config/test.connect' : './config/connect');
-var firebaseConfig = require('./config/firebaseConfig');
+var config;
+if (process.env.npm_lifecycle_event === "test") {
+  config = require("./config/test.connect");
+} else {
+  config = require("./config/connect");
+}
+
+var firebaseConfig = require("./config/firebaseConfig");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
@@ -14,6 +20,7 @@ const projetRoute = require("./routes/projet");
 const craRoute = require("./routes/cra");
 const managerRoute = require("./routes/manager");
 const offreRoute = require("./routes/offre");
+const indispRoute = require("./routes/indisponibilite");
 
 var app = express();
 
@@ -36,6 +43,7 @@ app.use("/projet", projetRoute);
 app.use("/cra", craRoute);
 app.use("/manager", managerRoute);
 app.use("/offre", offreRoute);
+app.use("/indisp", indispRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
