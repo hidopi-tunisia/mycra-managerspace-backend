@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-//123456789123
+//azerty
 mongoose
   .connect("mongodb+srv://asma:as123456@cluster0.lpcnbkp.mongodb.net/mycra_test?retryWrites=true&w=majority")
   .then(async () => {
