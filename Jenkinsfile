@@ -19,6 +19,8 @@ pipeline {
 
                     // Run npm goals directly
                     sh 'npm install --force'
+                    sh 'npm install mocha chai chai-http'
+
                 }
                    
                 }

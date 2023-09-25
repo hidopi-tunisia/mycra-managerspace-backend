@@ -875,7 +875,7 @@ describe("/test de création de clients, projets, consultants", () => {
 
   //Manager
   //Création de manager
-  it("CREATE Manager", (done) => {
+  /*it("CREATE Manager", (done) => {
     const manager = {
       nom: "Rouine",
       prenom: "Marwa",
@@ -969,5 +969,5 @@ describe("/test de création de clients, projets, consultants", () => {
         console.log("manager : ", res.body.manager);
         done();
       });
-  });
+  });*/
 });

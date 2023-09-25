@@ -1,8 +1,6 @@
-const mongoose=require('mongoose');
+const mongoose = require("mongoose");
 
-//mongoose.connect('mongodb+srv://hidopi:SsTxf6X4b0pCcYSB@mycraclusterdev.hu0dhsd.mongodb.net/mycra_dev?retryWrites=true&w=majority').then(
-mongoose.connect('mongodb+srv://asma:as123456@cluster0.lpcnbkp.mongodb.net/mycra_dev?retryWrites=true&w=majority').then(
-
+mongoose.connect('mongodb+srv://hidopi:SsTxf6X4b0pCcYSB@mycraclusterdev.hu0dhsd.mongodb.net/mycra_dev?retryWrites=true&w=majority').then(
     ()=>{
         console.log('connected');
     }
@@ -12,5 +10,4 @@ mongoose.connect('mongodb+srv://asma:as123456@cluster0.lpcnbkp.mongodb.net/mycra
     }
 )
 
-
-module.exports=mongoose;
+module.exports = mongoose;
