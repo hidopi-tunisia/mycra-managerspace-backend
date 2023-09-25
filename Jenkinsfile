@@ -2,7 +2,7 @@ pipeline {
     agent any
     environment {
                  
-        DOCKER_IMAGE_NAME = "hidopi/my_cra:apiv1.0"
+        DOCKER_IMAGE_NAME = "hidopi/mycra_backend:v1.0"
     
     }
 
