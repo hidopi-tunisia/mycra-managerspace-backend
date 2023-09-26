@@ -1,4 +1,4 @@
-import { generateString } from "../utils/generate-string";
+import { Severity } from "./constants";
 
 class BaseNotification {
   data = {
@@ -6,6 +6,7 @@ class BaseNotification {
     image: "https://i.ytimg.com/vi/iosNuIdQoy8/maxresdefault.jpg",
     body: "",
     title: "",
+    severity: Severity.DEFAULT,
   };
   notification = {
     title: "",

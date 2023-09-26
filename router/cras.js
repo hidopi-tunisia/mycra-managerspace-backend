@@ -61,6 +61,11 @@ router.patch(
       };
       const result = await approveCRA(params.id, action);
       res.status(StatusCodes.OK).send(result);
+      emitter.emit("cra-approved", {
+        id: cra._id,
+        consultant: consultantId,
+        motive: body.motive,
+      });
     } catch (error) {
       handleError({ res, error });
     }
@@ -97,11 +102,11 @@ router.patch(
       };
       const result = await rejectCRA(params.id, action);
       res.status(StatusCodes.OK).send(result);
-      const n = new CRARejectedNotification({
-        data: { title: "CRA rejected", body: body.motive },
-        topic: `${Roles.CONSULTANT}~${consultantId}`,
+      emitter.emit("cra-rejected", {
+        id: cra._id,
+        consultant: consultantId,
+        motive: body.motive,
       });
-      emitter.emit(n.name, n);
     } catch (error) {
       handleError({ res, error });
     }
