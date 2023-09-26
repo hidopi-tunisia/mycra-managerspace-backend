@@ -7,23 +7,21 @@ import {
     CRARequiredNotification,
 } from "./cras-notifications";
 
-emitter.on("cra-submitted", (payload) => {});
-
 emitter.on("cra-rejected", (payload) => {
   try {
     let body = "-";
     if (payload.motive) {
       body = payload.motive;
     }
-    const notifications = new CRARejectedNotification({
+    const notification = new CRARejectedNotification({
       data: {
         id: payload._id,
         title: "CRA rejected",
         body,
       },
-      topic: `${Topics.CONSULTANTS}~${payload.consultant}`,
+      topic: `${Topics.CONSULTANTS}~${payload.consultantId}`,
     });
-    send(notifications);
+    send(notification);
   } catch (error) {
     console.log(error);
   }
@@ -35,30 +33,30 @@ emitter.on("cra-approved", (payload) => {
     if (payload.motive) {
       body = payload.motive;
     }
-    const notifications = new CRAApprovedNotification({
+    const notification = new CRAApprovedNotification({
       data: {
         id: payload._id,
         title: "CRA approved",
         body,
       },
-      topic: `${Topics.CONSULTANTS}~${payload.consultant}`,
+      topic: `${Topics.CONSULTANTS}~${payload.consultantId}`,
     });
-    send(notifications);
+    send(notification);
   } catch (error) {
     console.log(error);
   }
 });
 
-emitter.on("cra-required", (payload) => {
+emitter.on("cra-required", () => {
   try {
-    const notifications = new CRARequiredNotification({
+    const notification = new CRARequiredNotification({
       data: {
         title: "CRA required",
         body: "You need to fill submit the CRA before the end of the month.",
       },
       topic: `${Topics.CONSULTANTS_ALL}`,
     });
-    send(notifications);
+    send(notification);
   } catch (error) {
     console.log(error);
   }

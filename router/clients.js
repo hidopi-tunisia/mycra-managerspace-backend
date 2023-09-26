@@ -21,6 +21,7 @@ import { handleError, isValidEmail } from "../utils";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
 import { AlreadyAssignedError } from "../utils/errors/shared";
 import { StatusCodes } from "../utils/status-codes";
+import { emitter } from "../helpers/events";
 
 const router = Router();
 
@@ -219,6 +220,12 @@ router.patch(
         params.consultantId
       );
       res.status(StatusCodes.OK).send(result);
+      emitter.emit("consultant-assigned-to-project", {
+        id: project._id,
+        consultantId: params.consultantId,
+        clientId: client._id,
+        projectName: project.name,
+      });
     } catch (error) {
       handleError({ res, error });
     }
@@ -249,6 +256,12 @@ router.patch(
         params.consultantId
       );
       res.status(StatusCodes.OK).send(result);
+      emitter.emit("consultant-unassigned-from-project", {
+        id: project._id,
+        consultantId: params.consultantId,
+        clientId: client._id,
+        projectName: project.name,
+      });
     } catch (error) {
       handleError({ res, error });
     }

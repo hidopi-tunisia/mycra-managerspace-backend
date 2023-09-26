@@ -63,7 +63,7 @@ router.patch(
       res.status(StatusCodes.OK).send(result);
       emitter.emit("cra-approved", {
         id: cra._id,
-        consultant: consultantId,
+        consultantId: consultantId,
         motive: body.motive,
       });
     } catch (error) {
@@ -104,7 +104,7 @@ router.patch(
       res.status(StatusCodes.OK).send(result);
       emitter.emit("cra-rejected", {
         id: cra._id,
-        consultant: consultantId,
+        consultantId: consultantId,
         motive: body.motive,
       });
     } catch (error) {
