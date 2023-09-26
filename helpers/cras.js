@@ -57,10 +57,20 @@ const getCRAs = async ({
       };
     }
   }
-  return CRA.find(predicate)
-    .skip(page * limit)
-    .limit(limit)
-    .sort({ createdAt: sort === "asc" ? 1 : -1 });
+  let docs;
+  if (populate) {
+    docs = await CRA.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 })
+      .populate(populate.split(",").map((path) => path));
+  } else {
+    docs = await CRA.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 });
+  }
+  return docs;
 };
 
 const getCRA = async (id, options = {}) => {
