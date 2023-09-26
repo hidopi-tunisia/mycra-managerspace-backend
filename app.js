@@ -15,7 +15,7 @@ import {
   meRouter,
   miscsRouter,
 } from "./router";
-
+import "./events";
 const app = express();
 const router = Router();
 const APP_PORT = process.env.APP_PORT;

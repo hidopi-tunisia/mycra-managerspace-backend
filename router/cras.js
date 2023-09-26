@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { approveCRA, createCRA, getCRA, rejectCRA } from "../helpers/cras";
-import { StatusCodes } from "../utils/status-codes";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { handleError } from "../utils";
+import { CRARejectedNotification } from "../events/cras/cras-notifications";
 import { getConsultant } from "../helpers/consultants";
+import { approveCRA, getCRA, rejectCRA } from "../helpers/cras";
+import { emitter } from "../helpers/events";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
+import { ForbiddenError, handleError } from "../utils";
+import { CRANotPendingError } from "../utils/errors/cras";
+import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
 
@@ -30,64 +33,80 @@ router.get("/:id", async (req, res) => {
     handleError({ res, error });
   }
 });
-router.patch("/:id/approve", checkGroup(Groups.SUPERVISORS), async (req, res) => {
-  try {
-    const { user, body, params } = req;
-    const cra = await getCRA(params.id);
-    const consultantId = cra.consultant;
-    const consultant = await getConsultant(consultantId);
-    if (!consultant.supervisor.equals(user.uid)) {
-      throw new ForbiddenError();
+router.patch(
+  "/:id/approve",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, body, params } = req;
+      const cra = await getCRA(params.id);
+      const consultantId = cra.consultant;
+      const consultant = await getConsultant(consultantId);
+      if (!consultant.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const meta = {
+        at: new Date(),
+        by: {
+          _id: user.uid,
+          role: Roles.SUPERVISOR,
+        },
+      };
+      if (body && body.motive) {
+        meta.by.motive = body.motive;
+      }
+      const action = {
+        action: CRAStatuses.APPROVED,
+        meta,
+      };
+      const result = await approveCRA(params.id, action);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
     }
-    const meta = {
-      at: new Date(),
-      by: {
-        _id: user.uid,
-        role: Roles.SUPERVISOR,
-      },
-    };
-    if (body && body.motive) {
-      meta.by.motive = body.motive;
-    }
-    const action = {
-      action: CRAStatuses.APPROVED,
-      meta,
-    };
-    const result = await approveCRA(params.id, action);
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
   }
-});
-router.patch("/:id/reject", checkGroup(Groups.SUPERVISORS), async (req, res) => {
-  try {
-    const { user, body, params } = req;
-    const cra = await getCRA(params.id);
-    const consultantId = cra.consultant;
-    const consultant = await getConsultant(consultantId);
-    if (!consultant.supervisor.equals(user.uid)) {
-      throw new ForbiddenError();
+);
+router.patch(
+  "/:id/reject",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, body, params } = req;
+      const cra = await getCRA(params.id);
+      const consultantId = cra.consultant;
+      const consultant = await getConsultant(consultantId);
+      if (!consultant.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      if (cra.status !== CRAStatuses.PENDING) {
+        throw new CRANotPendingError();
+      }
+      const meta = {
+        at: new Date(),
+        by: {
+          _id: user.uid,
+          role: Roles.SUPERVISOR,
+        },
+      };
+      if (body && body.motive) {
+        meta.by.motive = body.motive;
+      }
+      const action = {
+        action: CRAStatuses.REJECTED,
+        meta,
+      };
+      const result = await rejectCRA(params.id, action);
+      res.status(StatusCodes.OK).send(result);
+      const n = new CRARejectedNotification({
+        data: { title: "CRA rejected", body: body.motive },
+        topic: `${Roles.CONSULTANT}~${consultantId}`,
+      });
+      emitter.emit(n.name, n);
+    } catch (error) {
+      handleError({ res, error });
     }
-    const meta = {
-      at: new Date(),
-      by: {
-        _id: user.uid,
-        role: Roles.SUPERVISOR,
-      },
-    };
-    if (body && body.motive) {
-      meta.by.motive = body.motive;
-    }
-    const action = {
-      action: CRAStatuses.REJECTED,
-      meta,
-    };
-    const result = await rejectCRA(params.id, action);
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
   }
-});
+);
 router.put("/:id", (req, res) => {
   res.send("Got a PUT request at :id");
 });

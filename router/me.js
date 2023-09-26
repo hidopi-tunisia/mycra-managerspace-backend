@@ -5,7 +5,7 @@ import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs";
 import { getSupervisor } from "../helpers/supervisors";
 import { checkGroup, Groups, Roles } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
-import { handleError } from "../utils";
+import { ForbiddenError, handleError } from "../utils";
 import {
   filtedCRAsByStatus,
   filterCurrentProjects,
@@ -17,9 +17,74 @@ import {
   ProjectNotFoundError,
 } from "../utils/errors/projects";
 import { StatusCodes } from "../utils/status-codes";
+import { emitter } from "../helpers/events";
+import { CRARejectedNotification } from "../events/cras/cras-notifications";
+import { BaseNotification } from "../events/base-notification";
+import { CRANotPendingError, CRANotRejectedError } from "../utils/errors/cras";
 
 const router = Router();
+router.get("/foo", () => {
+  emitter.emit("foo", { baz: "boo" });
+  emitter.emit("koo", { kaz: "joo" });
+});
 
+router.get(
+  "/",
+  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user } = req;
+      const { populate, count } = req.query;
+      const options = {};
+      if (typeof populate === "string") {
+        options["populate"] = populate;
+      }
+      if (typeof count === "string") {
+        options["count"] = count;
+      }
+      let result;
+      switch (user.role) {
+        case Roles.SUPERVISOR:
+          result = await getSupervisor(user.uid, options);
+          break;
+        case Roles.CONSULTANT:
+          result = await getConsultant(user.uid, options);
+          break;
+
+        default:
+          break;
+      }
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+router.put(
+  "/",
+  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user, body } = req;
+      let result;
+      switch (user.role) {
+        case Roles.SUPERVISOR:
+          result = await updateSupervisor(user.uid, body);
+          break;
+        case Roles.CONSULTANT:
+          result = await updateConsultant(user.uid, body);
+          break;
+
+        default:
+          break;
+      }
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 router.post(
   "/projects/:id/cras",
   checkGroup(Groups.CONSULTANTS),
@@ -90,10 +155,10 @@ router.put("/cras/:id", checkGroup(Groups.CONSULTANTS), async (req, res) => {
     const { user, body, params } = req;
     const cra = await getCRA(params.id);
     if (!cra.consultant.equals(user.uid)) {
-      throw "not yours";
+      throw new ForbiddenError();
     }
     if (cra.status !== CRAStatuses.REJECTED) {
-      throw "not rejected";
+      throw new CRANotRejectedError();
     }
     const status = CRAStatuses.PENDING;
     const history = [
@@ -119,64 +184,6 @@ router.put("/cras/:id", checkGroup(Groups.CONSULTANTS), async (req, res) => {
     handleError({ res, error });
   }
 });
-
-router.get(
-  "/",
-  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
-  async (req, res) => {
-    try {
-      const { user } = req;
-      const { populate, count } = req.query;
-      const options = {};
-      if (typeof populate === "string") {
-        options["populate"] = populate;
-      }
-      if (typeof count === "string") {
-        options["count"] = count;
-      }
-      let result;
-      switch (user.role) {
-        case Roles.SUPERVISOR:
-          result = await getSupervisor(user.uid, options);
-          break;
-        case Roles.CONSULTANT:
-          result = await getConsultant(user.uid, options);
-          break;
-
-        default:
-          break;
-      }
-      res.status(StatusCodes.OK).send(result);
-    } catch (error) {
-      handleError({ res, error });
-    }
-  }
-);
-
-router.put(
-  "/",
-  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
-  async (req, res) => {
-    try {
-      const { user, body } = req;
-      let result;
-      switch (user.role) {
-        case Roles.SUPERVISOR:
-          result = await updateSupervisor(user.uid, body);
-          break;
-        case Roles.CONSULTANT:
-          result = await updateConsultant(user.uid, body);
-          break;
-
-        default:
-          break;
-      }
-      res.status(StatusCodes.OK).send(result);
-    } catch (error) {
-      handleError({ res, error });
-    }
-  }
-);
 
 // http://localhost:30000/me/cras?page=1&limit=2&sort=desc&year=2023&month=5&start=2020-02-22&end=2020-10-23
 router.get("/cras", async (req, res) => {

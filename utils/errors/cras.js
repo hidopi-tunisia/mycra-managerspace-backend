@@ -11,4 +11,23 @@ class CRANotFoundError extends BaseError {
   }
 }
 
-export { CRANotFoundError };
+class CRANotPendingError extends BaseError {
+  #code = StatusCodes.NOT_FOUND;
+  constructor() {
+    super();
+    this.message = "CRA not pending";
+    this.name = "CRANotPending";
+    this.code = this.#code;
+  }
+}
+class CRANotRejectedError extends BaseError {
+  #code = StatusCodes.NOT_FOUND;
+  constructor() {
+    super();
+    this.message = "CRA not rejected";
+    this.name = "CRANotRejected";
+    this.code = this.#code;
+  }
+}
+
+export { CRANotFoundError, CRANotPendingError, CRANotRejectedError };
