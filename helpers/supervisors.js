@@ -45,4 +45,12 @@ const assignSupervisorToClient = async (supervisorId, clientId) => {
   );
 };
 
-export { getSupervisor, createSupervisor, assignSupervisorToClient };
+const updateSupervisor = () => {
+  return Supervisor.findByIdAndUpdate(id, payload, { new: true });
+};
+export {
+  getSupervisor,
+  createSupervisor,
+  updateSupervisor,
+  assignSupervisorToClient,
+};

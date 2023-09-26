@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getConsultant } from "../helpers/consultants";
+import { getConsultant, updateConsultant } from "../helpers/consultants";
 import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras";
 import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs";
 import { getSupervisor } from "../helpers/supervisors";
@@ -141,6 +141,31 @@ router.get(
           break;
         case Roles.CONSULTANT:
           result = await getConsultant(user.uid, options);
+          break;
+
+        default:
+          break;
+      }
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+router.put(
+  "/",
+  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user, body } = req;
+      let result;
+      switch (user.role) {
+        case Roles.SUPERVISOR:
+          result = await updateSupervisor(user.uid, body);
+          break;
+        case Roles.CONSULTANT:
+          result = await updateConsultant(user.uid, body);
           break;
 
         default:

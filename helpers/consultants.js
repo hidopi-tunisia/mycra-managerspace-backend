@@ -28,4 +28,7 @@ const createConsultant = (payload) => {
   return new Consultant({ ...payload }).save();
 };
 
-export { getConsultant, createConsultant };
+const updateConsultant = (id, payload) => {
+  return Consultant.findByIdAndUpdate(id, payload, { new: true });
+};
+export { getConsultant, createConsultant, updateConsultant };
