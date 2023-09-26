@@ -16,6 +16,8 @@ import {
   miscsRouter,
 } from "./router";
 import "./events";
+import "./schedule";
+
 const app = express();
 const router = Router();
 const APP_PORT = process.env.APP_PORT;
@@ -35,7 +37,6 @@ router.use("/me", meRouter);
 router.use("/miscs", miscsRouter);
 
 app.use("/", router);
-
 app.listen(APP_PORT, () => {
   console.log(`Server listening on port ${APP_PORT}`);
 });

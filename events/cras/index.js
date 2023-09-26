@@ -51,17 +51,12 @@ emitter.on("cra-approved", (payload) => {
 
 emitter.on("cra-required", (payload) => {
   try {
-    let body = "-";
-    if (payload.motive) {
-      body = payload.motive;
-    }
     const notifications = new CRARequiredNotification({
       data: {
-        id: payload._id,
         title: "CRA required",
-        body,
+        body: "You need to fill submit the CRA before the end of the month.",
       },
-      topic: `${Topics.CONSULTANTS}~${payload.consultant}`,
+      topic: `${Topics.CONSULTANTS_ALL}`,
     });
     send(notifications);
   } catch (error) {

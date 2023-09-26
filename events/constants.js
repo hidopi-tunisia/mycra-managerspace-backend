@@ -7,5 +7,5 @@ export const Severity = {
 };
 
 export const Topics = {
-  CONSULTANTS: "consultants",
+  CONSULTANTS_ALL: "consultants_all",
 };
