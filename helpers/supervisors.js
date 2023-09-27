@@ -2,6 +2,67 @@ import { Client, Supervisor } from "../models";
 import { countData, populateData } from "../utils/data-options";
 import { SupervisorNotFoundError } from "../utils/errors/supervisors";
 
+const getSupervisors = async ({
+  page,
+  limit,
+  sort,
+  offer,
+  status,
+  companyName,
+  city,
+  zipCode,
+  createdAtMin,
+  createdAtMax,
+  populate,
+} = {}) => {
+  const predicate = {};
+  if (offer) {
+    predicate["offer"] = offer;
+  }
+  if (status) {
+    predicate["accountStatus"] = status;
+  }
+  if (companyName) {
+    predicate["company.companyName"] = companyName;
+  }
+  if (city) {
+    predicate["company.address.city"] = city;
+  }
+  if (zipCode) {
+    predicate["company.address.zipCode"] = zipCode;
+  }
+  if (createdAtMin || createdAtMax) {
+    if (createdAtMin && !createdAtMax) {
+      predicate["createdAt"] = {
+        $gte: new Date(createdAtMin),
+      };
+    } else if (!createdAtMin && createdAtMax) {
+      predicate["createdAt"] = {
+        $lt: new Date(createdAtMax),
+      };
+    } else {
+      predicate["createdAt"] = {
+        $gte: new Date(createdAtMin),
+        $lt: new Date(createdAtMax),
+      };
+    }
+  }
+  let docs;
+  if (populate) {
+    docs = await Client.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 })
+      .populate(populate.split(",").map((path) => path));
+  } else {
+    docs = await Client.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 });
+  }
+  return docs;
+};
+
 const getSupervisor = async (id, options = {}) => {
   let doc = await Supervisor.findById(id);
   let meta = {};
@@ -49,6 +110,7 @@ const updateSupervisor = () => {
   return Supervisor.findByIdAndUpdate(id, payload, { new: true });
 };
 export {
+  getSupervisors,
   getSupervisor,
   createSupervisor,
   updateSupervisor,

@@ -5,7 +5,12 @@ import {
   setRole,
 } from "../helpers/auth";
 import { sendEmail } from "../helpers/mailer";
-import { assignSupervisorToClient, createSupervisor, getSupervisor } from "../helpers/supervisors";
+import {
+  assignSupervisorToClient,
+  createSupervisor,
+  getSupervisor,
+  getSupervisors,
+} from "../helpers/supervisors";
 import {
   assignOfferToSupervisor,
   unassignOfferFromSupervisor,
@@ -18,8 +23,60 @@ import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.send("Hello Supervisors!");
+router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
+  try {
+    const {
+      page,
+      limit,
+      sort,
+      offer,
+      status,
+      "company-name": companyName,
+      city,
+      "zip-code": zipCode,
+      "created-at-min": camin,
+      "created-at-max": camax,
+      populate,
+    } = req.query;
+    const options = {};
+    if (!isNaN(page) && page >= 0) {
+      options["page"] = page;
+    }
+    if (!isNaN(limit) && limit > 0) {
+      options["limit"] = limit;
+    }
+    if (sort === "asc" || sort === "desc") {
+      options["sort"] = sort;
+    }
+    if (typeof offer === "string") {
+      options["offer"] = offer;
+    }
+    if (typeof status === "string") {
+      options["status"] = status;
+    }
+    if (typeof companyName === "string") {
+      options["companyName"] = companyName;
+    }
+    if (typeof city === "string") {
+      options["city"] = city;
+    }
+    if (typeof zipCode === "string") {
+      options["zipCode"] = zipCode;
+    }
+    if (typeof camin === "string") {
+      options["createdAtMin"] = camin;
+    }
+    if (typeof camax === "string") {
+      options["createdAtMax"] = camax;
+    }
+    if (typeof populate === "string") {
+      options["populate"] = populate;
+    }
+    const result = await getSupervisors(options);
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 router.get("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
@@ -111,7 +168,7 @@ router.patch(
       const { params } = req;
       const result = await assignSupervisorToClient(
         params.supervisorId,
-        params.clientId,
+        params.clientId
       );
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
