@@ -24,8 +24,20 @@ const getOffer = async (id, options = {}) => {
   return doc;
 };
 
+const getOffers = async () => {
+  return Offer.find();
+};
+
 const createOffer = async (payload) => {
   return new Offer({ ...payload }).save();
+};
+
+const updateOffer = async (id, payload) => {
+  return Offer.findByIdAndUpdate(id, { ...payload }, { new: true });
+};
+
+const deleteOffer = async (id) => {
+  return Offer.findByIdAndDelete(id, { new: true });
 };
 
 /**
@@ -64,7 +76,10 @@ const unassignOfferFromSupervisor = async (supervisorId) => {
 
 export {
   getOffer,
+  getOffers,
   createOffer,
+  updateOffer,
+  deleteOffer,
   assignOfferToSupervisor,
   unassignOfferFromSupervisor,
 };
