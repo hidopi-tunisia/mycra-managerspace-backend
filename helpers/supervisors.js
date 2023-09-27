@@ -117,10 +117,18 @@ const assignSupervisorToClient = async (supervisorId, clientId) => {
 const updateSupervisor = () => {
   return Supervisor.findByIdAndUpdate(id, payload, { new: true });
 };
+const deleteSupervisor = async (id, { keepIdentity = false }) => {
+  if (keepIdentity === false) {
+    await deleteUser(id);
+  }
+  return Supervisor.findByIdAndDelete(id, { new: true });
+};
+
 export {
   getSupervisors,
   getSupervisor,
   createSupervisor,
   updateSupervisor,
+  deleteSupervisor,
   assignSupervisorToClient,
 };

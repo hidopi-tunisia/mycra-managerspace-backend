@@ -8,8 +8,10 @@ import { sendEmail } from "../helpers/mailer";
 import {
   assignSupervisorToClient,
   createSupervisor,
+  deleteSupervisor,
   getSupervisor,
   getSupervisors,
+  updateSupervisor,
 } from "../helpers/supervisors";
 import {
   assignOfferToSupervisor,
@@ -114,7 +116,7 @@ router.post("/", checkGroup(Groups.ADMINS), async (req, res) => {
     const uid = generateObjectId().toString();
     const user = await createUser({ uid, email: body.email });
     await setRole(uid, Roles.SUPERVISOR);
-    if (query.send_email !== "false") {
+    if (query["send-email"] !== "false") {
       const link = await generatePasswordResetLink(body.email);
       const html = await generateTemplate("supervisor_reset-password", {
         EMAIL: body.email,
@@ -184,11 +186,27 @@ router.patch(
     }
   }
 );
-router.put("/:id", (req, res) => {
-  res.send("Got a PUT request at :id");
+router.put("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
+  try {
+    const { body, params } = req;
+    const result = await updateSupervisor(params.id, { ...body });
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
-router.delete("/:id", (req, res) => {
-  res.send("Got a DELETE request at /user");
+router.delete("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
+  try {
+    const { params, query } = req;
+    let keepIdentity = false;
+    if (query["keep-identity"] === "true") {
+      keepIdentity = true;
+    }
+    const result = await deleteSupervisor(params.id, { keepIdentity });
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 
 export default router;

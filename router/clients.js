@@ -169,20 +169,12 @@ router.put(
     }
   }
 );
-
 router.delete(
   "/:id",
   checkGroup(Groups.ADMINS_OR_SUPERVISORS),
   async (req, res) => {
     try {
-      const { user, params } = req;
-      const client = await getClient(params.id);
-      if (
-        user.role === Roles.SUPERVISOR &&
-        !client.supervisor.equals(user.uid)
-      ) {
-        throw new ForbiddenError();
-      }
+      const { params } = req;
       const result = await deleteClient(params.id);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
