@@ -49,7 +49,7 @@ const schema = new Schema({
       required: true,
     },
   },
-  supervisorFullName: {
+  representativeFullName: {
     // nomCompletResponsable
     type: String,
     required: true,

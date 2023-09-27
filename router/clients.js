@@ -3,6 +3,7 @@ import {
   assignSupervisorToClient,
   createClient,
   getClient,
+  getClients,
 } from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
 import {
@@ -15,7 +16,7 @@ import {
   unassignConsultantFromProject,
   setProjectStatus,
 } from "../helpers/projects";
-import { Groups, checkGroup } from "../middlewares/check-group";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { Statuses } from "../models/project";
 import { handleError, isValidEmail } from "../utils";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
@@ -25,8 +26,60 @@ import { emitter } from "../helpers/events";
 
 const router = Router();
 
-router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), (req, res) => {
-  res.send("Hello Consultants!");
+router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
+  try {
+    const { user } = req;
+    const {
+      page,
+      limit,
+      sort,
+      supervisor,
+      createdAtMin,
+      createdAtMax,
+      populate,
+    } = req.query;
+    const options = {};
+    if (!isNaN(page) && page >= 0) {
+      options["page"] = page;
+    }
+    if (!isNaN(limit) && limit > 0) {
+      options["limit"] = limit;
+    }
+    if (sort === "asc" || sort === "desc") {
+      options["sort"] = sort;
+    }
+    if (typeof createdAtMin === "string") {
+      options["created-at-min"] = createdAtMin;
+    }
+    if (typeof createdAtMax === "string") {
+      options["created-at-min"] = createdAtMax;
+    }
+    if (typeof populate === "string") {
+      options["populate"] = populate;
+    }
+    let result;
+    switch (user.role) {
+      case Roles.SUPERVISOR:
+        if (typeof supervisor === "string") {
+          throw new ForbiddenError();
+        }
+        options["supervisor"] = user.uid;
+        result = await getClients(options);
+        break;
+      case Roles.ADMIN:
+        if (typeof supervisor === "string") {
+          options["supervisor"] = supervisor;
+        }
+        result = await getClients(options);
+        break;
+
+      default:
+        break;
+    }
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 router.get(
   "/:id",

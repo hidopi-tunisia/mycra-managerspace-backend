@@ -42,13 +42,13 @@ const getCRAs = async ({
       predicate["date.month"] = month;
     }
   } else if (createdAtMin || createdAtMax) {
-    if (start && !end) {
+    if (createdAtMin && !createdAtMax) {
       predicate["createdAt"] = {
         $gte: new Date(createdAtMin),
       };
     } else if (!createdAtMin && createdAtMax) {
       predicate["createdAt"] = {
-        $lt: new Date(end),
+        $lt: new Date(createdAtMax),
       };
     } else {
       predicate["createdAt"] = {

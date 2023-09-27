@@ -2,7 +2,6 @@ import { Client } from "../models";
 import { countData, populateData } from "../utils/data-options";
 import { ClientNotFoundError } from "../utils/errors/clients";
 
-// TODO: Use this
 const getClient = async (id, options = {}) => {
   let doc = await Client.findById(id);
   let meta = {};
@@ -23,6 +22,50 @@ const getClient = async (id, options = {}) => {
     doc["meta"] = meta;
   }
   return doc;
+};
+
+const getClients = async ({
+  page,
+  limit,
+  sort,
+  createdAtMin,
+  createdAtMax,
+  populate,
+} = {}) => {
+  const predicate = {};
+  if (supervisor) {
+    predicate["supervisor"] = supervisor;
+  }
+  if (createdAtMin || createdAtMax) {
+    if (createdAtMin && !createdAtMax) {
+      predicate["createdAt"] = {
+        $gte: new Date(createdAtMin),
+      };
+    } else if (!createdAtMin && createdAtMax) {
+      predicate["createdAt"] = {
+        $lt: new Date(createdAtMax),
+      };
+    } else {
+      predicate["createdAt"] = {
+        $gte: new Date(createdAtMin),
+        $lt: new Date(createdAtMax),
+      };
+    }
+  }
+  let docs;
+  if (populate) {
+    docs = await Client.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 })
+      .populate(populate.split(",").map((path) => path));
+  } else {
+    docs = await Client.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 });
+  }
+  return docs;
 };
 
 const createClient = (payload) => {
@@ -46,4 +89,4 @@ const assignSupervisorToClient = async (clientId, supervisorId) => {
   );
 };
 
-export { getClient, createClient, assignSupervisorToClient };
+export { getClient, getClients, createClient, assignSupervisorToClient };
