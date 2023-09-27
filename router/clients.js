@@ -36,8 +36,8 @@ router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
       limit,
       sort,
       supervisor,
-      createdAtMin,
-      createdAtMax,
+      "created-at-min": camin,
+      "created-at-max": camax,
       populate,
     } = req.query;
     const options = {};
@@ -50,11 +50,11 @@ router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
     if (sort === "asc" || sort === "desc") {
       options["sort"] = sort;
     }
-    if (typeof createdAtMin === "string") {
-      options["created-at-min"] = createdAtMin;
+    if (typeof camin === "string") {
+      options["createdAtMin"] = camin;
     }
-    if (typeof createdAtMax === "string") {
-      options["created-at-max"] = createdAtMax;
+    if (typeof camax === "string") {
+      options["createdAtMax"] = camax;
     }
     if (typeof populate === "string") {
       options["populate"] = populate;

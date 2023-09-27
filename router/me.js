@@ -197,8 +197,8 @@ router.get("/cras", async (req, res) => {
       client,
       year,
       month,
-      createdAtMin,
-      createdAtMax,
+      "created-at-min": camin,
+      "created-at-max": camax,
       populate,
       count,
     } = req.query;
@@ -227,11 +227,11 @@ router.get("/cras", async (req, res) => {
     if (!isNaN(month) && Number(month) >= 0 && Number(month) <= 11) {
       options["month"] = Number(month);
     }
-    if (typeof createdAtMin === "string") {
-      options["created-at-min"] = createdAtMin;
+    if (typeof camin === "string") {
+      options["createdAtMin"] = camin;
     }
-    if (typeof createdAtMax === "string") {
-      options["created-at-max"] = createdAtMax;
+    if (typeof camax === "string") {
+      options["createdAtMax"] = camax;
     }
     if (typeof populate === "string") {
       options["populate"] = populate;
