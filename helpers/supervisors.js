@@ -30,14 +30,14 @@ const getSupervisors = async ({
   if (siret) {
     predicate["company.siret"] = siret;
   }
+  if (zipCode) {
+    predicate["company.address.zipCode"] = zipCode;
+  }
   if (city) {
     predicate["company.address.city"] = { $regex: city, $options: "i" };
   }
   if (street) {
     predicate["company.address.street"] = { $regex: street, $options: "i" };
-  }
-  if (zipCode) {
-    predicate["company.address.zipCode"] = zipCode;
   }
   if (createdAtMin || createdAtMax) {
     if (createdAtMin && !createdAtMax) {

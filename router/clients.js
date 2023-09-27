@@ -36,6 +36,13 @@ router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
       limit,
       sort,
       supervisor,
+      status,
+      city,
+      siret,
+      street,
+      representative,
+      "company-name": companyName,
+      "zip-code": zipCode,
       "created-at-min": camin,
       "created-at-max": camax,
       populate,
@@ -49,6 +56,27 @@ router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
     }
     if (sort === "asc" || sort === "desc") {
       options["sort"] = sort;
+    }
+    if (typeof status === "string") {
+      options["status"] = status;
+    }
+    if (typeof companyName === "string") {
+      options["companyName"] = companyName;
+    }
+    if (typeof representative === "string") {
+      options["representative"] = representative;
+    }
+    if (typeof siret === "string") {
+      options["siret"] = siret;
+    }
+    if (typeof street === "string") {
+      options["street"] = street;
+    }
+    if (typeof city === "string") {
+      options["city"] = city;
+    }
+    if (typeof zipCode === "string") {
+      options["zipCode"] = zipCode;
     }
     if (typeof camin === "string") {
       options["createdAtMin"] = camin;

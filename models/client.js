@@ -31,24 +31,6 @@ const schema = new Schema({
     // deuxiemeNumeroTelephone
     type: String,
   },
-  address: {
-    // adresse
-    street: {
-      // rue
-      type: String,
-      required: true,
-    },
-    zipCode: {
-      // codePostal
-      type: String,
-      required: true,
-    },
-    city: {
-      // ville
-      type: String,
-      required: true,
-    },
-  },
   company: {
     name: {
       // nomSocialEntreprise
@@ -63,6 +45,24 @@ const schema = new Schema({
     representative: {
       type: String,
       required: true,
+    },
+    address: {
+      // adresse
+      street: {
+        // rue
+        type: String,
+        required: true,
+      },
+      zipCode: {
+        // codePostal
+        type: String,
+        required: true,
+      },
+      city: {
+        // ville
+        type: String,
+        required: true,
+      },
     },
   },
   signatureDate: {

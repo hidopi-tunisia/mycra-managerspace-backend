@@ -29,6 +29,13 @@ const getClients = async ({
   limit,
   sort,
   supervisor,
+  status,
+  siret,
+  representative,
+  companyName,
+  street,
+  city,
+  zipCode,
   createdAtMin,
   createdAtMax,
   populate,
@@ -36,6 +43,27 @@ const getClients = async ({
   const predicate = {};
   if (supervisor) {
     predicate["supervisor"] = supervisor;
+  }
+  if (status) {
+    predicate["status"] = status;
+  }
+  if (companyName) {
+    predicate["company.name"] = { $regex: companyName, $options: "i" };
+  }
+  if (representative) {
+    predicate["company.representative"] = { $regex: representative, $options: "i" };
+  }
+  if (siret) {
+    predicate["company.siret"] = siret;
+  }
+  if (zipCode) {
+    predicate["company.address.zipCode"] = zipCode;
+  }
+  if (city) {
+    predicate["company.address.city"] = { $regex: city, $options: "i" };
+  }
+  if (street) {
+    predicate["company.address.street"] = { $regex: street, $options: "i" };
   }
   if (createdAtMin || createdAtMax) {
     if (createdAtMin && !createdAtMax) {
