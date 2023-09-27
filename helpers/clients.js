@@ -28,6 +28,7 @@ const getClients = async ({
   page,
   limit,
   sort,
+  supervisor,
   createdAtMin,
   createdAtMax,
   populate,
