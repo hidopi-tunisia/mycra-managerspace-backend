@@ -135,6 +135,12 @@ const markCRAAsDeleted = async (id) => {
     }
   );
 };
+
+const deleteCRA = async (id) => {
+  return CRA.findByIdAndDelete(id, {
+    new: true,
+  });
+};
 export {
   getCRAs,
   getCRA,
@@ -143,4 +149,5 @@ export {
   approveCRA,
   updateCRA,
   markCRAAsDeleted,
+  deleteCRA,
 };

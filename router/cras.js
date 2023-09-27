@@ -111,10 +111,19 @@ router.patch(
     }
   }
 );
-router.patch("/:id/delete", checkGroup(Groups.SUPERVISORS), async (req, res) => {
+router.patch("/:id/delete", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
   try {
     const { params } = req;
     const result = await markCRAAsDeleted(params.id);
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
+});
+router.delete("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
+  try {
+    const { params } = req;
+    const result = await deleteCRA(params.id);
     res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });
