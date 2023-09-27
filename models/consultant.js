@@ -88,7 +88,7 @@ const schema = new Schema({
     type: String,
     default: "",
   },
-  accountStatus: {
+  status: {
     // statutCompte
     type: String,
     enum: [Statuses.ACTIVE, Statuses.INACTIVE],

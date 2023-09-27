@@ -2,6 +2,62 @@ import { Consultant } from "../models";
 import { countData, populateData } from "../utils/data-options";
 import { ConsultantNotFoundError } from "../utils/errors/consultants";
 
+const getConsultants = async ({
+  page,
+  limit,
+  sort,
+  status,
+  firstName,
+  lastName,
+  email,
+  createdAtMin,
+  createdAtMax,
+  populate,
+} = {}) => {
+  const predicate = {};
+  if (status) {
+    predicate["status"] = status;
+  }
+  if (firstName) {
+    predicate["firstName"] = { $regex: firstName, $options: "i" };
+  }
+  if (lastName) {
+    predicate["lastName"] = { $regex: lastName, $options: "i" };
+  }
+  if (email) {
+    predicate["email"] = { $regex: lastName, $options: "i" };
+  }
+  if (createdAtMin || createdAtMax) {
+    if (createdAtMin && !createdAtMax) {
+      predicate["createdAt"] = {
+        $gte: new Date(createdAtMin),
+      };
+    } else if (!createdAtMin && createdAtMax) {
+      predicate["createdAt"] = {
+        $lt: new Date(createdAtMax),
+      };
+    } else {
+      predicate["createdAt"] = {
+        $gte: new Date(createdAtMin),
+        $lt: new Date(createdAtMax),
+      };
+    }
+  }
+  let docs;
+  if (populate) {
+    docs = await Supervisor.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 })
+      .populate(populate.split(",").map((path) => path));
+  } else {
+    docs = await Supervisor.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 });
+  }
+  return docs;
+};
 const getConsultant = async (id, options = {}) => {
   let doc = await Consultant.findById(id);
   let meta = {};
@@ -38,4 +94,10 @@ const deleteConsultant = async (id, { keepIdentity = false }) => {
   }
   return Consultant.findByIdAndDelete(id, { new: true });
 };
-export { getConsultant, createConsultant, updateConsultant, deleteConsultant };
+export {
+  getConsultant,
+  getConsultants,
+  createConsultant,
+  updateConsultant,
+  deleteConsultant,
+};

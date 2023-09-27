@@ -19,8 +19,56 @@ import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
 
-router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), (req, res) => {
-  res.send("Hello Consultants!");
+router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
+  try {
+    const {
+      page,
+      limit,
+      sort,
+      status,
+      fname,
+      lname,
+      email,
+      "created-at-min": camin,
+      "created-at-max": camax,
+      populate,
+    } = req.query;
+    const options = {};
+    if (!isNaN(page) && page >= 0) {
+      options["page"] = page;
+    }
+    if (!isNaN(limit) && limit > 0) {
+      options["limit"] = limit;
+    }
+    if (sort === "asc" || sort === "desc") {
+      options["sort"] = sort;
+    }
+    if (typeof status === "string") {
+      options["status"] = status;
+    }
+    if (typeof fname === "string") {
+      options["firstName"] = fname;
+    }
+    if (typeof lname === "string") {
+      options["lastName"] = lname;
+    }
+    if (typeof email === "string") {
+      options["email"] = email;
+    }
+    if (typeof camin === "string") {
+      options["createdAtMin"] = camin;
+    }
+    if (typeof camax === "string") {
+      options["createdAtMax"] = camax;
+    }
+    if (typeof populate === "string") {
+      options["populate"] = populate;
+    }
+    const result = await getConsultant(options);
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 router.get(
   "/:id",
