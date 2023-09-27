@@ -231,7 +231,7 @@ router.get("/cras", async (req, res) => {
       options["created-at-min"] = createdAtMin;
     }
     if (typeof createdAtMax === "string") {
-      options["created-at-min"] = createdAtMax;
+      options["created-at-max"] = createdAtMax;
     }
     if (typeof populate === "string") {
       options["populate"] = populate;
