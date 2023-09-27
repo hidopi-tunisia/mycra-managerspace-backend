@@ -74,11 +74,11 @@ const createClient = (payload) => {
 };
 
 const updateClient = async (id, payload) => {
-  return Client.findByIdAndUpdate(id, { ...payload });
+  return Client.findByIdAndUpdate(id, { ...payload }, { new: true });
 };
 
 const deleteClient = async (id) => {
-  return Client.findByIdAndDelete(id);
+  return Client.findByIdAndDelete(id, { new: true });
 };
 
 /**
