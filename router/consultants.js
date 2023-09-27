@@ -4,11 +4,15 @@ import {
   generatePasswordResetLink,
   setRole,
 } from "../helpers/auth";
-import { createConsultant, getConsultant } from "../helpers/consultants";
+import {
+  createConsultant,
+  deleteConsultant,
+  getConsultant,
+} from "../helpers/consultants";
 import { sendEmail } from "../helpers/mailer";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { handleError, isValidEmail } from "../utils";
-import { InvalidEmailError } from "../utils/errors/auth";
+import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
 import { generateObjectId } from "../utils/generate-string";
 import { generateTemplate } from "../utils/mailing/generate-template";
 import { StatusCodes } from "../utils/status-codes";
@@ -75,11 +79,28 @@ router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.put("/:id", (req, res) => {
-  res.send("Got a PUT request at :id");
-});
-router.delete("/:id", (req, res) => {
-  res.send("Got a DELETE request at /user");
-});
-
+router.delete(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params, query } = req;
+      const consultant = await getConsultant(params.id);
+      if (
+        user.role === Roles.SUPERVISOR &&
+        !consultant.supervisor.equals(user.uid)
+      ) {
+        throw new ForbiddenError();
+      }
+      let keepIdentity = false;
+      if (query["keep-identity"] === "true") {
+        keepIdentity = true;
+      }
+      const result = await deleteConsultant(params.id, { keepIdentity });
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 export default router;

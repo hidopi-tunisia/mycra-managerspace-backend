@@ -31,4 +31,11 @@ const createConsultant = (payload) => {
 const updateConsultant = (id, payload) => {
   return Consultant.findByIdAndUpdate(id, payload, { new: true });
 };
-export { getConsultant, createConsultant, updateConsultant };
+
+const deleteConsultant = async (id, { keepIdentity = false }) => {
+  if (keepIdentity === false) {
+    await deleteUser(id);
+  }
+  return Consultant.findByIdAndDelete(id, { new: true });
+};
+export { getConsultant, createConsultant, updateConsultant, deleteConsultant };
