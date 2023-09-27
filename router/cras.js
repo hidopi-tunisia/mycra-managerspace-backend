@@ -1,7 +1,6 @@
 import { Router } from "express";
-import { CRARejectedNotification } from "../events/cras/cras-notifications";
 import { getConsultant } from "../helpers/consultants";
-import { approveCRA, getCRA, rejectCRA } from "../helpers/cras";
+import { approveCRA, getCRA, markCRAAsDeleted, rejectCRA } from "../helpers/cras";
 import { emitter } from "../helpers/events";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
@@ -112,8 +111,14 @@ router.patch(
     }
   }
 );
-router.delete("/:id", (req, res) => {
-  res.send("Got a DELETE request at /user");
+router.patch("/:id/delete", checkGroup(Groups.SUPERVISORS), async (req, res) => {
+  try {
+    const { params } = req;
+    const result = await markCRAAsDeleted(params.id);
+    res.status(StatusCodes.OK).send(result);
+  } catch (error) {
+    handleError({ res, error });
+  }
 });
 
 export default router;

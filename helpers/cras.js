@@ -126,4 +126,21 @@ const approveCRA = async (id, action) => {
   );
 };
 
-export { getCRAs, getCRA, createCRA, rejectCRA, approveCRA, updateCRA };
+const markCRAAsDeleted = async (id) => {
+  return CRA.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { $set: { isDeleted: true } },
+    {
+      new: true,
+    }
+  );
+};
+export {
+  getCRAs,
+  getCRA,
+  createCRA,
+  rejectCRA,
+  approveCRA,
+  updateCRA,
+  markCRAAsDeleted,
+};
