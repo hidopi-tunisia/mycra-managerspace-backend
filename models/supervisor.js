@@ -24,7 +24,7 @@ const schema = new Schema({
   },
   company: {
     // entreprise
-    companyName: {
+    name: {
       // nomSocial
       type: String,
       required: true,
@@ -87,7 +87,7 @@ const schema = new Schema({
     type: String,
     default: "",
   },
-  accountStatus: {
+  status: {
     // statutCompte
     type: String,
     enum: ["active", "inactive"],

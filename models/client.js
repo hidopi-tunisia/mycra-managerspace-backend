@@ -49,20 +49,21 @@ const schema = new Schema({
       required: true,
     },
   },
-  representativeFullName: {
-    // nomCompletResponsable
-    type: String,
-    required: true,
-  },
-  companyName: {
-    // nomSocialEntreprise
-    type: String,
-    required: true,
-  },
-  siret: {
-    // siretEntreprise
-    type: String,
-    required: true,
+  company: {
+    name: {
+      // nomSocialEntreprise
+      type: String,
+      required: true,
+    },
+    siret: {
+      // siretEntreprise
+      type: String,
+      required: true,
+    },
+    representative: {
+      type: String,
+      required: true,
+    },
   },
   signatureDate: {
     // dateSignature

@@ -20,10 +20,13 @@ const getSupervisors = async ({
     predicate["offer"] = offer;
   }
   if (status) {
-    predicate["accountStatus"] = status;
+    predicate["status"] = status;
   }
   if (companyName) {
-    predicate["company.companyName"] = companyName;
+    predicate["company.name"] = companyName;
+  }
+  if (siret) {
+    predicate["company.siret"] = siret;
   }
   if (city) {
     predicate["company.address.city"] = city;
