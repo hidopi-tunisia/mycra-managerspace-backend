@@ -72,6 +72,14 @@ const createClient = (payload) => {
   return new Client({ ...payload }).save();
 };
 
+const updateClient = async (id, payload) => {
+  return Client.findByIdAndUpdate(id, { ...payload });
+};
+
+const deleteClient = async (id) => {
+  return Client.findByIdAndDelete(id);
+};
+
 /**
  * Assigns a supervisor to a client.
  * @function
@@ -89,4 +97,11 @@ const assignSupervisorToClient = async (clientId, supervisorId) => {
   );
 };
 
-export { getClient, getClients, createClient, assignSupervisorToClient };
+export {
+  getClient,
+  getClients,
+  createClient,
+  updateClient,
+  deleteClient,
+  assignSupervisorToClient,
+};

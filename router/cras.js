@@ -112,9 +112,6 @@ router.patch(
     }
   }
 );
-router.put("/:id", (req, res) => {
-  res.send("Got a PUT request at :id");
-});
 router.delete("/:id", (req, res) => {
   res.send("Got a DELETE request at /user");
 });

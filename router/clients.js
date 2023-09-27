@@ -2,8 +2,10 @@ import { Router } from "express";
 import {
   assignSupervisorToClient,
   createClient,
+  deleteClient,
   getClient,
   getClients,
+  updateClient,
 } from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
 import {
@@ -119,12 +121,47 @@ router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.put("/:id", (req, res) => {
-  res.send("Got a PUT request at :id");
-});
-router.delete("/:id", (req, res) => {
-  res.send("Got a DELETE request at /user");
-});
+router.put(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, body, params } = req;
+      const client = await getClient(params.id);
+      if (
+        user.role === Roles.SUPERVISOR &&
+        !client.supervisor.equals(user.uid)
+      ) {
+        throw new ForbiddenError();
+      }
+      const result = await updateClient(params.id, { ...body });
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+router.delete(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const client = await getClient(params.id);
+      if (
+        user.role === Roles.SUPERVISOR &&
+        !client.supervisor.equals(user.uid)
+      ) {
+        throw new ForbiddenError();
+      }
+      const result = await deleteClient(params.id);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 
 // Assign a client to a supervisor
 router.patch(
