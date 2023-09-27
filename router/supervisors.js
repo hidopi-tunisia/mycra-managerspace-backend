@@ -32,6 +32,8 @@ router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
       offer,
       status,
       city,
+      siret,
+      street,
       "company-name": companyName,
       "zip-code": zipCode,
       "created-at-min": camin,
@@ -56,6 +58,12 @@ router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
     }
     if (typeof companyName === "string") {
       options["companyName"] = companyName;
+    }
+    if (typeof siret === "string") {
+      options["siret"] = siret;
+    }
+    if (typeof street === "string") {
+      options["street"] = street;
     }
     if (typeof city === "string") {
       options["city"] = city;

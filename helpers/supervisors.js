@@ -8,7 +8,9 @@ const getSupervisors = async ({
   sort,
   offer,
   status,
+  siret,
   companyName,
+  street,
   city,
   zipCode,
   createdAtMin,
@@ -23,13 +25,16 @@ const getSupervisors = async ({
     predicate["status"] = status;
   }
   if (companyName) {
-    predicate["company.name"] = companyName;
+    predicate["company.name"] = { $regex: companyName, $options: "i" };
   }
   if (siret) {
     predicate["company.siret"] = siret;
   }
   if (city) {
-    predicate["company.address.city"] = city;
+    predicate["company.address.city"] = { $regex: city, $options: "i" };
+  }
+  if (street) {
+    predicate["company.address.street"] = { $regex: street, $options: "i" };
   }
   if (zipCode) {
     predicate["company.address.zipCode"] = zipCode;
@@ -52,13 +57,13 @@ const getSupervisors = async ({
   }
   let docs;
   if (populate) {
-    docs = await Client.find(predicate)
+    docs = await Supervisor.find(predicate)
       .skip(page * limit)
       .limit(limit)
       .sort({ createdAt: sort === "asc" ? 1 : -1 })
       .populate(populate.split(",").map((path) => path));
   } else {
-    docs = await Client.find(predicate)
+    docs = await Supervisor.find(predicate)
       .skip(page * limit)
       .limit(limit)
       .sort({ createdAt: sort === "asc" ? 1 : -1 });
