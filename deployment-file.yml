@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: upteck
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mycraBackend
+  template:
+    metadata:
+      labels:
+        app: mycraBackend
+    spec:
+      containers:
+      - name: backend
+        image: hidopi/mycra-backend:v1.0
+        ports:
+        - containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: 
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "0.1"
+          limits:
+            memory: "512Mi"
+            cpu: "0.5"
