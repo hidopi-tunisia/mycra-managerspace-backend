@@ -1,8 +1,13 @@
+#version de l'api kuberenetes:
 apiVersion: apps/v1
+
+#type d'objet: déploiement
 kind: Deployment
 metadata:
   name: backend-deployment
-  namespace: upteck
+  namespace: mycra
+
+#spécification du déploiement  
 spec:
   replicas: 1
   selector:
@@ -18,9 +23,6 @@ spec:
         image: hidopi/mycra-backend:v1.0
         ports:
         - containerPort: 8080
-        envFrom:
-        - configMapRef:
-            name: 
         resources:
           requests:
             memory: "256Mi"
