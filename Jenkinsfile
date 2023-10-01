@@ -62,6 +62,21 @@ pipeline {
             }
         }
     }
+   stage('Deploy') {
+            steps {
+              script {
+                withKubeConfig([credentialsId: 'K8S', serverUrl: '']) {
+                sh ('kubectl apply -f deployment-file.yml')
+                }}
+            
+
+            }
+        }
+
+
+
+
+
 
     post {
         always {
