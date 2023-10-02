@@ -1,6 +1,11 @@
 import { Router } from "express";
 import { getConsultant } from "../helpers/consultants";
-import { approveCRA, getCRA, markCRAAsDeleted, rejectCRA } from "../helpers/cras";
+import {
+  approveCRA,
+  getCRA,
+  markCRAAsDeleted,
+  rejectCRA,
+} from "../helpers/cras";
 import { emitter } from "../helpers/events";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
@@ -61,8 +66,8 @@ router.patch(
       const result = await approveCRA(params.id, action);
       res.status(StatusCodes.OK).send(result);
       emitter.emit("cra-approved", {
-        id: cra._id,
-        consultantId: consultantId,
+        id: cra._id.toString(),
+        consultantId: consultantId.toString(),
         motive: body.motive,
       });
     } catch (error) {
@@ -102,8 +107,8 @@ router.patch(
       const result = await rejectCRA(params.id, action);
       res.status(StatusCodes.OK).send(result);
       emitter.emit("cra-rejected", {
-        id: cra._id,
-        consultantId: consultantId,
+        id: cra._id.toString(),
+        consultantId: consultantId.toString(),
         motive: body.motive,
       });
     } catch (error) {
@@ -111,15 +116,19 @@ router.patch(
     }
   }
 );
-router.patch("/:id/delete", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
-  try {
-    const { params } = req;
-    const result = await markCRAAsDeleted(params.id);
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
+router.patch(
+  "/:id/delete",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const result = await markCRAAsDeleted(params.id);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
   }
-});
+);
 router.delete("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
   try {
     const { params } = req;

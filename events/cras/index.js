@@ -2,9 +2,9 @@ import { emitter } from "../../helpers/events";
 import { send } from "../../helpers/messaging";
 import { Topics } from "../constants";
 import {
-    CRAApprovedNotification,
-    CRARejectedNotification,
-    CRARequiredNotification,
+  CRAApprovedNotification,
+  CRARejectedNotification,
+  CRARequiredNotification,
 } from "./cras-notifications";
 
 emitter.on("cra-rejected", (payload) => {
@@ -15,9 +15,14 @@ emitter.on("cra-rejected", (payload) => {
     }
     const notification = new CRARejectedNotification({
       data: {
-        id: payload._id,
         title: "CRA rejected",
         body,
+        action: {
+          type: "cra-rejected",
+          meta: {
+            id: payload.id,
+          },
+        },
       },
       topic: `${Topics.CONSULTANTS}~${payload.consultantId}`,
     });
@@ -38,6 +43,12 @@ emitter.on("cra-approved", (payload) => {
         id: payload._id,
         title: "CRA approved",
         body,
+        action: {
+          type: "cra-approved",
+          meta: {
+            id: payload.id,
+          },
+        },
       },
       topic: `${Topics.CONSULTANTS}~${payload.consultantId}`,
     });

@@ -7,6 +7,7 @@ class BaseNotification {
     body: "",
     title: "",
     severity: Severity.DEFAULT,
+    action: null,
   };
   notification = {
     title: "",
@@ -26,6 +27,9 @@ class BaseNotification {
   constructor({ data = {}, notification = {}, topic }) {
     this.data.title = data.title;
     this.data.body = data.body;
+    if (data.action && JSON.stringify(data.action)) {
+      this.data.action = JSON.stringify(data.action);
+    }
     if (!notification.title) {
       this.notification.title = data.title;
     } else {
