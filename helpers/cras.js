@@ -88,6 +88,14 @@ const getCRA = async (id, options = {}) => {
       meta["count"] = count;
     }
   }
+  if (options.total) {
+    const { working, half, remote, holidays } = doc;
+    const total =
+      working.length + remote.length + holidays.length + half.length * 0.5;
+    if (total > 0) {
+      meta["total"] = total;
+    }
+  }
   if (Object.keys(meta).length > 0) {
     doc = doc.toObject();
     doc["meta"] = meta;

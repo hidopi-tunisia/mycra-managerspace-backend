@@ -21,13 +21,19 @@ router.get("/", (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const { populate, count } = req.query;
+    const { populate, count, total } = req.query;
     const options = {};
     if (typeof populate === "string") {
       options["populate"] = populate;
     }
     if (typeof count === "string") {
       options["count"] = count;
+    }
+    if (typeof count === "string") {
+      options["count"] = count;
+    }
+    if (total === "true") {
+      options["total"] = total;
     }
     const result = await getCRA(id, {
       ...options,
