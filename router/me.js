@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { getConsultant, updateConsultant } from "../helpers/consultants";
 import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras";
-import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs";
+import { HolidayCountries, getHolidays, getWeekends } from "../helpers/miscs";
 import { getSupervisor } from "../helpers/supervisors";
-import { checkGroup, Groups, Roles } from "../middlewares/check-group";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { CRAStatuses } from "../models/cra";
 import { ForbiddenError, handleError } from "../utils";
 import {
@@ -11,22 +11,15 @@ import {
   filterCurrentProjects,
   sortCRAsByHistory,
 } from "../utils/data-options";
+import { CRANotRejectedError } from "../utils/errors/cras";
 import {
   NoCurrentProjectsError,
   NoProjectsError,
   ProjectNotFoundError,
 } from "../utils/errors/projects";
 import { StatusCodes } from "../utils/status-codes";
-import { emitter } from "../helpers/events";
-import { CRARejectedNotification } from "../events/cras/cras-notifications";
-import { BaseNotification } from "../events/base-notification";
-import { CRANotPendingError, CRANotRejectedError } from "../utils/errors/cras";
 
 const router = Router();
-router.get("/foo", () => {
-  emitter.emit("foo", { baz: "boo" });
-  emitter.emit("koo", { kaz: "joo" });
-});
 
 router.get(
   "/",

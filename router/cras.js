@@ -15,9 +15,6 @@ import { StatusCodes } from "../utils/status-codes";
 
 const router = Router();
 
-router.get("/", (req, res) => {
-  res.send("Hello Cras!");
-});
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
