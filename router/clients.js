@@ -8,15 +8,15 @@ import {
   updateClient,
 } from "../helpers/clients";
 import { getConsultant } from "../helpers/consultants";
+import { emitter } from "../helpers/events";
 import {
   assignProjectToClient,
   assignSupervisorToProject,
-  assignConsultantToProject,
   createProject,
   getProject,
-  unassignProjectFromClient,
-  unassignConsultantFromProject,
   setProjectStatus,
+  unassignConsultantFromProject,
+  unassignProjectFromClient
 } from "../helpers/projects";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group";
 import { Statuses } from "../models/project";
@@ -24,7 +24,6 @@ import { handleError, isValidEmail } from "../utils";
 import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
 import { AlreadyAssignedError } from "../utils/errors/shared";
 import { StatusCodes } from "../utils/status-codes";
-import { emitter } from "../helpers/events";
 
 const router = Router();
 
@@ -325,11 +324,11 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      // const result = await assignConsultantToProject(
-      //   params.projectId,
-      //   params.consultantId
-      // );
-      // res.status(StatusCodes.OK).send(result);
+      const result = await assignConsultantToProject(
+        params.projectId,
+        params.consultantId
+      );
+      res.status(StatusCodes.OK).send(result);
       emitter.emit("consultant-assigned-to-project", {
         projectId: project._id.toString(),
         consultantId: params.consultantId,

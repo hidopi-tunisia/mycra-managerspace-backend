@@ -24,6 +24,7 @@ import {
   getAlert,
   getAlerts,
 } from "../helpers/alerts";
+import { emitter } from "../helpers/events";
 
 const router = Router();
 
@@ -390,7 +391,7 @@ router.post(
   async (req, res) => {
     try {
       const { user, body } = req;
-      const consultant = await getConsultant(user.uid);
+      const consultant = await getConsultant(user.uid, { po });
       const payload = {
         ...body,
         consultant: user.uid,
@@ -398,6 +399,12 @@ router.post(
       };
       const result = await createAlert(payload);
       res.status(StatusCodes.CREATED).send(result);
+      emitter.emit("alert-created", {
+        alertId: result._id,
+        supervisorId: consultant.supervisor.toString(),
+        consultantId: user.uid,
+        content: body.content,
+      });
     } catch (error) {
       handleError({ res, error });
     }
