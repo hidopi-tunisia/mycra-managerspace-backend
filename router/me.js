@@ -18,6 +18,12 @@ import {
   ProjectNotFoundError,
 } from "../utils/errors/projects";
 import { StatusCodes } from "../utils/status-codes";
+import {
+  createAlert,
+  deleteAlert,
+  getAlert,
+  getAlerts,
+} from "../helpers/alerts";
 
 const router = Router();
 
@@ -312,6 +318,102 @@ router.get(
       if (Array.isArray(sortedRejectedCRAs) && sortedRejectedCRAs.length > 0) {
         result.rejected = sortedRejectedCRAs;
       }
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+
+router.get(
+  "/alerts",
+  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user } = req;
+      const {
+        page,
+        limit,
+        sort,
+        supervisor,
+        consultant,
+        "created-at-min": camin,
+        "created-at-max": camax,
+        populate,
+      } = req.query;
+      const options = {};
+      if (!isNaN(page) && page >= 0) {
+        options["page"] = page;
+      }
+      if (!isNaN(limit) && limit > 0) {
+        options["limit"] = limit;
+      }
+      if (sort === "asc" || sort === "desc") {
+        options["sort"] = sort;
+      }
+      if (typeof camin === "string") {
+        options["createdAtMin"] = camin;
+      }
+      if (typeof camax === "string") {
+        options["createdAtMax"] = camax;
+      }
+      if (typeof populate === "string") {
+        options["populate"] = populate;
+      }
+      let result;
+      switch (user.role) {
+        case Roles.SUPERVISOR:
+          if (typeof supervisor === "string") {
+            throw new ForbiddenError();
+          }
+          options["supervisor"] = user.uid;
+          options["consultant"] = consultant;
+          result = await getAlerts(options);
+          break;
+        case Roles.CONSULTANT:
+          options["consultant"] = consultant;
+          result = await getAlerts(options);
+          break;
+
+        default:
+          break;
+      }
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+router.post(
+  "/alerts",
+  checkGroup(Groups.SUPERVISORS_OR_CONSULTANTS),
+  async (req, res) => {
+    try {
+      const { user, body } = req;
+      const consultant = await getConsultant(user.uid);
+      const payload = {
+        ...body,
+        consultant: user.uid,
+        supervisor: consultant.supervisor,
+      };
+      const result = await createAlert(payload);
+      res.status(StatusCodes.CREATED).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
+router.delete(
+  "/alerts/:id",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const alert = await getAlert(params.id);
+      if (!alert.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const result = await deleteAlert(params.id);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });
