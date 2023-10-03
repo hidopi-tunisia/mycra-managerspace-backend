@@ -40,7 +40,6 @@ emitter.on("cra-approved", (payload) => {
     }
     const notification = new CRAApprovedNotification({
       data: {
-        id: payload._id,
         title: "CRA approved",
         body,
         action: {

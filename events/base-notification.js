@@ -1,9 +1,9 @@
-import { Severity } from "./constants";
+import { IMAGE_URL, Severity } from "./constants";
 
 class BaseNotification {
   data = {
     content_available: "true",
-    image: "https://i.ytimg.com/vi/iosNuIdQoy8/maxresdefault.jpg",
+    image: IMAGE_URL,
     body: "",
     title: "",
     severity: Severity.DEFAULT,
@@ -12,7 +12,7 @@ class BaseNotification {
   notification = {
     title: "",
     body: "",
-    image: "https://i.ytimg.com/vi/iosNuIdQoy8/maxresdefault.jpg",
+    image: IMAGE_URL,
   };
   topic;
   /**
@@ -20,7 +20,6 @@ class BaseNotification {
    * @param {Object} payload.data data
    * @param {string} payload.data.title data title
    * @param {string} payload.data.body data body
-   * @param {string} payload.notification.body notification body
    * @param {string} payload.notification.body notification body
    * @param {string} payload.topic topic
    */

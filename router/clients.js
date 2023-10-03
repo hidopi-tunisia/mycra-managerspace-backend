@@ -325,15 +325,15 @@ router.patch(
       if (!project.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
       }
-      const result = await assignConsultantToProject(
-        params.projectId,
-        params.consultantId
-      );
-      res.status(StatusCodes.OK).send(result);
+      // const result = await assignConsultantToProject(
+      //   params.projectId,
+      //   params.consultantId
+      // );
+      // res.status(StatusCodes.OK).send(result);
       emitter.emit("consultant-assigned-to-project", {
-        id: project._id,
+        projectId: project._id.toString(),
         consultantId: params.consultantId,
-        clientId: client._id,
+        clientId: client._id.toString(),
         projectName: project.name,
       });
     } catch (error) {
@@ -367,9 +367,9 @@ router.patch(
       );
       res.status(StatusCodes.OK).send(result);
       emitter.emit("consultant-unassigned-from-project", {
-        id: project._id,
+        projectId: project._id.toString(),
         consultantId: params.consultantId,
-        clientId: client._id,
+        clientId: client._id.toString(),
         projectName: project.name,
       });
     } catch (error) {
