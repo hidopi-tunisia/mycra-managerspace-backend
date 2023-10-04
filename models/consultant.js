@@ -41,12 +41,7 @@ const schema = new Schema({
     type: Date,
     required: true,
   },
-  skillsPortfolio: {
-    // dossierCompetence
-    type: String,
-    required: false,
-  },
-  linkedInProfile: {
+  linkedIn: {
     // profilLinkedIn
     type: String,
     required: false,
