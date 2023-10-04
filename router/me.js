@@ -279,7 +279,7 @@ router.get(
       const month = today.getMonth();
       const year = today.getFullYear();
       const cras = await getCRAs({
-        projectIds: currentProjects.map((p) => p._id),
+        project: currentProjects[0],
         month,
         year,
       });
