@@ -10,6 +10,7 @@ import {
 import { getConsultant } from "../helpers/consultants";
 import { emitter } from "../helpers/events";
 import {
+  assignConsultantToProject,
   assignProjectToClient,
   assignSupervisorToProject,
   createProject,
