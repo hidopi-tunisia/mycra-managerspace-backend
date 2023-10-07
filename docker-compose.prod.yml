@@ -3,7 +3,7 @@ version: "3.7"
 services:
   app:
     build: .
-    command: ["yarn", "dev"]
+    command: ["yarn", "start"]
     ports:
       - ${APP_PORT}:${APP_PORT}
     volumes:

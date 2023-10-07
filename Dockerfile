@@ -21,28 +21,8 @@ RUN yarn
 # Bundle app source
 COPY --chown=node:node . .
 
-EXPOSE 8080
+ARG APP_PORT
+EXPOSE ${APP_PORT}
 
 # overrite by the docker-compose command
 CMD [ "yarn", "dev" ]
-
-
-# staging
-
-# FROM node:16.0-alpine3.13 AS build
-# RUN yarn global add http-server
-# WORKDIR /node/app
-# COPY package*.json ./
-# RUN yarn
-# COPY . .
-# RUN yarn build
-# EXPOSE 8080
-# CMD [ "http-server", "dist" ]
-
-
-# production
-
-# FROM nginx:stable-alpine as production
-# COPY --from=build /node/app/dist /usr/share/nginx/html
-# EXPOSE 80
-# CMD ["nginx", "-g", "daemon off;"]
