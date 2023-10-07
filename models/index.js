@@ -1,9 +1,18 @@
-import Consultant from "./consultant";
-import CRA from "./cra";
-import Supervisor from "./supervisor";
-import Client from "./client";
-import Project from "./project";
-import Offer from "./offer";
-import Alert from "./alert";
+import Consultant from "./consultant.js";
+import CRA, { CRAStatuses } from "./cra.js";
+import Supervisor from "./supervisor.js";
+import Client from "./client.js";
+import Project from "./project.js";
+import Offer from "./offer.js";
+import Alert from "./alert.js";
 
-export { Consultant, CRA, Client, Project, Supervisor, Offer, Alert };
+export {
+  Consultant,
+  CRA,
+  CRAStatuses,
+  Client,
+  Project,
+  Supervisor,
+  Offer,
+  Alert,
+};

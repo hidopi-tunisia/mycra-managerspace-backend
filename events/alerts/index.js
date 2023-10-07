@@ -1,9 +1,9 @@
-import { emitter } from "../../helpers/events";
-import { sendEmail } from "../../helpers/mailer";
-import { send } from "../../helpers/messaging";
-import { getSupervisor } from "../../helpers/supervisors";
-import { Severity, Topics } from "../constants";
-import { AlertCreated } from "./alerts-notifications";
+import { emitter } from "../../helpers/events.js";
+import { sendEmail } from "../../helpers/mailer.js";
+import { send } from "../../helpers/messaging.js";
+import { getSupervisor } from "../../helpers/supervisors.js";
+import { Severity, Topics } from "../constants.js";
+import { AlertCreated } from "./alerts-notifications.js";
 
 emitter.on("alert-created", async (payload) => {
   try {

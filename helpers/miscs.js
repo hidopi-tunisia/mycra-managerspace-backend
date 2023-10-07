@@ -1,4 +1,4 @@
-import { getHolidaysData } from "../utils/holidays";
+import { getHolidaysData } from "../utils/holidays/index.js";
 
 export const HolidayCountries = {
   FRANCE: "fr",

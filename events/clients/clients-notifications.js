@@ -1,5 +1,5 @@
-import { BaseNotification } from "../base-notification";
-import { Severity } from "../constants";
+import { BaseNotification } from "../base-notification.js";
+import { Severity } from "../constants.js";
 
 class ConsultantAssignedToProject extends BaseNotification {
   constructor({ data = {}, notification = {}, topic }) {

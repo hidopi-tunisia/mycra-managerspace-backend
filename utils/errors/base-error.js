@@ -1,4 +1,4 @@
-import { StatusCodes } from "../status-codes";
+import { StatusCodes } from "../status-codes.js";
 
 class BaseError extends Error {
   #code = StatusCodes.INTERNAL_SERVER_ERROR;

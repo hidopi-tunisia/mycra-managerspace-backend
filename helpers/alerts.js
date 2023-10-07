@@ -1,4 +1,4 @@
-import { Alert } from "../models";
+import { Alert } from "../models/index.js";
 
 const getAlert = async (id) => {
   return Alert.findById(id);

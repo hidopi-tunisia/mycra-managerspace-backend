@@ -10,7 +10,7 @@ import {
   filtedCRAsByStatus,
   filterCurrentProjects,
   sortCRAsByHistory,
-} from "../utils/data-options.js";
+} from "../utils/data-options/index.js";
 import { CRANotRejectedError } from "../utils/errors/cras.js";
 import {
   NoCurrentProjectsError,

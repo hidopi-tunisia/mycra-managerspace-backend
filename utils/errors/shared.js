@@ -1,5 +1,5 @@
-import { StatusCodes } from "../status-codes";
-import { BaseError } from "./base-error";
+import { StatusCodes } from "../status-codes.js";
+import { BaseError } from "./base-error.js";
 
 class AlreadyAssignedError extends BaseError {
   #code = StatusCodes.NOT_ACCEPTABLE;

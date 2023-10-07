@@ -1,6 +1,6 @@
-import { Client, Supervisor } from "../models";
-import { countData, populateData } from "../utils/data-options";
-import { SupervisorNotFoundError } from "../utils/errors/supervisors";
+import { Client, Supervisor } from "../models/index.js";
+import { countData, populateData } from "../utils/data-options/index.js";
+import { SupervisorNotFoundError } from "../utils/errors/supervisors.js";
 
 const getSupervisors = async ({
   page,

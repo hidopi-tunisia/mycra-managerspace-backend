@@ -1,4 +1,4 @@
-import { HolidayCountries } from "../../helpers/miscs";
+import { HolidayCountries } from "../../helpers/miscs.js";
 import data_fr from "./fr";
 
 const getHolidaysData = (country, year = new Date().getFullYear()) => {

@@ -1,10 +1,10 @@
-import { emitter } from "../../helpers/events";
-import { send } from "../../helpers/messaging";
-import { Severity, Topics } from "../constants";
+import { emitter } from "../../helpers/events.js";
+import { send } from "../../helpers/messaging.js";
+import { Severity, Topics } from "../constants.js";
 import {
   ConsultantAssignedToProject,
   ConsultantUnassignedFromProject,
-} from "./clients-notifications";
+} from "./clients-notifications.js";
 
 emitter.on("consultant-assigned-to-project", (payload) => {
   try {

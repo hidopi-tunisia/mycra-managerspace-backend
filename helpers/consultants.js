@@ -1,6 +1,6 @@
-import { Consultant } from "../models";
-import { countData, populateData } from "../utils/data-options";
-import { ConsultantNotFoundError } from "../utils/errors/consultants";
+import { Consultant } from "../models/index.js";
+import { countData, populateData } from "../utils/data-options/index.js";
+import { ConsultantNotFoundError } from "../utils/errors/consultants.js";
 
 const getConsultants = async ({
   page,

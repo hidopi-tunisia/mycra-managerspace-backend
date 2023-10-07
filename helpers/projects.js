@@ -1,5 +1,5 @@
-import { Client, Consultant, Project } from "../models";
-import { ProjectNotFoundError } from "../utils/errors/projects";
+import { Client, Consultant, Project } from "../models/index.js";
+import { ProjectNotFoundError } from "../utils/errors/projects.js";
 
 const getProject = async (id, options = {}) => {
   let doc = await Project.findById(id);

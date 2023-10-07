@@ -1,5 +1,5 @@
-import { StatusCodes } from "../status-codes";
-import { BaseError } from "./base-error";
+import { StatusCodes } from "../status-codes.js";
+import { BaseError } from "./base-error.js";
 
 class CRANotFoundError extends BaseError {
   #code = StatusCodes.NOT_FOUND;

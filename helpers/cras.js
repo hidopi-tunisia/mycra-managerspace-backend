@@ -1,7 +1,6 @@
-import { CRA } from "../models";
-import { CRAStatuses } from "../models/cra";
-import { countData, populateData } from "../utils/data-options";
-import { CRANotFoundError } from "../utils/errors/cras";
+import { CRA, CRAStatuses } from "../models/index.js";
+import { countData, populateData } from "../utils/data-options/index.js";
+import { CRANotFoundError } from "../utils/errors/cras.js";
 
 const getCRAs = async ({
   consultant,

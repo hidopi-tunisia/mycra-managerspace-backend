@@ -1,6 +1,6 @@
-import { Supervisor, Offer } from "../models";
-import { countData, populateData } from "../utils/data-options";
-import { OfferNotFoundError } from "../utils/errors/offers";
+import { Supervisor, Offer } from "../models/index.js";
+import { countData, populateData } from "../utils/data-options/index.js";
+import { OfferNotFoundError } from "../utils/errors/offers.js";
 
 const getOffer = async (id, options = {}) => {
   let doc = await Offer.findById(id);

@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { Roles } from "../middlewares/check-group";
+import { Roles } from "../middlewares/check-group.js";
 
 export const CRAStatuses = {
   SUBMITTED: "submitted",

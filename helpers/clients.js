@@ -1,6 +1,6 @@
-import { Client } from "../models";
-import { countData, populateData } from "../utils/data-options";
-import { ClientNotFoundError } from "../utils/errors/clients";
+import { Client } from "../models/index.js";
+import { countData, populateData } from "../utils/data-options/index.js";
+import { ClientNotFoundError } from "../utils/errors/clients.js";
 
 const getClient = async (id, options = {}) => {
   let doc = await Client.findById(id);
