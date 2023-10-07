@@ -1,5 +1,5 @@
 import { HolidayCountries } from "../../helpers/miscs.js";
-import data_fr from "./fr";
+import data_fr from "./fr.js";
 
 const getHolidaysData = (country, year = new Date().getFullYear()) => {
   if (country === HolidayCountries.FRANCE) {

@@ -1,4 +1,4 @@
-import { IMAGE_URL, Severity } from "./constants";
+import { IMAGE_URL, Severity } from "./constants.js";
 
 class BaseNotification {
   data = {

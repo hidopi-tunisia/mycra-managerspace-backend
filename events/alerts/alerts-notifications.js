@@ -1,4 +1,4 @@
-import { BaseNotification } from "../base-notification";
+import { BaseNotification } from "../base-notification.js";
 
 class AlertCreated extends BaseNotification {
   constructor({ data = {}, notification = {}, topic }) {
