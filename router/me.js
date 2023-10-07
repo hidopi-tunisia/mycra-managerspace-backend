@@ -1,30 +1,30 @@
 import { Router } from "express";
-import { getConsultant, updateConsultant } from "../helpers/consultants";
-import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras";
-import { HolidayCountries, getHolidays, getWeekends } from "../helpers/miscs";
-import { getSupervisor } from "../helpers/supervisors";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { CRAStatuses } from "../models/cra";
-import { ForbiddenError, handleError } from "../utils";
+import { getConsultant, updateConsultant } from "../helpers/consultants.js";
+import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras.js";
+import { HolidayCountries, getHolidays, getWeekends } from "../helpers/miscs.js";
+import { getSupervisor } from "../helpers/supervisors.js";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
+import { CRAStatuses } from "../models/cra.js";
+import { ForbiddenError, handleError } from "../utils/index.js";
 import {
   filtedCRAsByStatus,
   filterCurrentProjects,
   sortCRAsByHistory,
-} from "../utils/data-options";
-import { CRANotRejectedError } from "../utils/errors/cras";
+} from "../utils/data-options.js";
+import { CRANotRejectedError } from "../utils/errors/cras.js";
 import {
   NoCurrentProjectsError,
   NoProjectsError,
   ProjectNotFoundError,
-} from "../utils/errors/projects";
-import { StatusCodes } from "../utils/status-codes";
+} from "../utils/errors/projects.js";
+import { StatusCodes } from "../utils/status-codes.js";
 import {
   createAlert,
   deleteAlert,
   getAlert,
   getAlerts,
-} from "../helpers/alerts";
-import { emitter } from "../helpers/events";
+} from "../helpers/alerts.js";
+import { emitter } from "../helpers/events.js";
 
 const router = Router();
 

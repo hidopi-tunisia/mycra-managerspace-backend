@@ -1,17 +1,17 @@
 import { Router } from "express";
-import { getConsultant } from "../helpers/consultants";
+import { getConsultant } from "../helpers/consultants.js";
 import {
   approveCRA,
   getCRA,
   markCRAAsDeleted,
   rejectCRA,
-} from "../helpers/cras";
-import { emitter } from "../helpers/events";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { CRAStatuses } from "../models/cra";
-import { ForbiddenError, handleError } from "../utils";
-import { CRANotPendingError } from "../utils/errors/cras";
-import { StatusCodes } from "../utils/status-codes";
+} from "../helpers/cras.js";
+import { emitter } from "../helpers/events.js";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
+import { CRAStatuses } from "../models/cra.js";
+import { ForbiddenError, handleError } from "../utils/index.js";
+import { CRANotPendingError } from "../utils/errors/cras.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 

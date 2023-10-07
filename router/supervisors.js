@@ -3,8 +3,8 @@ import {
   createUser,
   generatePasswordResetLink,
   setRole,
-} from "../helpers/auth";
-import { sendEmail } from "../helpers/mailer";
+} from "../helpers/auth.js";
+import { sendEmail } from "../helpers/mailer.js";
 import {
   assignSupervisorToClient,
   createSupervisor,
@@ -12,16 +12,16 @@ import {
   getSupervisor,
   getSupervisors,
   updateSupervisor,
-} from "../helpers/supervisors";
+} from "../helpers/supervisors.js";
 import {
   assignOfferToSupervisor,
   unassignOfferFromSupervisor,
-} from "../helpers/offers";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { handleError, isValidEmail } from "../utils";
-import { generateObjectId } from "../utils/generate-string";
-import { generateTemplate } from "../utils/mailing/generate-template";
-import { StatusCodes } from "../utils/status-codes";
+} from "../helpers/offers.js";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
+import { handleError, isValidEmail } from "../utils/index.js";
+import { generateObjectId } from "../utils/generate-string.js";
+import { generateTemplate } from "../utils/mailing/generate-template.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 

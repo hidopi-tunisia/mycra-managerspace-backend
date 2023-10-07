@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import { ForbiddenError, UnidentifiedRoleError, handleError } from "../utils";
+import { ForbiddenError, UnidentifiedRoleError, handleError } from "../utils/index.js";
 
 export const Roles = {
   CONSULTANT: "consultant",

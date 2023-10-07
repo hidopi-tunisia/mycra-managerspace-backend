@@ -1,12 +1,12 @@
 import { Router } from "express";
-import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs";
-import { handleError } from "../utils";
+import { getHolidays, getWeekends, HolidayCountries } from "../helpers/miscs.js";
+import { handleError } from "../utils/index.js";
 import {
   InvalidCountryError,
   InvalidMonthError,
   InvalidYearError,
-} from "../utils/errors/miscs";
-import { StatusCodes } from "../utils/status-codes";
+} from "../utils/errors/miscs.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 router.get("/dates/holidays", async (req, res) => {

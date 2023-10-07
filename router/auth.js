@@ -3,13 +3,13 @@ import {
   createUser,
   generatePasswordResetLink,
   setRole,
-} from "../helpers/auth";
-import { sendEmail } from "../helpers/mailer";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { handleError, isValidEmail } from "../utils";
-import { InvalidEmailError, InvalidRoleError } from "../utils/errors/auth";
-import { generateTemplate } from "../utils/mailing/generate-template";
-import { StatusCodes } from "../utils/status-codes";
+} from "../helpers/auth.js";
+import { sendEmail } from "../helpers/mailer.js";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
+import { handleError, isValidEmail } from "../utils/index.js";
+import { InvalidEmailError, InvalidRoleError } from "../utils/errors/auth.js";
+import { generateTemplate } from "../utils/mailing/generate-template.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 

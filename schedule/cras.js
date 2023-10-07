@@ -1,5 +1,5 @@
 import { CronJob } from "cron";
-import { emitter } from "../helpers/events";
+import { emitter } from "../helpers/events.js";
 
 const scheduleCRARequired = () => {
   new CronJob(

@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import { NoAuthorizationHeaderError, NoAuthorizationTokenError, handleError } from "../utils";
+import { NoAuthorizationHeaderError, NoAuthorizationTokenError, handleError } from "../utils/index.js";
 
 const auth = (req, res, next) => {
   const fn = async () => {

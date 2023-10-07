@@ -1,5 +1,7 @@
 FROM node:20-alpine3.17
 
+RUN yarn global add nodemon
+
 USER node
 
 # Create app directory

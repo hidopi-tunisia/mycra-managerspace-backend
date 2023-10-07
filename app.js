@@ -1,9 +1,9 @@
 import "dotenv/config";
 import express, { Router } from "express";
-import "./config/database";
-import "./config/firebase";
+import "./config/database.js";
+import "./config/firebase.js";
 
-import { auth } from "./middlewares/auth";
+import { auth } from "./middlewares/auth.js";
 
 import {
   authRouter,
@@ -14,9 +14,9 @@ import {
   offersRouter,
   meRouter,
   miscsRouter,
-} from "./router";
-import "./events";
-import "./schedule";
+} from "./router/index.js";
+import "./events/index.js";
+import "./schedule/index.js";
 
 const app = express();
 const router = Router();

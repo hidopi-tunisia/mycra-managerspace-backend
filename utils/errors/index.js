@@ -1,12 +1,12 @@
-import { StatusCodes } from "../status-codes";
-import { BaseError } from "./base-error";
+import { StatusCodes } from "../status-codes.js";
+import { BaseError } from "./base-error.js";
 
 export {
   NoAuthorizationHeaderError,
   NoAuthorizationTokenError,
   ForbiddenError,
   UnidentifiedRoleError,
-} from "./auth";
+} from "./auth.js";
 
 export function handleError({ res, error }) {
   console.info("-----ERROR-----");

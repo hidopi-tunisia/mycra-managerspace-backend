@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { createOffer, deleteOffer, getOffer, getOffers } from "../helpers/offers";
-import { Groups, checkGroup } from "../middlewares/check-group";
-import { handleError } from "../utils";
-import { StatusCodes } from "../utils/status-codes";
+import { createOffer, deleteOffer, getOffer, getOffers } from "../helpers/offers.js";
+import { Groups, checkGroup } from "../middlewares/check-group.js";
+import { handleError } from "../utils/index.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 

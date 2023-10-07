@@ -1,11 +1,11 @@
-import authRouter from "./auth";
-import clientsRouter from "./clients";
-import consultantsRouter from "./consultants";
-import crasRouter from "./cras";
-import supervisorsRouter from "./supervisors";
-import offersRouter from "./offers";
-import meRouter from "./me";
-import miscsRouter from "./miscs";
+import authRouter from "./auth.js";
+import clientsRouter from "./clients.js";
+import consultantsRouter from "./consultants.js";
+import crasRouter from "./cras.js";
+import supervisorsRouter from "./supervisors.js";
+import offersRouter from "./offers.js";
+import meRouter from "./me.js";
+import miscsRouter from "./miscs.js";
 
 export {
   authRouter,

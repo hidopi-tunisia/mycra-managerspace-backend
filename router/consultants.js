@@ -3,19 +3,19 @@ import {
   createUser,
   generatePasswordResetLink,
   setRole,
-} from "../helpers/auth";
+} from "../helpers/auth.js";
 import {
   createConsultant,
   deleteConsultant,
   getConsultant,
-} from "../helpers/consultants";
-import { sendEmail } from "../helpers/mailer";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { handleError, isValidEmail } from "../utils";
-import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
-import { generateObjectId } from "../utils/generate-string";
-import { generateTemplate } from "../utils/mailing/generate-template";
-import { StatusCodes } from "../utils/status-codes";
+} from "../helpers/consultants.js";
+import { sendEmail } from "../helpers/mailer.js";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
+import { handleError, isValidEmail } from "../utils/index.js";
+import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth.js";
+import { generateObjectId } from "../utils/generate-string.js";
+import { generateTemplate } from "../utils/mailing/generate-template.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 

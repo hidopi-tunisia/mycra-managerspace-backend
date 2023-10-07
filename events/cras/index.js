@@ -1,11 +1,11 @@
-import { emitter } from "../../helpers/events";
-import { send } from "../../helpers/messaging";
-import { Topics } from "../constants";
+import { emitter } from "../../helpers/events.js";
+import { send } from "../../helpers/messaging.js";
+import { Topics } from "../constants.js";
 import {
   CRAApprovedNotification,
   CRARejectedNotification,
   CRARequiredNotification,
-} from "./cras-notifications";
+} from "./cras-notifications.js";
 
 emitter.on("cra-rejected", (payload) => {
   try {

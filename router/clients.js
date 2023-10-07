@@ -6,9 +6,9 @@ import {
   getClient,
   getClients,
   updateClient,
-} from "../helpers/clients";
-import { getConsultant } from "../helpers/consultants";
-import { emitter } from "../helpers/events";
+} from "../helpers/clients.js";
+import { getConsultant } from "../helpers/consultants.js";
+import { emitter } from "../helpers/events.js";
 import {
   assignConsultantToProject,
   assignProjectToClient,
@@ -18,13 +18,13 @@ import {
   setProjectStatus,
   unassignConsultantFromProject,
   unassignProjectFromClient
-} from "../helpers/projects";
-import { Groups, Roles, checkGroup } from "../middlewares/check-group";
-import { Statuses } from "../models/project";
-import { handleError, isValidEmail } from "../utils";
-import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth";
-import { AlreadyAssignedError } from "../utils/errors/shared";
-import { StatusCodes } from "../utils/status-codes";
+} from "../helpers/projects.js";
+import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
+import { Statuses } from "../models/project.js";
+import { handleError, isValidEmail } from "../utils/index.js";
+import { ForbiddenError, InvalidEmailError } from "../utils/errors/auth.js";
+import { AlreadyAssignedError } from "../utils/errors/shared.js";
+import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 
