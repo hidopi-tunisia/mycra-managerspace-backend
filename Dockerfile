@@ -30,4 +30,4 @@ EXPOSE ${APP_PORT}
 
 # overrite by the docker-compose command
 #CMD [ "yarn", "dev" ]
-CMD [ "sh"]
+CMD [ "sh" ]
