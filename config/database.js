@@ -5,10 +5,10 @@ const DATABASE_CONNECTION = process.env.DATABASE_CONNECTION;
 mongoose
   .connect(DATABASE_CONNECTION)
   .then(() => {
-    console.log("Connected to the database");
+    console.info("Connected to the database");
   })
   .catch((err) => {
-    console.log(err);
+    console.log(error);
   });
 
 export default this;

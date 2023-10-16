@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express, { Router } from "express";
+import cors from "cors";
 import "./config/database.js";
 import "./config/firebase.js";
 
@@ -24,6 +25,7 @@ const APP_PORT = process.env.APP_PORT;
 
 app.use(express.json());
 app.use(express.static("./views"));
+app.use(cors())
 
 router.use("/", auth);
 

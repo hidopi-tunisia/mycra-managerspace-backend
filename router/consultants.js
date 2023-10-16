@@ -8,6 +8,7 @@ import {
   createConsultant,
   deleteConsultant,
   getConsultant,
+  getConsultants,
 } from "../helpers/consultants.js";
 import { sendEmail } from "../helpers/mailer.js";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
@@ -19,7 +20,7 @@ import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();
 
-router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
+router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
   try {
     const {
       page,
@@ -32,7 +33,9 @@ router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
       "created-at-min": camin,
       "created-at-max": camax,
       populate,
+      supervisor,
     } = req.query;
+    const { user } = req;
     const options = {};
     if (!isNaN(page) && page >= 0) {
       options["page"] = page;
@@ -64,7 +67,26 @@ router.get("/", checkGroup(Groups.ADMINS), async (req, res) => {
     if (typeof populate === "string") {
       options["populate"] = populate;
     }
-    const result = await getConsultant(options);
+
+    let result;
+    switch (user.role) {
+      case Roles.SUPERVISOR:
+        if (typeof supervisor === "string") {
+          throw new ForbiddenError();
+        }
+        options["supervisor"] = user.uid;
+        result = await getConsultants(options);
+        break;
+      case Roles.ADMIN:
+        if (typeof supervisor === "string") {
+          options["supervisor"] = supervisor;
+        }
+        result = await getConsultants(options);
+        break;
+
+      default:
+        break;
+    }
     res.status(StatusCodes.OK).send(result);
   } catch (error) {
     handleError({ res, error });

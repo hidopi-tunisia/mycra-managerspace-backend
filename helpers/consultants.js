@@ -1,6 +1,7 @@
-import { Consultant } from "../models/index.js";
+import { Consultant, Supervisor } from "../models/index.js";
 import { countData, populateData } from "../utils/data-options/index.js";
 import { ConsultantNotFoundError } from "../utils/errors/consultants.js";
+import { deleteUser } from "./auth.js";
 
 const getConsultants = async ({
   page,
@@ -45,13 +46,13 @@ const getConsultants = async ({
   }
   let docs;
   if (populate) {
-    docs = await Supervisor.find(predicate)
+    docs = await Consultant.find(predicate)
       .skip(page * limit)
       .limit(limit)
       .sort({ createdAt: sort === "asc" ? 1 : -1 })
       .populate(populate.split(",").map((path) => path));
   } else {
-    docs = await Supervisor.find(predicate)
+    docs = await Consultant.find(predicate)
       .skip(page * limit)
       .limit(limit)
       .sort({ createdAt: sort === "asc" ? 1 : -1 });
