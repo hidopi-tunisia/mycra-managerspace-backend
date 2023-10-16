@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "pm2 start app.js",
-    "dev": "pm2 nodemon app.js",
+    "dev": "pm2 start app.js",
     "dev:inspect": "nodemon app.js",
     "play": "nodemon --inspect play",
     "test": "reset && jest --watchAll"
