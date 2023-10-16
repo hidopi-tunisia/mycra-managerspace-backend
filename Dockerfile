@@ -1,6 +1,7 @@
 FROM node:20-alpine3.17
 
 RUN yarn global add nodemon
+RUN yarn global add pm2
 
 USER node
 
