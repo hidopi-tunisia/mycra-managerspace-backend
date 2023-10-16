@@ -23,6 +23,8 @@ RUN yarn
 # Bundle app source
 COPY --chown=node:node . .
 RUN chmod 777 .pm2/pm2.log
+RUN ls -al
+RUN ls -al .pm2 
 
 ARG APP_PORT
 EXPOSE ${APP_PORT}
