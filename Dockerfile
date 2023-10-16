@@ -30,4 +30,4 @@ ARG APP_PORT
 EXPOSE ${APP_PORT}
 
 # overrite by the docker-compose command
-CMD [ "pm2-runtime", "docker-compose.yml" ]
+CMD [ "pm2-runtime","app.js" ]
