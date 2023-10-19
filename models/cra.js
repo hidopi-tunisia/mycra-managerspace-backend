@@ -9,9 +9,6 @@ export const CRAStatuses = {
 };
 
 const schema = new Schema({
-  type: {
-    type: String,
-  },
   date: {
     month: {
       type: Number,
@@ -70,20 +67,8 @@ const schema = new Schema({
       },
     },
   ],
-  unavailable: [
-    // indisponibilites
-    {
-      date: {
-        type: String,
-        required: true,
-      },
-      meta: {
-        value: { type: String },
-      },
-    },
-  ],
   holidays: [
-    // indisponibilites
+    // jours fériés
     {
       date: {
         type: String,
