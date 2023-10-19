@@ -55,7 +55,7 @@ const schema = new Schema({
         // ville
         type: String,
         required: true,
-      }
+      },
     },
     phone: {
       // numeroTelephone
@@ -73,27 +73,26 @@ const schema = new Schema({
         type: String,
         required: false,
       },
-      facebook_link: {
+      facebookLink: {
         // facebook
         type: String,
         required: false,
       },
-      instagram_page: {
+      instagramPage: {
         // instagram
         type: String,
         required: false,
       },
-      x: {
+      xLink: {
         // x
         type: String,
         required: false,
       },
-      linkedIn_link: {
+      linkedInLink: {
         // linkedin_link
         type: String,
         required: false,
-      }
-
+      },
     },
   },
   trialPeriod: {
@@ -101,7 +100,7 @@ const schema = new Schema({
     start: {
       // debut
       type: Date,
-      default: Date.now()
+      default: Date.now(),
     },
     end: {
       // fin

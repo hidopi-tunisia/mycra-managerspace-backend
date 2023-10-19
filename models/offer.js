@@ -9,7 +9,7 @@ const schema = new Schema({
     type: String,
     required: true,
   },
-  trialPeriod: { // dureeEssai
+  trialPeriod: { // dureeEssai (jours)
     type: Number,
     required: true,
   },
@@ -17,7 +17,7 @@ const schema = new Schema({
     type: Number,
     required: true,
   },
-  includedFeatures: { // fonctionnalitesIncluses
+  features: { // fonctionnalitesIncluses
     type: [String],
     required: true,
   },

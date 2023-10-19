@@ -4,12 +4,17 @@ const Statuses = {
   ACTIVE: "active",
   INACTIVE: "inactive",
 };
+const Sexes = {
+  MALE: "male",
+  FEMALE: "female",
+};
 
 const schema = new Schema({
-  civility: {
-    // civilite
+  sex: {
+    // sex
     type: String,
-    required: true,
+    enum: [Sexes.MALE, Sexes.FEMALE],
+    required: false,
   },
   lastName: {
     // nom
@@ -41,17 +46,11 @@ const schema = new Schema({
     type: Date,
     required: true,
   },
-  linkedIn: {
+  linkedInLink: {
     // profilLinkedIn
     type: String,
     required: false,
   },
-  skills: [
-    // competences
-    {
-      type: String,
-    },
-  ],
   position: {
     // poste
     type: String,
@@ -81,7 +80,7 @@ const schema = new Schema({
   acceptedTermsAndConditionsVersion: {
     // cguVersionAcceptee
     type: String,
-    default: "",
+    default: "1.0.0",
   },
   status: {
     // statutCompte
@@ -107,6 +106,14 @@ const schema = new Schema({
     // dateCreation
     type: Date,
     default: Date.now(),
+  },
+  skills: {
+    array: {
+      type: String,
+    },
+    url: {
+      type: String,
+    }
   },
 });
 

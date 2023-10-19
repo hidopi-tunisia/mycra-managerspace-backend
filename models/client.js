@@ -1,10 +1,14 @@
 import { Schema, model } from "mongoose";
-
+const Sexes = {
+  MALE: "male",
+  FEMALE: "female",
+};
 const schema = new Schema({
-  civility: {
-    // civilite
+  sex: {
+    // sex
     type: String,
-    required: true,
+    enum: [Sexes.MALE, Sexes.FEMALE],
+    required: false,
   },
   lastName: {
     // nom
@@ -22,15 +26,6 @@ const schema = new Schema({
     required: true,
     unique: true,
   },
-  phone: {
-    // numeroTelephone
-    type: String,
-    required: true,
-  },
-  secondPhone: {
-    // deuxiemeNumeroTelephone
-    type: String,
-  },
   company: {
     name: {
       // nomSocialEntreprise
@@ -45,6 +40,15 @@ const schema = new Schema({
     representative: {
       type: String,
       required: true,
+    },
+    phone: {
+      // numeroTelephone
+      type: String,
+      required: true,
+    },
+    secondPhone: {
+      // deuxiemeNumeroTelephone
+      type: String,
     },
     address: {
       // adresse
@@ -65,13 +69,10 @@ const schema = new Schema({
       },
     },
   },
-  signatureDate: {
-    // dateSignature
-    type: Date,
-  },
-  observation: {
-    // observation
+  note: {
+    // note
     type: String,
+    maxlength: 500,
   },
   supervisor: {
     // supervisor
@@ -83,6 +84,15 @@ const schema = new Schema({
     // dateCreation
     type: Date,
     default: Date.now(),
+  },
+  contract: {
+    signedAt: {
+      // dateSignature
+      type: Date,
+    },
+    url: {
+      type: String,
+    },
   },
 });
 

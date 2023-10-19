@@ -11,15 +11,15 @@ const schema = new Schema({
     type: String,
     required: true,
   },
-  projectCode: {
-    // codeProjet
+  code: {
+    // code
     type: String,
-    required: true,
+    required: false,
   },
   description: {
     // description
     type: String,
-    required: true,
+    required: false,
   },
   startDate: {
     // dateDebut
@@ -34,7 +34,7 @@ const schema = new Schema({
   category: {
     // categorie
     type: String,
-    required: true,
+    required: false,
   },
   client: {
     // client
