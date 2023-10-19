@@ -34,6 +34,11 @@ const schema = new Schema({
       type: String,
       required: true,
     },
+    logo: {
+      // logo
+      type: String,
+      required: false,
+    },
     address: {
       // adresse
       street: {
@@ -50,12 +55,45 @@ const schema = new Schema({
         // ville
         type: String,
         required: true,
-      },
+      }
     },
     phone: {
       // numeroTelephone
       type: String,
       required: true,
+    },
+    secondPhone: {
+      // numeroTelephone2
+      type: String,
+      required: false,
+    },
+    social: {
+      website: {
+        // website
+        type: String,
+        required: false,
+      },
+      facebook_link: {
+        // facebook
+        type: String,
+        required: false,
+      },
+      instagram_page: {
+        // instagram
+        type: String,
+        required: false,
+      },
+      x: {
+        // x
+        type: String,
+        required: false,
+      },
+      linkedIn_link: {
+        // linkedin_link
+        type: String,
+        required: false,
+      }
+
     },
   },
   trialPeriod: {
@@ -85,7 +123,7 @@ const schema = new Schema({
   acceptedTermsAndConditionsVersion: {
     // cguVersionAcceptee
     type: String,
-    default: "",
+    default: "1.0.0",
   },
   status: {
     // statutCompte
