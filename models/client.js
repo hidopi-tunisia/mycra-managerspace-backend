@@ -32,6 +32,11 @@ const schema = new Schema({
       type: String,
       required: true,
     },
+    logo: {
+      // logo
+      type: String,
+      required: false,
+    },
     siret: {
       // siretEntreprise
       type: String,
