@@ -9,6 +9,7 @@ import {
   deleteConsultant,
   getConsultant,
   getConsultants,
+  updateConsultant,
 } from "../helpers/consultants.js";
 import { sendEmail } from "../helpers/mailer.js";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
@@ -149,6 +150,26 @@ router.post("/", checkGroup(Groups.SUPERVISORS), async (req, res) => {
     handleError({ res, error });
   }
 });
+router.put(
+  "/:id",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, body, params } = req;
+      const consultant = await getConsultant(params.id);
+      if (
+        user.role === Roles.SUPERVISOR &&
+        !consultant.supervisor.equals(user.uid)
+      ) {
+        throw new ForbiddenError();
+      }
+      const result = await updateConsultant(params.id, { ...body });
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 router.delete(
   "/:id",
   checkGroup(Groups.ADMINS_OR_SUPERVISORS),

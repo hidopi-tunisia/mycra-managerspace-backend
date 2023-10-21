@@ -108,12 +108,14 @@ const schema = new Schema({
     default: Date.now(),
   },
   skills: {
-    array: {
-      type: String,
-    },
+    arr: [
+      {
+        type: String,
+      },
+    ],
     url: {
       type: String,
-    }
+    },
   },
 });
 
