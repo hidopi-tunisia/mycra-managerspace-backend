@@ -8,6 +8,7 @@ import { auth } from "./middlewares/auth.js";
 
 import {
   authRouter,
+  projectsRouter,
   clientsRouter,
   consultantsRouter,
   crasRouter,
@@ -15,7 +16,7 @@ import {
   offersRouter,
   meRouter,
   miscsRouter,
-  supervisorStatisticsRouter
+  supervisorStatisticsRouter,
 } from "./router/index.js";
 import "./events/index.js";
 import "./schedule/index.js";
@@ -32,6 +33,7 @@ router.use("/", auth);
 
 router.use("/auth", authRouter);
 router.use("/supervisors/statistics", supervisorStatisticsRouter);
+router.use("/projects", projectsRouter);
 router.use("/cras", crasRouter);
 router.use("/supervisors", supervisorsRouter);
 router.use("/clients", clientsRouter);

@@ -23,6 +23,27 @@ const getProject = async (id, options = {}) => {
   return doc;
 };
 
+const getProjects = async ({ page, limit, sort, populate, status }) => {
+  const predicate = {};
+  if (status) {
+    predicate["status"] = status;
+  }
+  let docs;
+  if (populate) {
+    docs = await Project.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 })
+      .populate(populate.split(",").map((path) => path));
+  } else {
+    docs = await Project.find(predicate)
+      .skip(page * limit)
+      .limit(limit)
+      .sort({ createdAt: sort === "asc" ? 1 : -1 });
+  }
+  return docs;
+};
+
 const createProject = async (payload) => {
   return Project({ ...payload }).save();
 };
@@ -151,11 +172,12 @@ const setProjectStatus = async (projectId, status) => {
 
 export {
   createProject,
+  getProjects,
   getProject,
   assignProjectToClient,
   unassignProjectFromClient,
   assignConsultantToProject,
   unassignConsultantFromProject,
   assignSupervisorToProject,
-  setProjectStatus
+  setProjectStatus,
 };
