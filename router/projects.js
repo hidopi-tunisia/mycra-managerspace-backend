@@ -8,7 +8,9 @@ const router = Router();
 
 router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
   try {
-    const { user, page, limit, sort, supervisor, client, status } = req;
+    const { user } = req;
+    const { page, limit, sort, supervisor, client, status, populate } =
+      req.query;
     const options = {};
     if (!isNaN(page) && page >= 0) {
       options["page"] = page;
@@ -21,6 +23,9 @@ router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
     }
     if (typeof status === "string") {
       options["status"] = status;
+    }
+    if (typeof populate === "string") {
+      options["populate"] = populate;
     }
     let result;
     switch (user.role) {
