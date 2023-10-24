@@ -6,6 +6,7 @@ import supervisorsRouter from "./supervisors.js";
 import offersRouter from "./offers.js";
 import meRouter from "./me.js";
 import miscsRouter from "./miscs.js";
+import supervisorStatisticsRouter from './supervisors/statistics/index.js'
 
 export {
   authRouter,
@@ -15,5 +16,6 @@ export {
   supervisorsRouter,
   offersRouter,
   meRouter,
-  miscsRouter
+  miscsRouter,
+  supervisorStatisticsRouter
 };

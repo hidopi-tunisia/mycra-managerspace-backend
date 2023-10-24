@@ -15,6 +15,7 @@ import {
   offersRouter,
   meRouter,
   miscsRouter,
+  supervisorStatisticsRouter
 } from "./router/index.js";
 import "./events/index.js";
 import "./schedule/index.js";
@@ -30,6 +31,7 @@ app.use(cors())
 router.use("/", auth);
 
 router.use("/auth", authRouter);
+router.use("/supervisors/statistics", supervisorStatisticsRouter);
 router.use("/cras", crasRouter);
 router.use("/supervisors", supervisorsRouter);
 router.use("/clients", clientsRouter);
