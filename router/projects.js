@@ -1,5 +1,10 @@
 import { Router } from "express";
-import { deleteProject, getProjects, updateProject } from "../helpers/projects.js";
+import {
+  deleteProject,
+  getProject,
+  getProjects,
+  updateProject,
+} from "../helpers/projects.js";
 import { Groups, checkGroup, Roles } from "../middlewares/check-group.js";
 import { handleError } from "../utils/index.js";
 import { StatusCodes } from "../utils/status-codes.js";
@@ -57,22 +62,43 @@ router.get("/", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
     handleError({ res, error });
   }
 });
-router.put("/:id", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
-  try {
-    const { body, params } = req;
-    const result = await updateProject(params.id, { ...body });
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
+router.get(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const result = await getProject(params.id);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
   }
-});
-router.delete("/:id", checkGroup(Groups.ADMINS_OR_SUPERVISORS), async (req, res) => {
-  try {
-    const { params } = req;
-    const result = await deleteProject(params.id);
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
+);
+router.put(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { body, params } = req;
+      const result = await updateProject(params.id, { ...body });
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
   }
-});
+);
+router.delete(
+  "/:id",
+  checkGroup(Groups.ADMINS_OR_SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { params } = req;
+      const result = await deleteProject(params.id);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 export default router;
