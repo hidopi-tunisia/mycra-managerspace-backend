@@ -169,7 +169,12 @@ const setProjectStatus = async (projectId, status) => {
     }
   );
 };
-
+const updateProject = async (id, payload) => {
+  return Project.findByIdAndUpdate(id, { ...payload }, { new: true });
+};
+const deleteProject = async (id) => {
+  return Project.findByIdAndDelete(id, { new: true });
+};
 export {
   createProject,
   getProjects,
@@ -180,4 +185,6 @@ export {
   unassignConsultantFromProject,
   assignSupervisorToProject,
   setProjectStatus,
+  updateProject,
+  deleteProject,
 };
