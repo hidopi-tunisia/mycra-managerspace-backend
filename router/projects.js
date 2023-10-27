@@ -68,7 +68,12 @@ router.get(
   async (req, res) => {
     try {
       const { params } = req;
-      const result = await getProject(params.id);
+      const { populate } = req.query;
+      const options = {};
+      if (typeof populate === "string") {
+        options["populate"] = populate;
+      }
+      const result = await getProject(params.id, options);
       res.status(StatusCodes.OK).send(result);
     } catch (error) {
       handleError({ res, error });

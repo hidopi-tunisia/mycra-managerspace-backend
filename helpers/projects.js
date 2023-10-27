@@ -1,4 +1,5 @@
 import { Client, Consultant, Project } from "../models/index.js";
+import { countData, populateData } from "../utils/data-options/index.js";
 import { ProjectNotFoundError } from "../utils/errors/projects.js";
 
 const getProject = async (id, options = {}) => {
@@ -25,6 +26,7 @@ const getProject = async (id, options = {}) => {
 
 const getProjects = async ({ page, limit, sort, populate, status }) => {
   const predicate = {};
+  console.log(populate);
   if (status) {
     predicate["status"] = status;
   }
