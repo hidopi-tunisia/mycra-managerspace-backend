@@ -26,7 +26,6 @@ const getProject = async (id, options = {}) => {
 
 const getProjects = async ({ page, limit, sort, populate, status }) => {
   const predicate = {};
-  console.log(populate);
   if (status) {
     predicate["status"] = status;
   }
