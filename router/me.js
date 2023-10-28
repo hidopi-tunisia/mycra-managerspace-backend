@@ -215,10 +215,10 @@ router.get("/cras", async (req, res) => {
     if (typeof project === "string") {
       options["project"] = project;
     }
-    if (typeof consultant === "consultant") {
+    if (typeof consultant === "string") {
       options["consultant"] = consultant;
     }
-    if (typeof client === "client") {
+    if (typeof client === "string") {
       options["client"] = client;
     }
     if (!isNaN(year) && Number(year) >= 2000) {
@@ -391,7 +391,7 @@ router.post(
   async (req, res) => {
     try {
       const { user, body } = req;
-      const consultant = await getConsultant(user.uid, { po });
+      const consultant = await getConsultant(user.uid);
       const payload = {
         ...body,
         consultant: user.uid,
@@ -415,7 +415,7 @@ router.delete(
   checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
-      const { params } = req;
+      const { user,params } = req;
       const alert = await getAlert(params.id);
       if (!alert.supervisor.equals(user.uid)) {
         throw new ForbiddenError();

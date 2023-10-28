@@ -2,6 +2,7 @@ import { Router } from "express";
 import { getConsultant } from "../helpers/consultants.js";
 import {
   approveCRA,
+  deleteCRA,
   getCRA,
   markCRAAsDeleted,
   rejectCRA,

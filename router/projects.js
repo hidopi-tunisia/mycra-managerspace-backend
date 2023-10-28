@@ -6,7 +6,7 @@ import {
   updateProject,
 } from "../helpers/projects.js";
 import { Groups, checkGroup, Roles } from "../middlewares/check-group.js";
-import { handleError } from "../utils/index.js";
+import { ForbiddenError, handleError } from "../utils/index.js";
 import { StatusCodes } from "../utils/status-codes.js";
 
 const router = Router();

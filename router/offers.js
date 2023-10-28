@@ -3,6 +3,7 @@ import { createOffer, deleteOffer, getOffer, getOffers } from "../helpers/offers
 import { Groups, checkGroup } from "../middlewares/check-group.js";
 import { handleError } from "../utils/index.js";
 import { StatusCodes } from "../utils/status-codes.js";
+import { updateClient } from "../helpers/clients.js";
 
 const router = Router();
 
