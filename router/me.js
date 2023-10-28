@@ -2,7 +2,7 @@ import { Router } from "express";
 import { getConsultant, updateConsultant } from "../helpers/consultants.js";
 import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras.js";
 import { HolidayCountries, getHolidays, getWeekends } from "../helpers/miscs.js";
-import { getSupervisor } from "../helpers/supervisors.js";
+import { getSupervisor, updateSupervisor } from "../helpers/supervisors.js";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
 import { CRAStatuses } from "../models/cra.js";
 import { ForbiddenError, handleError } from "../utils/index.js";
