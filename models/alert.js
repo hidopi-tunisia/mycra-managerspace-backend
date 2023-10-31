@@ -8,6 +8,10 @@ const schema = new Schema({
   satisfaction: {
     type: Number,
   },
+  isRead: {
+    type: Boolean,
+    default: false
+  },
   supervisor: {
     type: Schema.Types.ObjectId,
     ref: "Supervisor",

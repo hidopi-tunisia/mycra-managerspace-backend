@@ -340,6 +340,7 @@ router.get(
         consultant,
         "created-at-min": camin,
         "created-at-max": camax,
+        "is-read": is_read,
         populate,
       } = req.query;
       const options = {};
@@ -357,6 +358,12 @@ router.get(
       }
       if (typeof camax === "string") {
         options["createdAtMax"] = camax;
+      }
+      if (typeof is_read === "true") {
+        options["isRead"] = true;
+      }
+      else if (typeof is_read === "false") {
+        options["isRead"] = false;
       }
       if (typeof populate === "string") {
         options["populate"] = populate;
