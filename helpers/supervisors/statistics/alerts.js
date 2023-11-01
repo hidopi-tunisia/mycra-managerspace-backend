@@ -4,10 +4,14 @@ const getAlertsCount = async ({
   createdAtMin,
   createdAtMax,
   supervisor,
+  isRead,
 } = {}) => {
   const predicate = {};
   if (supervisor) {
     predicate["supervisor"] = supervisor;
+  }
+  if (isRead !== undefined) {
+    predicate["isRead"] = isRead;
   }
   if (createdAtMin || createdAtMax) {
     if (createdAtMin && !createdAtMax) {

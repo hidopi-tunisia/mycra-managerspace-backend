@@ -364,9 +364,9 @@ router.get(
       if (typeof camax === "string") {
         options["createdAtMax"] = camax;
       }
-      if (typeof is_read === "true") {
+      if (is_read === "true") {
         options["isRead"] = true;
-      } else if (typeof is_read === "false") {
+      } else if (is_read === "false") {
         options["isRead"] = false;
       }
       if (typeof populate === "string") {

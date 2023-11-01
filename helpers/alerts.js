@@ -12,6 +12,7 @@ const getAlerts = async ({
   supervisor,
   createdAtMin,
   createdAtMax,
+  isRead,
   populate,
 } = {}) => {
   const predicate = {};
@@ -20,6 +21,9 @@ const getAlerts = async ({
   }
   if (supervisor) {
     predicate["supervisor"] = supervisor;
+  }
+  if (isRead !== undefined) {
+    predicate["isRead"] = isRead;
   }
   if (createdAtMin || createdAtMax) {
     if (createdAtMin && !createdAtMax) {
