@@ -57,8 +57,23 @@ const createAlert = async (payload) => {
   return new Alert({ ...payload }).save();
 };
 
+const updateAlert = async (id, payload) => {
+  return Alert.findByIdAndUpdate(id, { ...payload }, { new: true });
+};
+
+const toggleAlertIsRead = async (id, isRead) => {
+  return Alert.findByIdAndUpdate(id, { isRead }, { new: true });
+};
+
 const deleteAlert = async (id) => {
   return Alert.findByIdAndDelete(id, { new: true });
 };
 
-export { getAlert, createAlert, deleteAlert, getAlerts };
+export {
+  getAlert,
+  createAlert,
+  deleteAlert,
+  updateAlert,
+  toggleAlertIsRead,
+  getAlerts,
+};

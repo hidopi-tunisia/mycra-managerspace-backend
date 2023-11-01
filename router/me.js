@@ -1,7 +1,11 @@
 import { Router } from "express";
 import { getConsultant, updateConsultant } from "../helpers/consultants.js";
 import { createCRA, getCRA, getCRAs, updateCRA } from "../helpers/cras.js";
-import { HolidayCountries, getHolidays, getWeekends } from "../helpers/miscs.js";
+import {
+  HolidayCountries,
+  getHolidays,
+  getWeekends,
+} from "../helpers/miscs.js";
 import { getSupervisor, updateSupervisor } from "../helpers/supervisors.js";
 import { Groups, Roles, checkGroup } from "../middlewares/check-group.js";
 import { CRAStatuses } from "../models/cra.js";
@@ -23,6 +27,7 @@ import {
   deleteAlert,
   getAlert,
   getAlerts,
+  toggleAlertIsRead,
 } from "../helpers/alerts.js";
 import { emitter } from "../helpers/events.js";
 
@@ -361,8 +366,7 @@ router.get(
       }
       if (typeof is_read === "true") {
         options["isRead"] = true;
-      }
-      else if (typeof is_read === "false") {
+      } else if (typeof is_read === "false") {
         options["isRead"] = false;
       }
       if (typeof populate === "string") {
@@ -417,12 +421,30 @@ router.post(
     }
   }
 );
+router.patch(
+  "/alerts/:id/is-read",
+  checkGroup(Groups.SUPERVISORS),
+  async (req, res) => {
+    try {
+      const { user, params } = req;
+      const alert = await getAlert(params.id);
+      if (!alert.supervisor.equals(user.uid)) {
+        throw new ForbiddenError();
+      }
+      const { isRead } = alert;
+      const result = await toggleAlertIsRead(params.id, !isRead);
+      res.status(StatusCodes.OK).send(result);
+    } catch (error) {
+      handleError({ res, error });
+    }
+  }
+);
 router.delete(
   "/alerts/:id",
   checkGroup(Groups.SUPERVISORS),
   async (req, res) => {
     try {
-      const { user,params } = req;
+      const { user, params } = req;
       const alert = await getAlert(params.id);
       if (!alert.supervisor.equals(user.uid)) {
         throw new ForbiddenError();
