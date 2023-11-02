@@ -17,6 +17,7 @@ import {
   meRouter,
   miscsRouter,
   supervisorStatisticsRouter,
+  messagingRouter,
 } from "./router/index.js";
 import "./events/index.js";
 import "./schedule/index.js";
@@ -40,6 +41,7 @@ router.use("/clients", clientsRouter);
 router.use("/consultants", consultantsRouter);
 router.use("/offers", offersRouter);
 router.use("/me", meRouter);
+router.use("/messaging", messagingRouter);
 router.use("/miscs", miscsRouter);
 
 app.use("/", router);

@@ -6,6 +6,7 @@ import crasRouter from "./cras.js";
 import supervisorsRouter from "./supervisors.js";
 import offersRouter from "./offers.js";
 import meRouter from "./me.js";
+import messagingRouter from "./messaging.js";
 import miscsRouter from "./miscs.js";
 import supervisorStatisticsRouter from "./supervisors/statistics/index.js";
 
@@ -18,6 +19,7 @@ export {
   supervisorsRouter,
   offersRouter,
   meRouter,
+  messagingRouter,
   miscsRouter,
   supervisorStatisticsRouter,
 };
