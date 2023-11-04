@@ -72,6 +72,12 @@ const schema = new Schema({
         type: String,
         required: true,
       },
+      lat: {
+        type: Number,
+      },
+      lon: {
+        type: Number,
+      },
     },
   },
   note: {
