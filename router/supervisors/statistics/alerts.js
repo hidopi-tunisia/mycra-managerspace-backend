@@ -14,7 +14,6 @@ router.get("/count", checkGroup(Groups.SUPERVISORS), async (req, res) => {
       "created-at-max": camax,
       "is-read": is_read,
     } = req.query;
-    console.log(req.query);
     const options = {};
     if (typeof camin === "string") {
       options["createdAtMin"] = camin;
