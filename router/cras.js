@@ -27,9 +27,6 @@ router.get("/:id", async (req, res) => {
     if (typeof count === "string") {
       options["count"] = count;
     }
-    if (typeof count === "string") {
-      options["count"] = count;
-    }
     if (total === "true") {
       options["total"] = total;
     }
