@@ -284,6 +284,7 @@ router.get(
       const month = today.getMonth();
       const year = today.getFullYear();
       const cras = await getCRAs({
+        consultant: user.uid,
         project: currentProjects[0],
         month,
         year,
