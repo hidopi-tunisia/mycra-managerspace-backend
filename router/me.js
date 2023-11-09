@@ -384,7 +384,7 @@ router.get(
           result = await getAlerts(options);
           break;
         case Roles.CONSULTANT:
-          options["consultant"] = consultant;
+          options["consultant"] = user.uid;
           result = await getAlerts(options);
           break;
 
