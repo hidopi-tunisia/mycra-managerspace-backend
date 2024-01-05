@@ -9,6 +9,7 @@ import meRouter from "./me.js";
 import messagingRouter from "./messaging.js";
 import miscsRouter from "./miscs.js";
 import supervisorStatisticsRouter from "./supervisors/statistics/index.js";
+import exportRouter from "./export.js";
 
 export {
   authRouter,
@@ -22,4 +23,5 @@ export {
   messagingRouter,
   miscsRouter,
   supervisorStatisticsRouter,
+  exportRouter
 };

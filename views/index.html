@@ -14,78 +14,91 @@
   </head>
   <body>
     <script type="module">
-      import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js'
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-app.js";
       const firebaseConfig = {
-        apiKey: 'AIzaSyAtbcfR9X35EzSnXvBnof6JtSzkg6n-FPc',
-        authDomain: 'mycra-dev.firebaseapp.com',
-        projectId: 'mycra-dev',
-        storageBucket: 'mycra-dev.appspot.com',
-        messagingSenderId: '474737003844',
-        appId: '1:474737003844:web:29df8548ab6c9915cd5b11',
-        measurementId: 'G-T6VZS6SR76',
-      }
+        apiKey: "AIzaSyAtbcfR9X35EzSnXvBnof6JtSzkg6n-FPc",
+        authDomain: "mycra-dev.firebaseapp.com",
+        projectId: "mycra-dev",
+        storageBucket: "mycra-dev.appspot.com",
+        messagingSenderId: "474737003844",
+        appId: "1:474737003844:web:29df8548ab6c9915cd5b11",
+        measurementId: "G-T6VZS6SR76",
+      };
 
       // Initialize Firebase
-      const app = initializeApp(firebaseConfig)
+      const app = initializeApp(firebaseConfig);
     </script>
 
     <script type="module">
-      import { createApp } from 'https://unpkg.com/petite-vue?module'
+      import { createApp } from "https://unpkg.com/petite-vue?module";
       import {
         getAuth,
         signInWithEmailAndPassword,
         connectAuthEmulator,
         createUserWithEmailAndPassword,
-      } from 'https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js'
+      } from "https://www.gstatic.com/firebasejs/9.5.0/firebase-auth.js";
 
       function MyApp() {
         return {
           auth: null,
-          email: '',
-          password: '',
+          email: "",
+          password: "",
           user: null,
-          str: '',
-          role: '',
+          str: "",
+          role: "",
           showMessage: false,
           mounted() {
-            this.auth = getAuth()
+            this.auth = getAuth();
+            this.email = "";
+            this.password = "";
           },
           handleClickSignIn() {
-            this.str = ''
-            this.role = ''
+            this.str = "";
+            this.role = "";
             signInWithEmailAndPassword(this.auth, this.email, this.password)
               .then(({ user }) => {
-                this.user = user
-                this.str = JSON.stringify(user, null, 2)
+                this.user = user;
+                this.str = JSON.stringify(user, null, 2);
                 this.auth.currentUser
                   .getIdTokenResult()
                   .then((token) => {
                     if (token.claims && token.claims.role) {
-                      this.role = token.claims.role
+                      this.role = token.claims.role;
                     }
                   })
                   .catch((error) => {
-                    console.log(error)
-                  })
+                    console.log(error);
+                  });
               })
               .catch((error) => {
-                console.log(error)
-                const errorCode = error.code
-                const errorMessage = error.message
-              })
+                console.log(error);
+                const errorCode = error.code;
+                const errorMessage = error.message;
+              });
           },
           handleClickCopyAuthorization() {
-            navigator.clipboard.writeText(this.user.accessToken)
-            this.showMessage = true
+            navigator.clipboard.writeText(this.user.accessToken);
+            this.showMessage = true;
             setTimeout(() => {
-              this.showMessage = false
-            }, 2000)
+              this.showMessage = false;
+            }, 2000);
           },
-        }
+          download() {
+            const id = prompt("Type the CRA ID")
+            fetch(`/export/cras/${id}/pdf`, {
+              headers: { authorization: this.auth.currentUser.accessToken },
+            })
+              .then((res) => res.blob())
+              .then((blob) => {
+                const file = window.URL.createObjectURL(blob);
+                window.open(file, "_blank");
+              });
+          },
+        };
       }
       createApp({
         MyApp,
-      }).mount()
+      }).mount();
     </script>
     <div v-scope="MyApp()" @vue:mounted="mounted">
       <div class="row bg-info">
@@ -132,13 +145,15 @@
             >
               Copy authorization
             </button>
-            <span class="bg-info">
-              Role: {{role}}
-            </span>
+            <span class="bg-info"> Role: {{role}} </span>
           </div>
-          <div v-show="showMessage" class="alert alert-warning">Copied to clipboard</div>
+          <div v-show="showMessage" class="alert alert-warning">
+            Copied to clipboard
+          </div>
         </div>
       </div>
+
+      <button class="btn btn-info" @click="download()">Download</button>
     </div>
   </body>
 </html>

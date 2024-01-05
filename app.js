@@ -18,6 +18,7 @@ import {
   miscsRouter,
   supervisorStatisticsRouter,
   messagingRouter,
+  exportRouter,
 } from "./router/index.js";
 import "./events/index.js";
 import "./schedule/index.js";
@@ -43,6 +44,7 @@ router.use("/offers", offersRouter);
 router.use("/me", meRouter);
 router.use("/messaging", messagingRouter);
 router.use("/miscs", miscsRouter);
+router.use("/export", exportRouter);
 
 app.use("/", router);
 app.listen(APP_PORT, () => {
