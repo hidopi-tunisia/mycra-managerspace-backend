@@ -1,3 +1,4 @@
+import fs from 'fs'
 import moment from "moment";
 import { jsPDF } from "jspdf";
 import { applyPlugin } from "jspdf-autotable";
@@ -9,6 +10,7 @@ import {
   prepareTable,
   sortData,
 } from "./helpers.js";
+import { TEMP_PATH } from './constants.js';
 
 moment.locale("fr");
 applyPlugin(jsPDF);
@@ -21,7 +23,8 @@ const exportPDF = async (cra) => {
   prepareTable(doc, body, totals);
   drawFooter(doc, cra);
   await prepareQRCode(doc, cra.consultant._id);
-  const filename = `temp/files/pdfs/cra-${new Date()
+  fs.mkdirSync(TEMP_PATH, { recursive: true });
+  const filename = `${TEMP_PATH}/cra-${new Date()
     .toISOString()
     .substring(0, 10)}.pdf`;
   doc.save(filename);

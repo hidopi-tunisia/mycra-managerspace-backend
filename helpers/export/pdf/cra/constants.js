@@ -26,5 +26,5 @@ const Reasons = {
   Other: "Autre",
 };
 const APP_URL = "https://mycra-dev.web.app";
-
-export { APP_URL, LOGO, Colors, Reasons };
+const TEMP_PATH="tmp/files/pdfs/"
+export { APP_URL, LOGO, Colors, Reasons,TEMP_PATH };
