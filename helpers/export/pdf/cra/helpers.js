@@ -128,14 +128,11 @@ const sortData = (data) => {
             }
           : {},
     });
-    let total = 1;
-    if (element.type === "half") {
+    let total = 0;
+    if (element.type === "working" || element.type === "remote") {
+      total = 1;
+    } else if (element.type === "half") {
       total = 0.5;
-    } else if (
-      element.type === "off" &&
-      element.meta.value.includes("unpaid")
-    ) {
-      total = 0;
     }
     arr.push({
       content: total,
