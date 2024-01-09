@@ -15,30 +15,21 @@ const drawHeader = (doc, cra) => {
   doc.text("1", 282, 200);
 };
 const prepareData = (cra) => {
-  let data = [];
-  data = [
-    ...data,
-    ...cra.working.map(({ date }) => ({ date, type: "working" })),
-  ];
-  data = [...data, ...cra.half.map(({ date }) => ({ date, type: "half" }))];
-  data = [...data, ...cra.remote.map(({ date }) => ({ date, type: "remote" }))];
-  data = [
-    ...data,
-    ...cra.off.map(({ date, meta }) => ({ date, type: "off", meta })),
-  ];
-  data = [
-    ...data,
-    ...cra.holidays.map(({ date }) => ({ date, type: "holidays" })),
-  ];
-  data = [
-    ...data,
-    ...cra.weekends.map(({ date }) => ({ date, type: "weekends" })),
-  ];
+  let data = {};
+  cra.working.forEach(({ date }) => {
+      data[date] = { date, type: "working" };
+    }),
+  cra.half.forEach(({ date }) => (data[date] = { date, type: "half" })),
+  data,
+    cra.remote.forEach(({ date }) => (data[date] = { date, type: "remote" })),
+  cra.off.forEach(({ date, meta }) => (data[date] = { date, type: "off", meta })),
+  cra.holidays.forEach(({ date }) => (data[date] = { date, type: "holidays" })),
+  cra.weekends.forEach(({ date }) => (data[date] = { date, type: "weekends" }))
   return data;
 };
 
 const sortData = (data) => {
-  const sorted = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const sorted = Object.keys(data).sort((a, b) => new Date(a) - new Date(b));
   let body = [];
   const totals = {
     working: 0,
@@ -52,86 +43,86 @@ const sortData = (data) => {
   sorted.forEach((element) => {
     const arr = [];
     arr.push({
-      content: `${element.date.substr(8)} - ${moment(element.date).format(
+      content: `${data[element].date.substr(8)} - ${moment(data[element].date).format(
         "dddd"
       )}`,
       rowSpan: 1,
       styles:
-        element.type === "weekends"
+      data[element].type === "weekends"
           ? {
               fontStyle: "bold",
-              textColor: Colors[element.type],
-              lineColor: Colors[element.type],
+              textColor: Colors[data[element].type],
+              lineColor: Colors[data[element].type],
             }
           : {},
     });
     arr.push({
-      content: element.type === "working" ? "Oui" : "",
+      content: data[element].type === "working" ? "Oui" : "",
       rowSpan: 1,
       styles:
-        element.type === "working"
+      data[element].type === "working"
           ? {
               halign: "center",
               textColor: "#ffffff",
-              fillColor: Colors[element.type],
+              fillColor: Colors[data[element].type],
             }
           : {},
     });
     arr.push({
-      content: element.type === "remote" ? "Oui" : "",
+      content: data[element].type === "remote" ? "Oui" : "",
       rowSpan: 1,
       styles:
-        element.type === "remote"
+      data[element].type === "remote"
           ? {
               halign: "center",
               textColor: "#ffffff",
-              fillColor: Colors[element.type],
+              fillColor: Colors[data[element].type],
             }
           : {},
     });
     arr.push({
-      content: element.type === "half" ? "Oui" : "",
+      content: data[element].type === "half" ? "Oui" : "",
       rowSpan: 1,
       styles:
-        element.type === "half"
+      data[element].type === "half"
           ? {
               halign: "center",
               fontStyle: "bold",
               fillColor: "#ffffff",
-              textColor: Colors[element.type],
-              lineColor: Colors[element.type],
+              textColor: Colors[data[element].type],
+              lineColor: Colors[data[element].type],
               lineWidth: 0.2,
             }
           : {},
     });
     arr.push({
-      content: element.type === "off" ? Reasons[element.meta.value] : "",
+      content: data[element].type === "off" ? Reasons[data[element].meta.value] : "",
       rowSpan: 1,
       styles:
-        element.type === "off"
+      data[element].type === "off"
           ? {
               textColor: "#ffffff",
-              fillColor: Colors[element.type],
+              fillColor: Colors[data[element].type],
               halign: "center",
             }
           : {},
     });
     arr.push({
-      content: element.type === "holidays" ? "Oui" : "",
+      content: data[element].type === "holidays" ? "Oui" : "",
       rowSpan: 1,
       styles:
-        element.type === "holidays"
+      data[element].type === "holidays"
           ? {
               textColor: "#ffffff",
-              fillColor: Colors[element.type],
+              fillColor: Colors[data[element].type],
               halign: "center",
             }
           : {},
     });
     let total = 0;
-    if (element.type === "working" || element.type === "remote") {
+    if (data[element].type === "working" || data[element].type === "remote") {
       total = 1;
-    } else if (element.type === "half") {
+    } else if (data[element].type === "half") {
       total = 0.5;
     }
     arr.push({
@@ -142,7 +133,7 @@ const sortData = (data) => {
         fontStyle: "bold",
       },
     });
-    totals[element.type] += 1;
+    totals[data[element].type] += 1;
     totals["total"] += total;
     body.push(arr);
   });

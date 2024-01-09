@@ -13,10 +13,6 @@ import { CRAStatuses } from "../models/cra.js";
 import { ForbiddenError, handleError } from "../utils/index.js";
 import { CRANotPendingError } from "../utils/errors/cras.js";
 import { StatusCodes } from "../utils/status-codes.js";
-import fs from "fs";
-import { jsPDF } from "jspdf";
-import { applyPlugin } from "jspdf-autotable";
-
 
 const router = Router();
 
@@ -144,48 +140,4 @@ router.delete("/:id", checkGroup(Groups.ADMINS), async (req, res) => {
   }
 });
 
-router.get("/:id/export/pdf", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const options = {
-      populate:"consultant,project"
-    };
-    const result = await getCRA(id, {
-      ...options,
-    });
-    const doc = new jsPDF({ orientation: "landscape" });
-console.log(JSON.stringify(result));
-    doc.autoTable({
-      margin: { top: 64 },
-      head: [
-        [
-          {
-            content: "Text",
-            colSpan: 10,
-            rowSpan: 1,
-            styles: { halign: "center", fillColor: "#ff0000" },
-          },
-          "Entreprise",
-          "Travaillé",
-          "Abscence",
-          "Catégorie d'absence",
-          "Total",
-          "TAD",
-          "Commentaire",
-        ],
-      ],
-      body: [
-        [
-          { content: "Text", colSpan: 1, rowSpan: 2, styles: { halign: "center" } },
-          { content: "Text", colSpan: 2, rowSpan: 2, styles: { halign: "center" } },
-          { content: "Text", colSpan: 2, rowSpan: 2, styles: { halign: "center" } },
-        ],
-        ["Castille", "castille@example.com", "Spain"],
-      ],
-    });
-    res.status(StatusCodes.OK).send(result);
-  } catch (error) {
-    handleError({ res, error });
-  }
-});
 export default router;
