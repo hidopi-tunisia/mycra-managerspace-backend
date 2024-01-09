@@ -12,4 +12,4 @@ export const Topics = {
   SUPERVISORS: "supervisors",
 };
 
-export const IMAGE_URL = "https://i.ytimg.com/vi/iosNuIdQoy8/maxresdefault.jpg"
+export const IMAGE_URL = "https://d2q79iu7y748jz.cloudfront.net/s/_squarelogo/256x256/48d4b9964f19abe35938fbe33da5b987"

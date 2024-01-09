@@ -7,7 +7,7 @@ class BaseNotification {
     body: "",
     title: "",
     severity: Severity.DEFAULT,
-    action: null,
+    action: "unspecified",
   };
   notification = {
     title: "",

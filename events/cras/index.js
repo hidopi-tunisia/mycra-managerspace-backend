@@ -59,14 +59,14 @@ emitter.on("cra-approved", (payload) => {
 
 emitter.on("cra-required", () => {
   try {
-    const notification = new CRARequiredNotification({
+    const message = new CRARequiredNotification({
       data: {
-        title: "CRA required",
-        body: "You need to fill submit the CRA before the end of the month.",
+        title: "CRA requis",
+        body: "Vous devez remplir et soumettre le CRA avant la fin du mois.",
       },
       topic: `${Topics.CONSULTANTS_ALL}`,
     });
-    send(notification);
+    send(message);
   } catch (error) {
     console.log(error);
   }
