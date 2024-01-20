@@ -148,6 +148,10 @@ router.post(
         project: params.id,
         consultant: user.uid,
       });
+      emitter.emit("cra-created", {
+        id: result.id,
+        consultantId: user.uid,
+      });
       res.status(StatusCodes.CREATED).send(result);
     } catch (error) {
       handleError({ res, error });

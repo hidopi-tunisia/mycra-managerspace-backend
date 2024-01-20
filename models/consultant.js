@@ -117,6 +117,16 @@ const schema = new Schema({
       type: String,
     },
   },
+  lastSubmittedCRA: {
+    id: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+  },
 });
 
 const Consultant = model("Consultant", schema);

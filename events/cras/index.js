@@ -1,3 +1,4 @@
+import { updateConsultant } from "../../helpers/consultants.js";
 import { emitter } from "../../helpers/events.js";
 import { send } from "../../helpers/messaging.js";
 import { Topics } from "../constants.js";
@@ -67,6 +68,16 @@ emitter.on("cra-required", () => {
       topic: `${Topics.CONSULTANTS_ALL}`,
     });
     send(message);
+  } catch (error) {
+    console.log(error);
+  }
+});
+emitter.on("cra-created", async (payload) => {
+  try {
+    const { id, consultantId } = payload;
+    await updateConsultant(consultantId, {
+      lastSubmittedCRA: { id, date: new Date().toISOString() },
+    });
   } catch (error) {
     console.log(error);
   }
